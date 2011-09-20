@@ -7,23 +7,37 @@ DPClient = Class.create(
 	/**
 	 * Constructor for this class
 	 */
-	initialize: function(w)
-	{
-		this.Version =  '0.1';
-		this.windowReference = w;
+	initialize: function() {
+		this.Version =  '1.0a';
 		this.Editor = new DP_Editor(this);
 		this.Article = new DP_Article(this);
-		this.account = w ? window.account : null;
+	},
+	
+	/**
+	 * Dispatches a request to DrPublish, and returns the reply to callback
+	 * @param callSpec What do you want to call?
+	 * @param data The data attached to the request
+	 * @param callback The function to call upon return
+	 * @param error The function to call upon error
+	 */
+	_request: function ( callSpec, data, callback, error ) {
+	  $.pm ( {
+	    target: parent,
+	    type: callSpec,
+	    data: data,
+	    success: callback,
+	    error: error,
+	    origin: "*", // TODO: Find a way of avoiding all-origins
+	    hash: false
+	  } );
 	},
 
-	createDialog: function(options)
-	{
+	createDialog: function(options) {
 		var dialog = jQuery('<div />');
 		return dialog.dialog(options);
 	},
 
-	createNewTag: function(callback, data)
-	{
+	createNewTag: function(callback, data) {
 		return DPEditor.createNewTag(callback, data);
 	},
 
@@ -32,11 +46,7 @@ DPClient = Class.create(
 	 */
 	reloadIframe: function()
 	{
-		var name = this.getPluginName();
-		var plugins = parent.window.Plugins;
-		plugins.stop(name);
-		plugins.remove(name);
-		plugins.start(name);
+	  this._request ( "reload", { plugin: this.getPluginName() } );
 	},
 
 	log: function(str) { },
@@ -46,61 +56,12 @@ DPClient = Class.create(
 	 */
 	getPluginName: function()
 	{
-		var name = this.getWindow().frameElement.id;
+	  var name = self.window.frameElement.id
 		if (name.match('plugin-')) {
 			return name.replace('plugin\-', '');
 		} else {
 			return false;
 		}
-	},
-
-	getPlugins: function () {
-		return Plugins;
-	},
-
-	postForm: function(id)
-	{
-		var name = this.getPluginName();
-		if (name) {
-			var form = this.getWindow().frameElement.contentDocument.getElementById(id);
-			var plugin = Plugins.get(name);
-			plugin.removeListeners();
-			plugin.showLoader('Updating page ..');
-			plugin.loadContent(form.action.blank() ? plugin.url : form.action, {
-				method: 'post',
-				postBody: Form.serialize(form)
-			});
-		}
-	},
-
-	/**
-	 * Get AJAX proxy URL (required for making cross-domain requests)
-	 *
-	 * @param string The wanted URL
-	 * @return string The rewritten URL which is using the proxy
-	 */
-	getProxyUrl: function(url)
-	{
-		return getProxyUrl(url);
-	},
-
-	/**
-	 * Load an external javascript into the plugin window
-	 *
-	 * @param string URL to the javascript resource
-	 */
-	loadScript: function(url, callback) {
-		AjaxController.get(this.getProxyUrl(url), {
-			errorTitle: 'Error loading external javascript',
-			  evalJS: false,
-			  evalJSON: false,
-			  onSuccess: function(transport) {
-				this.getWindow().eval(transport.responseText);
-				if (callback) {
-					callback();
-				}
-			  }.bind(this)
-		});
 	},
 
 	/**
@@ -127,19 +88,12 @@ DPClient = Class.create(
 	},
 
 	/**
-	 * Get the plugin window object
-	 */
-	getWindow: function() {
-		return this.windowReference;
-	},
-
-	/**
 	 * Show info-message to the user
 	 *
 	 * @param string Message to be displayed
 	 */
 	showInfoMsg: function(msg) {
-		showInfoMsg(msg);
+		this._request ( "show-message-info", { message: msg } );
 	},
 
 	/**
@@ -148,7 +102,7 @@ DPClient = Class.create(
 	 * @param string Message to be displayed
 	 */
 	showWarningMsg: function(msg) {
-		showWarningMsg(msg);
+	  this._request ( "show-message-warning", { message: msg } );
 	},
 
 	/**
@@ -157,7 +111,7 @@ DPClient = Class.create(
 	 * @param string Message to be displayed
 	 */
 	showErrorMsg: function(msg) {
-		showErrorMsg(msg);
+	  this._request ( "show-message-error", { message: msg } );
 	},
 	
 	/**
@@ -166,6 +120,6 @@ DPClient = Class.create(
 	 * @param id Int The id of the revision to load
 	 */
 	__loadArticleRevision: function(id) {
-		activeArticle.getRevision(id);
+	  this._request ( "load-revision", { revision: id } ); 
 	}
 });
