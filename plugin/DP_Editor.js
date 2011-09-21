@@ -10,7 +10,7 @@ DP_Editor = {
   /**
    * Gives callback all categories
    * 
-   * @param callback The function to call with fetched data
+   * @param {Function} callback The function to call with fetched data
    */
 	getCategories: function ( callback ) {
 	  DP.request ( 'get-categories', null, callback );
@@ -19,7 +19,7 @@ DP_Editor = {
 	/**
    * Gives callback all tag types
    * 
-   * @param callback The function to call with fetched data
+   * @param {Function} callback The function to call with fetched data
    */
 	getTagTypes: function ( callback ) {
 	  DP.request ( 'get-tag-types', null, callback );
@@ -28,7 +28,7 @@ DP_Editor = {
 	/**
    * Gives callback data about the given tag type
    * 
-   * @param callback The function to call with fetched data
+   * @param {Function} callback The function to call with fetched data
    */
 	getTagType: function ( id, callback ) {
 		DP.request ( 'get-tag-type', { id: id }, callback );
@@ -37,7 +37,7 @@ DP_Editor = {
 	/**
    * Clears the editor contents
    * 
-   * @param callback The function to call when editor has been cleared
+   * @param {Function} callback The function to call when editor has been cleared
    */
 	clear: function ( callback ) {
 		DP.request ( 'editor-clear', null, callback );
@@ -46,7 +46,7 @@ DP_Editor = {
 	/**
    * Moves editor cursor to the beginning
    * 
-   * @param callback The function to call when cursor has been moved
+   * @param {Function} callback The function to call when cursor has been moved
    */
 	moveToStart: function ( callback ) {
 	  DP.request ( 'editor-seek', { position: 0 }, callback );
@@ -55,7 +55,7 @@ DP_Editor = {
 	/**
    * Moves editor cursor to the end
    * 
-   * @param callback The function to call when cursor has been moved
+   * @param {Function} callback The function to call when cursor has been moved
    */
 	moveToEnd: function ( callback ) {
 		DP.request ( 'editor-seek', { position: 'end' }, callback );
@@ -69,8 +69,8 @@ DP_Editor = {
    * 
    * TODO: Handle insertion of DOM nodes
    * 
-   * @param element The element or string that should be inserted
-   * @param callback The function to call when content has been inserted
+   * @param {Element} element The element or string that should be inserted
+   * @param {Function} callback The function to call when content has been inserted
    */
 	insertElement : function ( element, callback ) {
     DP.request ( 'editor-insert', { element: element }, callback );
@@ -84,8 +84,8 @@ DP_Editor = {
 	/**
    * Hide an element from the plugin element menu
    * 
-   * @param name The name of the element to hide
-   * @param callback The function to call when the item has been hidden
+   * @param {String} name The name of the element to hide
+   * @param {Function} callback The function to call when the item has been hidden
    */
 	hideElementMenuItem: function ( name, callback ) {
 		DP.request ( 'editor-menu-element-hide', { element: name }, callback );
@@ -94,10 +94,10 @@ DP_Editor = {
 	/**
    * Adds a menu item to the editor with a callback for on click handling
    * 
-   * @param name The name of the element to add
-   * @param action The function to call upon click
-   * @param callback The function to call when the menu item has been added
-   * @param prepend True to prepend instead of append
+   * @param {String} name The name of the element to add
+   * @param {Function} action The function to call upon click
+   * @param {Function} callback The function to call when the menu item has been added
+   * @param {Boolean} prepend True to prepend instead of append
    */
 	addElementMenuItem: function ( name, action, callback, prepend ) {
 	  var event = 'menu-click-' + name;
@@ -109,8 +109,8 @@ DP_Editor = {
 	
 	/**
    * Adds a menu label to the editor
-   * @param name The name to add to the menu (will be suffixed with a colon)
-   * @param callback The function to call when the label has been added
+   * @param {String} name The name to add to the menu (will be suffixed with a colon)
+   * @param {Function} allback The function to call when the label has been added
    */
 	appendElementMenuLabel: function ( name, callback ) {
 	  DP.request ( 'editor-menu-label-add', { label: name }, callback );
@@ -118,7 +118,7 @@ DP_Editor = {
 
 	/**
 	 * Updates the editor
-	 * @param callback The function to call when the editor has been updated
+	 * @param {Function} callback The function to call when the editor has been updated
 	 */
 	update: function ( callback ) {
 		DP.request ( 'editor-update', null, callback );
@@ -126,10 +126,10 @@ DP_Editor = {
 
 	/**
 	 * Sets the attribute of the element with the given ID to value
-	 * @param id The ID of the element to set the attribute on
-	 * @param attribute The attribute to set
-	 * @param value What to set the attribute to
-	 * @param callback The function to call when the attribute has been set
+	 * @param {String} id The ID of the element to set the attribute on
+	 * @param {String} attribute The attribute to set
+	 * @param {String} value What to set the attribute to
+	 * @param {Function} callback The function to call when the attribute has been set
 	 */
 	setAttributeById: function ( id, attribute, value, callback ) {
 		DP.request ( 'editor-element-attribute-set-byid', { id: id, attribute: attribute, value: value }, callback );
@@ -137,10 +137,10 @@ DP_Editor = {
 	
 	/**
    * Sets the attribute of the element identified by the given selector
-   * @param selector The selector for finding the element to set the attribute on
-   * @param attribute The attribute to set
-   * @param value What to set the attribute to
-   * @param callback The function to call when the attribute has been set
+   * @param {String} selector The selector for finding the element to set the attribute on
+   * @param {String} attribute The attribute to set
+   * @param {String} value What to set the attribute to
+   * @param {Function} callback The function to call when the attribute has been set
    */
   setAttributeByCSS: function ( elector, attribute, value, callback ) {
     DP.request ( 'editor-element-attribute-set-byselector', { selector: selector, attribute: attribute, value: value }, callback );
@@ -148,10 +148,10 @@ DP_Editor = {
 
   /**
    * Sets a style of the element with the given ID to value
-   * @param id The ID of the element to set the attribute on
-   * @param attribute The style attribute to set
-   * @param value What to set the attribute to
-   * @param callback The function to call when the attribute has been set
+   * @param {String} id The ID of the element to set the attribute on
+   * @param {String} attribute The style attribute to set
+   * @param {String} value What to set the attribute to
+   * @param {Function} callback The function to call when the attribute has been set
    */
   setStyleById: function ( id, attribute, value, callback ) {
     DP.request ( 'editor-element-style-set-byid', { id: id, attribute: attribute, value: value }, callback );
@@ -159,10 +159,10 @@ DP_Editor = {
   
   /**
    * Sets a style of the element identified by the given selector
-   * @param selector The selector for finding the element to set the attribute on
-   * @param attribute The style attribute to set
-   * @param value What to set the attribute to
-   * @param callback The function to call when the attribute has been set
+   * @param {String} selector The selector for finding the element to set the attribute on
+   * @param {String} attribute The style attribute to set
+   * @param {String} value What to set the attribute to
+   * @param {Function} callback The function to call when the attribute has been set
    */
   setStyleByCSS: function ( elector, attribute, value, callback ) {
     DP.request ( 'editor-element-style-set-byselector', { selector: selector, attribute: attribute, value: value }, callback );
