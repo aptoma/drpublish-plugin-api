@@ -22,8 +22,8 @@ function Listeners () {
  * });
  * </code>
  * 
- * @param object A list of callbacks that should be called on events
- * @returns A dictionary of events => listener ID for later removal
+ * @param {Object} events A list of callbacks that should be called on events
+ * @returns {Object} A dictionary of events => listener ID for later removal
  */
 Listeners.prototype.addAll = function ( events ) {
 
@@ -37,6 +37,8 @@ Listeners.prototype.addAll = function ( events ) {
 
 /**
  * Adds a new listener
+ * @param {String} event Event name
+ * @param {Function} callback Function to call when an even of the type is received
  */
 Listeners.prototype.add = function ( event, callback ) {
 
@@ -52,8 +54,8 @@ Listeners.prototype.add = function ( event, callback ) {
 /**
  * Removes the listener at the given index
  * 
- * @param event Event type
- * @param index The index of the event handler to remove
+ * @param {String} event Event type
+ * @param {Function} index The index of the event handler to remove
  */
 Listeners.prototype.remove = function ( event, index ) {
 
@@ -70,8 +72,8 @@ Listeners.prototype.remove = function ( event, index ) {
  * Removes the first matching listener by callback lookup (if you don't have the
  * index)
  * 
- * @param event Event type
- * @param callback Function originally bound to event type
+ * @param {String} event Event type
+ * @param {Function} callback Function originally bound to event type
  * @returns {Boolean} Whether a handler was removed
  */
 Listeners.prototype.removeByCallback = function ( event, callback ) {
@@ -91,7 +93,7 @@ Listeners.prototype.removeByCallback = function ( event, callback ) {
  * Removes all listeners for the given event type, or if !event then removes all
  * listeners
  * 
- * @param event event type to remove handlers for (!event for all)
+ * @param {String} event Event type to remove handlers for (!event for all)
  */
 Listeners.prototype.removeAll = function ( event ) {
 
@@ -105,8 +107,8 @@ Listeners.prototype.removeAll = function ( event ) {
 /**
  * Notifies all registered listeners that an event has occurred
  * 
- * @param event event type
- * @param data The event data
+ * @param {String} event Event type
+ * @param {Object} data The event data
  */
 Listeners.prototype.notify = function ( event, data ) {
 
