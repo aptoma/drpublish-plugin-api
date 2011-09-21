@@ -207,9 +207,10 @@ from-plugin:
         desc: List of IDs for the categories to add
   - event: article-categories-remove
     desc: Remove the given categories
-    returns:
-      type: array
-      desc: List of IDs for the categories to remove
+    parameters:
+      categories:
+        type: array
+        desc: List of IDs for the categories to remove
   - event: article-categories-main-set
     desc: Set the main category of the current article
     parameters:
@@ -268,9 +269,10 @@ from-plugin:
         desc: List of authors to add
   - event: article-authors-remove
     desc: Remove the given authors
-    returns:
-      type: array
-      desc: List of authors to remove
+    parameters:
+      authors:
+        type: array
+        desc: List of authors to remove
   - event: article-content-get
     desc: Get the current article content
     returns:
