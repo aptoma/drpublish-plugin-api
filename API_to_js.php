@@ -13,6 +13,7 @@ usort ( $data['from-plugin'], "event_cmp" );
 /**
  * <?php echo $call['event']; ?>
  
+ *
  * <?php echo $call['desc']; ?>
 
  */
@@ -32,8 +33,10 @@ $.pm.bind ( '<?php echo $call['event']; ?>', function ( data ) {
   if ( array_key_exists ( 'returns', $call ) ): ?>
   
   return null; // <?php echo $call['returns']['type'] . '; ' . $call['returns']['desc']; ?>
-  <?php endif;
-?>
+  <?php else: ?>
+  
+  
+  return true; <?php endif; ?>
   
 } );
 
