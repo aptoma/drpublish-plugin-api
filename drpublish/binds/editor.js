@@ -174,11 +174,11 @@ $.pm.bind ( 'editor-menu-element-add', function ( data ) {
   
   if ( prepend ) {
     DPTiny.pluginElements.menu.item.prepend ( element, function ( e ) {
-      DPAPI.event ( data.src_plugin, event, e );
+      DPAPI.directedEvent ( data.src_plugin, event, e );
     } );
   } else {
     DPTiny.pluginElements.menu.item.append ( element, function ( e ) {
-      DPAPI.event ( data.src_plugin, event, e );
+      DPAPI.directedEvent ( data.src_plugin, event, e );
     } );
   }
   
