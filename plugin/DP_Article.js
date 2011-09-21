@@ -69,7 +69,7 @@ var DP_Article = {
   /**
    * Set tags for the article
    * 
-   * @param {String} tags Comma-separated list of tags that should be set
+   * @param {Array} tags List of tags that should be set
    * @param {Function} callback The function to call when tags have been set
    */
   setTags : function ( tags, callback ) {
@@ -133,8 +133,7 @@ var DP_Article = {
   /**
    * Set selected categories
    * 
-   * @param {String} categories Comma-separated list of category IDs that should
-   *          be set
+   * @param {Array} categories List of category IDs that should be set
    * @param {Function} callback The function to call when the categories have
    *          been set
    */
@@ -148,7 +147,7 @@ var DP_Article = {
   /**
    * Add the given categories to the list of categories
    * 
-   * @param {String} categories Comma-separated list of category IDs to add
+   * @param {Array} categories List of category IDs to add
    * @param {Function} callback The function to call when the categories have
    *          been added
    */
@@ -162,7 +161,7 @@ var DP_Article = {
   /**
    * Remove the given categories from the list of categories
    * 
-   * @param {String} categories Comma-separated list of category IDs to remove
+   * @param {Array} categories List of category IDs to remove
    * @param {Function} callback The function to call when the categories have
    *          been removed
    */
@@ -273,8 +272,9 @@ var DP_Article = {
   /**
    * Set authors for the article
    * 
-   * @param {String} categories Comma-separated list of authors that should be set
-   * @param {Function} callback The function to call when the authors have been set
+   * @param {Array} authors List of authors that should be set
+   * @param {Function} callback The function to call when the authors have been
+   *          set
    */
   setAuthors : function ( authors, callback ) {
 
@@ -286,8 +286,9 @@ var DP_Article = {
   /**
    * Add the given authors to the list of authors
    * 
-   * @param {String} categories Comma-separated list of authors to add
-   * @param {Function} callback The function to call when the authors have been added
+   * @param {Array} authors List of authors to add
+   * @param {Function} callback The function to call when the authors have been
+   *          added
    */
   addAuthors : function ( authors, callback ) {
 
@@ -299,8 +300,9 @@ var DP_Article = {
   /**
    * Remove the given authors from the list of authors
    * 
-   * @param {String} categories Comma-separated list of authors to remove
-   * @param {Function} callback The function to call when the authors have been removed
+   * @param {Array} authors List of authors to remove
+   * @param {Function} callback The function to call when the authors have been
+   *          removed
    */
   removeCategories : function ( authors, callback ) {
 
@@ -315,6 +317,7 @@ var DP_Article = {
    * @param {Function} callback The function to call with the article contents
    */
   getCurrentContent : function ( callback ) {
+
     DP.request ( 'article-content-get', null, callback );
   },
   
@@ -322,18 +325,24 @@ var DP_Article = {
    * Updates current article content
    * 
    * @param {String} content The new content for the article
-   * @param {Function} callback The function to call when the contents have been updated
+   * @param {Function} callback The function to call when the contents have been
+   *          updated
    */
   setCurrentContent : function ( content, callback ) {
-    DP.request ( 'article-content-set', { content: content }, callback );
+
+    DP.request ( 'article-content-set', {
+      content : content
+    }, callback );
   },
   
   /**
    * Get the article type of the current article
    * 
-   * @param {Function} callback The function to call with the type of the article
+   * @param {Function} callback The function to call with the type of the
+   *          article
    */
   getArticletypeId : function ( callback ) {
+
     DP.request ( 'article-type-get', null, callback );
   },
   
@@ -341,10 +350,14 @@ var DP_Article = {
    * Set the article type of the current article
    * 
    * @param {Integer} articletypeId The new article type of the article
-   * @param {Function} callback The function to call when the article type has been changed
+   * @param {Function} callback The function to call when the article type has
+   *          been changed
    */
   setArticletypeId : function ( articletypeId, callback ) {
-    DP.request ( 'article-type-set', { articletype: articletypeId }, callback );
+
+    DP.request ( 'article-type-set', {
+      articletype : articletypeId
+    }, callback );
   }
 };
 
