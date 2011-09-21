@@ -1,5 +1,5 @@
 --- Events to be exchanged between DrPublish plugin and DrPublish panel
-events:
+from-plugin:
   - event: reload
     desc: Reload the given plugin
     parameters:
@@ -30,3 +30,19 @@ events:
       revision:
         type: integer
         desc: The revision to load
+  - event: create-tag
+    desc: Create a new tag
+    parameters:
+      tag:
+        type: string
+        desc: The tag to create
+to-plugin:
+  - event: event
+    desc: Sent when an event occurs in DrPublish
+    parameters:
+      event:
+        type: string
+        desc: The type of event that occured
+      data:
+        type: object
+        desc: Data associated with the event
