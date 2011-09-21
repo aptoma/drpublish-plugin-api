@@ -58,11 +58,12 @@ Listeners.prototype.add = function ( event, callback ) {
 Listeners.prototype.remove = function ( event, index ) {
 
   if ( this._listeners[event] == undefined ) return;
+  if ( this._listeners[event][index] == undefined ) return;
   
   /*
    * Set to null instead of remove to retain callback indexes
    */
-  this._listeners[event][index] = null;
+  this._listeners[event][index] = false;
 };
 
 /**
@@ -111,8 +112,9 @@ Listeners.prototype.notify = function ( event, data ) {
 
   if ( this._listeners[event] != undefined ) {
     $.each ( this.eventListeners[event], function () {
-
-      this ( data );
+      if ( this ) {
+        this ( data );
+      }
     } );
   }
 };
