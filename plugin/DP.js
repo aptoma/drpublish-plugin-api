@@ -32,7 +32,9 @@ var DP = {
    * @param {Function} callback The function to call upon return
    */
   request : function ( callSpec, data, callback ) {
-
+    
+    data['src-plugin'] = this.getPluginName ();
+    
     var me = this;
     $.pm ( {
       target : parent,
