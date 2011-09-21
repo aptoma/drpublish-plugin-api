@@ -8,11 +8,11 @@ var DP = {
   /**
    * Constructor for this class
    */
-  initialize : function () {
+  initialize : function ( ) {
 
     this.Version = '1.0a';
-    this.Editor = new DP_Editor ( this );
-    this.Article = new DP_Article ( this );
+    this.Editor = null;
+    this.Article = null;
     this.errorListeners = new Listeners;
     this.eventListeners = new Listeners;
     
@@ -31,7 +31,7 @@ var DP = {
    * @param data The data attached to the request
    * @param callback The function to call upon return
    */
-  _request : function ( callSpec, data, callback ) {
+  request : function ( callSpec, data, callback ) {
 
     var me = this;
     $.pm ( {
