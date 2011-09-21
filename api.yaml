@@ -247,7 +247,7 @@ from-plugin:
   - event: article-published-set
     desc: Set the published date of the current article
     parameters:
-      publish:
+      published:
         type: string
         desc: What to set the published date to
   - event: article-authors-get
@@ -258,7 +258,7 @@ from-plugin:
   - event: article-authors-set
     desc: Set authors for the current article
     parameters:
-      categories:
+      authors:
         type: array
         desc: List of authors
   - event: article-authors-add
