@@ -49,7 +49,7 @@ DP_Editor = {
    * @param {Function} callback The function to call when cursor has been moved
    */
 	moveToStart: function ( callback ) {
-	  DP.request ( 'editor-seek', { position: 0 }, callback );
+	  DP.request ( 'editor-seek', { position: 'start' }, callback );
 	},
 
 	/**

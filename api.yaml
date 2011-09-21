@@ -61,8 +61,8 @@ from-plugin:
     desc: Seek to a position in the editor
     parameters:
       position:
-        type: integer|end
-        desc: The character to place the cursor before (end means at the end)
+        type: start|end
+        desc: Where to seek to
   - event: editor-insert
     desc: Insert element into editor
     parameters:
