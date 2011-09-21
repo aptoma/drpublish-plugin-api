@@ -33,7 +33,7 @@ var DP = {
    */
   request : function ( callSpec, data, callback ) {
     
-    data['src-plugin'] = this.getPluginName ();
+    data['src_plugin'] = this.getPluginName ();
     
     var me = this;
     $.pm ( {
