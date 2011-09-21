@@ -27,9 +27,9 @@ var DP = {
    * error, notifies all error listeners based on the index .type of the thrown
    * object
    * 
-   * @param callSpec What do you want to call?
-   * @param data The data attached to the request
-   * @param callback The function to call upon return
+   * @param {String} callSpec What do you want to call?
+   * @param {Object} data The data attached to the request
+   * @param {Function} callback The function to call upon return
    */
   request : function ( callSpec, data, callback ) {
 
@@ -51,8 +51,8 @@ var DP = {
   /**
    * Creates a new jQuery dialog
    * 
-   * @param options Dialog options
-   * @returns New dialog
+   * @param {Object} options Dialog options
+   * @returns {jQuery.dialog} New dialog
    */
   createDialog : function ( options ) {
 
@@ -63,12 +63,12 @@ var DP = {
   /**
    * Creates a new tag
    * 
-   * @param tag The tag to create
-   * @param callback What do do when the tag was created
+   * @param {String} tag The tag to create
+   * @param {Function} callback What do do when the tag was created
    */
   createNewTag : function ( tag, callback ) {
 
-    this._request ( "create-tag", {
+    this.request ( "create-tag", {
       tag : tag
     }, callback );
   },
@@ -76,9 +76,9 @@ var DP = {
   /**
    * Reloads the plugin's iframe
    */
-  reloadIframe : function () {
+  reloadIframe : function ( ) {
 
-    this._request ( "plugin-reload", {
+    this.request ( "plugin-reload", {
       plugin : this.getPluginName ()
     } );
   },
@@ -90,11 +90,11 @@ var DP = {
   /**
    * Get the name of the loaded plugin
    * 
-   * @returns the name of the plugin, or false if it couldn't be detected
+   * @returns {String} The name of the plugin, or false if it couldn't be detected
    */
   getPluginName : function () {
 
-    var name = self.window.frameElement.id
+    var name = self.window.frameElement.id;
     if ( name.match ( 'plugin-' ) ) {
       return name.replace ( 'plugin\-', '' );
     } else {
@@ -105,11 +105,11 @@ var DP = {
   /**
    * Show info-message to the user
    * 
-   * @param string Message to be displayed
+   * @param {String} Message to be displayed
    */
   showInfoMsg : function ( msg ) {
 
-    this._request ( "show-message-info", {
+    this.request ( "show-message-info", {
       message : msg
     } );
   },
@@ -117,11 +117,11 @@ var DP = {
   /**
    * Show warning-message to the user
    * 
-   * @param string Message to be displayed
+   * @param {String} Message to be displayed
    */
   showWarningMsg : function ( msg ) {
 
-    this._request ( "show-message-warning", {
+    this.request ( "show-message-warning", {
       message : msg
     } );
   },
@@ -129,11 +129,11 @@ var DP = {
   /**
    * Show error-message to the user
    * 
-   * @param string Message to be displayed
+   * @param {String} Message to be displayed
    */
   showErrorMsg : function ( msg ) {
 
-    this._request ( "show-message-error", {
+    this.request ( "show-message-error", {
       message : msg
     } );
   },
@@ -141,11 +141,11 @@ var DP = {
   /**
    * Loads an old revision
    * 
-   * @param id Int The id of the revision to load
+   * @param {Integer} id The id of the revision to load
    */
   __loadArticleRevision : function ( id ) {
 
-    this._request ( "load-revision", {
+    this.request ( "load-revision", {
       revision : id
     } );
   }
