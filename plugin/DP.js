@@ -78,7 +78,7 @@ var DP = {
    */
   reloadIframe : function () {
 
-    this._request ( "reload", {
+    this._request ( "plugin-reload", {
       plugin : this.getPluginName ()
     } );
   },
