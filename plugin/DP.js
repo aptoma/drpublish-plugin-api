@@ -1,15 +1,14 @@
 /**
  * Namespace for all public Dr.Published methods available from plugins.
  * 
- * Listeners can be added through the Listeners objects DP.errorListeners and
- * DP.eventListeners
+ * Listeners can be added through the Listeners objects DP.errorListeners and DP.eventListeners
  */
 var DP = {
   /**
    * Constructor for this class
    */
-  initialize : function ( ) {
-
+  initialize : function () {
+    
     this.Version = '1.0a';
     this.Editor = null;
     this.Article = null;
@@ -17,15 +16,13 @@ var DP = {
     this.eventListeners = new Listeners;
     
     $.bind ( "event", function ( data ) {
-
+      
       this.eventListeners.notify ( data.event, data.data );
     } );
   },
   
   /**
-   * Dispatches a request to DrPublish, and returns the reply to callback On
-   * error, notifies all error listeners based on the index .type of the thrown
-   * object
+   * Dispatches a request to DrPublish, and returns the reply to callback On error, notifies all error listeners based on the index .type of the thrown object
    * 
    * @param {String} callSpec What do you want to call?
    * @param {Object} data The data attached to the request
@@ -42,7 +39,7 @@ var DP = {
       data : data,
       success : callback,
       error : function ( data ) {
-
+        
         me.errorListeners.notify ( data.type, data );
       },
       origin : "*", // TODO: Find a way of avoiding all-origins
@@ -57,7 +54,7 @@ var DP = {
    * @returns {jQuery.dialog} New dialog
    */
   createDialog : function ( options ) {
-
+    
     var dialog = jQuery ( '<div />' );
     return dialog.dialog ( options );
   },
@@ -69,7 +66,7 @@ var DP = {
    * @param {Function} callback What do do when the tag was created
    */
   createNewTag : function ( tag, callback ) {
-
+    
     this.request ( "create-tag", {
       tag : tag
     }, callback );
@@ -78,15 +75,15 @@ var DP = {
   /**
    * Reloads the plugin's iframe
    */
-  reloadIframe : function ( ) {
-
+  reloadIframe : function () {
+    
     this.request ( "plugin-reload", {
       plugin : this.getPluginName ()
     } );
   },
   
   log : function ( str ) {
-
+    
   },
   
   /**
@@ -95,7 +92,7 @@ var DP = {
    * @returns {String} The name of the plugin, or false if it couldn't be detected
    */
   getPluginName : function () {
-
+    
     var name = self.window.frameElement.id;
     if ( name.match ( 'plugin-' ) ) {
       return name.replace ( 'plugin\-', '' );
@@ -110,7 +107,7 @@ var DP = {
    * @param {String} Message to be displayed
    */
   showInfoMsg : function ( msg ) {
-
+    
     this.request ( "show-message-info", {
       message : msg
     } );
@@ -122,7 +119,7 @@ var DP = {
    * @param {String} Message to be displayed
    */
   showWarningMsg : function ( msg ) {
-
+    
     this.request ( "show-message-warning", {
       message : msg
     } );
@@ -134,7 +131,7 @@ var DP = {
    * @param {String} Message to be displayed
    */
   showErrorMsg : function ( msg ) {
-
+    
     this.request ( "show-message-error", {
       message : msg
     } );
@@ -146,7 +143,7 @@ var DP = {
    * @param {Integer} id The id of the revision to load
    */
   __loadArticleRevision : function ( id ) {
-
+    
     this.request ( "load-revision", {
       revision : id
     } );
