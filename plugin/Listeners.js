@@ -57,6 +57,8 @@ Listeners.prototype.add = function ( event, callback ) {
  */
 Listeners.prototype.remove = function ( event, index ) {
 
+  if ( this._listeners[event] == undefined ) return;
+  
   /*
    * Set to null instead of remove to retain callback indexes
    */
