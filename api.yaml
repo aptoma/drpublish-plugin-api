@@ -36,6 +36,113 @@ from-plugin:
       tag:
         type: string
         desc: The tag to create
+  - event: get-categories
+    desc: Gets all categories
+    returns:
+      type: set
+      desc: Set of all categories
+  - event: get-tag-types
+    desc: Gets all tag types
+    returns:
+      type: set
+      desc: Set of all tag types
+  - event: get-tag-type
+    desc: Gets data about the given tag type
+    parameters:
+      id:
+        type: integer
+        desc: The id of the tag type
+    returns:
+      type: object
+      desc: DPEditor.tagTypes[id]
+  - event: editor-clear
+    desc: Clear the editor
+  - event: editor-seek
+    desc: Seek to a position in the editor
+    parameters:
+      position:
+        type: integer|end
+        desc: The character to place the cursor before (end means at the end)
+  - event: editor-insert
+    desc: Insert element into editor
+    parameters:
+      element:
+        type: DOMElement|string
+        desc: The element or string to insert
+  - event: editor-menu-element-hide
+    desc: Hide an element from the editor menu panel
+    parameters:
+      element:
+        type: string
+        desc: The name of the item to remove
+  - event: editor-menu-element-add
+    desc: Add an element to the editor menu
+    parameters:
+      element:
+        type: string
+        desc: The name of the menu item to add
+      event:
+        type: string
+        desc: The event type to send when the menu item is clicked
+      prepend:
+        type: boolean
+        desc: "True to prepend, False to append"
+  - event: editor-menu-label-add
+    desc: Add a label to the editor menu
+    parameters:
+      label:
+        type: string
+        desc: The label to add
+  - event: editor-update
+    desc: Update the editor
+  - event: editor-element-attribute-set-byid
+    desc: Set an attribute value by element ID
+    parameters: 
+      id:
+        type: string
+        desc: ID of the element to change the attribute of
+      attribute:
+        type: string
+        desc: The attribute to set
+      value:
+        type: string
+        desc: The value to set the attribute to
+  - event: editor-element-attribute-set-byselector
+    desc: Set an attribute value by element selector
+    parameters: 
+      selector:
+        type: string
+        desc: The selector for finding the element to set the attribute on
+      attribute:
+        type: string
+        desc: The attribute to set
+      value:
+        type: string
+        desc: The value to set the attribute to
+  - event: editor-element-style-set-byid
+    desc: Set a style attribute value by element ID
+    parameters: 
+      id:
+        type: string
+        desc: ID of the element to change the attribute of
+      attribute:
+        type: string
+        desc: The style attribute to set
+      value:
+        type: string
+        desc: The value to set the attribute to
+  - event: editor-element-style-set-byselector
+    desc: Set a style attribute value by element selector
+    parameters: 
+      selector:
+        type: string
+        desc: The selector for finding the element to set the attribute on
+      attribute:
+        type: string
+        desc: The style attribute to set
+      value:
+        type: string
+        desc: The value to set the attribute to
 to-plugin:
   - event: event
     desc: Sent when an event occurs in DrPublish
