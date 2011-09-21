@@ -1,15 +1,19 @@
 /**
  * create-tag 
+ *
  * Create a new tag
  */
 $.pm.bind ( 'create-tag', function ( data ) {
   var tag = data.tag; // string; The tag to create  
 
   
+  
+  return true;   
 } );
 
 /**
  * get-categories 
+ *
  * Gets all categories
  */
 $.pm.bind ( 'get-categories', function ( data ) {
@@ -20,6 +24,7 @@ $.pm.bind ( 'get-categories', function ( data ) {
 
 /**
  * get-tag-type 
+ *
  * Gets data about the given tag type
  */
 $.pm.bind ( 'get-tag-type', function ( data ) {
@@ -31,6 +36,7 @@ $.pm.bind ( 'get-tag-type', function ( data ) {
 
 /**
  * get-tag-types 
+ *
  * Gets all tag types
  */
 $.pm.bind ( 'get-tag-types', function ( data ) {
@@ -41,26 +47,33 @@ $.pm.bind ( 'get-tag-types', function ( data ) {
 
 /**
  * load-revision 
+ *
  * Load the given revision of the current article
  */
 $.pm.bind ( 'load-revision', function ( data ) {
   var revision = data.revision; // integer; The revision to load  
 
   
+  
+  return true;   
 } );
 
 /**
  * plugin-reload 
+ *
  * Reload the given plugin
  */
 $.pm.bind ( 'plugin-reload', function ( data ) {
   var plugin = data.plugin; // string; Used to identify the plugin to reload  
 
   
+  
+  return true;   
 } );
 
 /**
  * plugin-start 
+ *
  * Start the given plugin
  */
 $.pm.bind ( 'plugin-start', function ( data ) {
@@ -68,44 +81,58 @@ $.pm.bind ( 'plugin-start', function ( data ) {
   var options = data.options; // JSON; Options for starting the plugin  
 
   
+  
+  return true;   
 } );
 
 /**
  * plugin-stop 
+ *
  * Stop the given plugin
  */
 $.pm.bind ( 'plugin-stop', function ( data ) {
   var plugin = data.plugin; // string; Name of the plugin to start  
 
   
+  
+  return true;   
 } );
 
 /**
  * show-message-error 
+ *
  * Show an error message to the user
  */
 $.pm.bind ( 'show-message-error', function ( data ) {
   var message = data.message; // string; The message to display  
 
   
+  
+  return true;   
 } );
 
 /**
  * show-message-info 
+ *
  * Show an info message to the user
  */
 $.pm.bind ( 'show-message-info', function ( data ) {
   var message = data.message; // string; The message to display  
 
   
+  
+  return true;   
 } );
 
 /**
  * show-message-warning 
+ *
  * Show a warning message to the user
  */
 $.pm.bind ( 'show-message-warning', function ( data ) {
   var message = data.message; // string; The message to display  
 
   
+  
+  return true;   
 } );
