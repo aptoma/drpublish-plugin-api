@@ -2,428 +2,349 @@
  * This class is used for communicating with the article in DOM, typically
  * setting and getting values of metadata or in the article content itself.
  * 
- * The class is extended to provide access to these functions to plugins
+ * TODO: Find the necessity of getDocument, getContent, getAside, setContent
  */
-
 var DP_Article = {
-  /**
-   * Constructor for this class
-   */
-  initialize : function () {
-
-  },
   
   /**
    * Start the given plugin
    * 
-   * @param string name of the plugin from settings.php
+   * @param {String} name Name of the plugin from settings.php
+   * @param {Object} options Options for initializing the plugin
+   * @param {Function} callback The function to call when the plugin has been
+   *          started
    */
-  startPlugin : function ( name, options ) {
+  startPlugin : function ( name, options, callback ) {
 
-    Plugins.start ( name, options );
+    DP.request ( "plugin-start", {
+      plugin : name,
+      option : options
+    }, callback );
   },
   
   /**
    * Stop the given plugin
    * 
-   * @param string name of the plugin from settings.php
+   * @param {String} name Name of the plugin from settings.php
+   * @param {Function} callback The function to call when the plugin has been
+   *          stopped
    */
   stopPlugin : function ( name ) {
 
-    Plugins.stop ( name );
+    DP.request ( "plugin-stop", {
+      plugin : name
+    }, callback );
   },
   
   /**
    * Get the id of the article currently edited
    * 
-   * @return int
+   * @param {Function} callback The function to call with the ID of the article
    */
-  getId : function () {
+  getId : function ( callback ) {
 
-    return DPEditor.article.id;
-  },
-  
-  /**
-   * Get the document object for the editor
-   * 
-   * @return HTMLDocument
-   */
-  getDocument : function () {
-
-    return tinyMCE.getInstanceById ( 'editor-' + DPEditor.article.templateName
-        + '-story' ).contentDocument;
-  },
-  
-  /**
-   * Get the content of the editor
-   * 
-   * @return Array(string)
-   */
-  getContent : function () {
-
-    return DPEditor.article.content;
-  },
-  
-  /**
-   * Get the aside content
-   * 
-   * @return Array(string)
-   */
-  getAside : function () {
-
-    return DPEditor.article.aside;
-  },
-  
-  /**
-   * Set the content of the editor
-   * 
-   * @param string Content to be set
-   */
-  setContent : function ( contentXmlString ) {
-
-    if ( !contentXmlString ) {
-      return;
-    }
-    var xmlDoc = xmlStringToDom ( contentXmlString );
-    var articleRoot = xmlDoc.getElementsByTagName ( 'dp-article-content' );
-    if ( articleRoot && articleRoot.length > 0 ) {
-      articleRoot = articleRoot[0];
-    } else {
-      return;
-    }
-    elementNodes = xmlDoc.documentElement.childNodes;
-    for ( var i = 0; i < elementNodes.length; i++ ) {
-      var dpElement = elementNodes[i];
-      if ( dpElement && dpElement.nodeType == 1 ) {
-        var content = '';
-        for ( var j = 0; j < dpElement.childNodes.length; j++ ) {
-          content += domToXmlString ( dpElement.childNodes[j] );
-        }
-        var name = dpElement.tagName;
-        DPEditor.article.content[name] = content;
-      }
-    }
-    DPArticleRender.render ( DPEditor.article );
+    DP.request ( 'article-id-get', null, callback );
   },
   
   /**
    * Clear the meta information summary
+   * 
+   * @param {Function} callback The function to call when info has been cleared
    */
-  clearMetaInfo : function () {
+  clearMetaInfo : function ( callback ) {
 
-    this.setTags ( '', true );
-    this.setCategories ( '', true );
-    this.setSource ( null, true );
-    this.setStatus ( 'draft', true );
-    this.setPublishedDatetime ( '', true );
-    this.setAuthors ( '', true );
-    this.setAwaitingResponseFromUsers ( '', true );
-    this.setPendingMessage ( '', true );
-    // this.setRevisionHistory(null);
+    DP.request ( "article-metainfo-clear", null, callback );
   },
   
   /**
    * Get tags used in the article
    * 
-   * @return array
+   * @param {Function} callback The function to call with all tags
    */
-  getTags : function () {
+  getTags : function ( callback ) {
 
-    return DPEditor.article.getMeta ( 'tags' );
+    DP.request ( "article-tags-get", null, callback );
   },
   
   /**
    * Set tags for the article
    * 
-   * @param string Comma-seperated list of tags that should be set
+   * @param {String} tags Comma-separated list of tags that should be set
+   * @param {Function} callback The function to call when tags have been set
    */
-  setTags : function ( tags ) {
+  setTags : function ( tags, callback ) {
 
-    DPEditor.setTags ( tags );
-    DPArticleRender.renderMetaTags ( DPEditor.article );
+    DP.request ( 'article-tags-set', {
+      tags : tags
+    }, callback );
   },
   
   /**
-   * Add tags for the article
+   * Add tag for the article
    * 
-   * @param string Tag to be added
+   * @param {String} tag Tag to be added
+   * @param {Function} callback Function to call when tag has been added
    */
-  addTag : function ( tag ) {
+  addTag : function ( tag, callback ) {
 
-    DPEditor.addTag ( tag );
-    DPArticleRender.renderMetaTags ( DPEditor.article );
+    DP.request ( 'article-tags-add', {
+      tag : tag
+    }, callback );
   },
   
+  /**
+   * Remove tag from article
+   * 
+   * @param {String} tag Tag to remove
+   * @param {Function} callback The function to call when tag has been removed
+   */
   removeTag : function ( tag ) {
 
-    DPEditor.removeTag ( tag );
-    DPArticleRender.renderMetaTags ( DPEditor.article );
+    DP.request ( 'article-tags-remove', {
+      tag : tag
+    }, callback );
   },
   
   /**
    * Get the selected categories
    * 
-   * @return object
+   * @param {Function} callback The function to call with the selected
+   *          categories
    */
-  getSelectedCategories : function () {
+  getSelectedCategories : function ( callback ) {
 
-    return DPEditor.article.getMeta ( 'categories' );
+    DP.request ( 'article-categories-selected-get', null, callback );
   },
   
-  saveCategories : function () {
+  /**
+   * Save the currently selected categories
+   * 
+   * @param {Function} callback The function to call when the categories have
+   *          been saved
+   */
+  saveCategories : function ( callback ) {
 
-    this.setCategories ( this.getSelectedCategories () );
+    this.getSelectedCategories ( function ( categories ) {
+
+      this.setCategories ( categories, callback );
+    } );
   },
   
   /**
    * Set selected categories
    * 
-   * @param string Comma-seperated list of category ids that should be set
+   * @param {String} categories Comma-separated list of category IDs that should
+   *          be set
+   * @param {Function} callback The function to call when the categories have
+   *          been set
    */
-  setCategories : function ( categories ) {
+  setCategories : function ( categories, callback ) {
 
-    DPEditor.setCategories ( categories );
+    DP.request ( 'article-categories-selected-set', {
+      categories : categories
+    }, callback );
   },
   
-  addCategories : function ( categories ) {
+  /**
+   * Add the given categories to the list of categories
+   * 
+   * @param {String} categories Comma-separated list of category IDs to add
+   * @param {Function} callback The function to call when the categories have
+   *          been added
+   */
+  addCategories : function ( categories, callback ) {
 
-    DPEditor.addCategories ( categories );
+    DP.request ( 'article-categories-add', {
+      categories : categories
+    }, callback );
   },
   
-  addCategory : function ( category ) {
+  /**
+   * Remove the given categories from the list of categories
+   * 
+   * @param {String} categories Comma-separated list of category IDs to remove
+   * @param {Function} callback The function to call when the categories have
+   *          been removed
+   */
+  removeCategories : function ( categories, callback ) {
 
-    DPEditor.addCategory ( category );
+    DP.request ( 'article-categories-remove', {
+      categories : categories
+    }, callback );
   },
   
-  removeCategory : function ( category ) {
+  /**
+   * Set the main category of the current article
+   * 
+   * @param {Integer} category The ID of the category to set as the main
+   *          category
+   * @param {Function} callback The function to call when the main category has
+   *          been updated
+   */
+  setMainCategory : function ( category, callback ) {
 
-    DPEditor.removeCategory ( category );
-  },
-  
-  removeCategories : function ( categories ) {
-
-    DPEditor.removeCategories ( categories );
-  },
-  
-  setMainCategory : function ( category ) {
-
-    DPEditor.setMainCategory ( category );
+    DP.request ( 'article-categories-main-set', {
+      category : category
+    }, callback );
   },
   
   /**
    * Get the source set for the article
    * 
-   * @return string
+   * @param {Function} callback The function to call with the source
    */
-  getSource : function () {
+  getSource : function ( callback ) {
 
-    return DPEditor.article.getMeta ( 'source' );
+    DP.request ( 'article-source-get', null, callback );
   },
   
   /**
    * Set the source for the article
    * 
-   * @param string The new value to be set
+   * @param {String} value The new value to be set as source
+   * @param {Function} callback The function to call when the source has been
+   *          set
    */
-  setSource : function ( value ) {
+  setSource : function ( value, callback ) {
 
-    DPEditor.setSource ( value );
+    DP.request ( 'article-source-set', {
+      source : value
+    }, callback );
   },
   
   /**
-   * Get the selected status for the article
+   * Get the status for the article
    * 
-   * @return string
+   * @param {Function} callback The function to call with the status
    */
-  getStatus : function () {
+  getStatus : function ( callback ) {
 
-    return DPEditor.article.getMeta ( 'status' );
+    DP.request ( 'article-status-get', null, callback );
   },
   
   /**
    * Set the status for the article
    * 
-   * @param string The new status to be set (draft, waiting, published)
+   * @param {String} status The new status to be set (draft, waiting, published)
+   * @param {Function} callback The function to call when the status has been
+   *          set
    */
-  setStatus : function ( status ) {
+  setStatus : function ( status, callback ) {
 
-    DPEditor.article.setMeta ( 'status', status );
-    DPArticleRender.renderMetaStatus ( DPEditor.article );
+    DP.request ( 'article-status-set', {
+      status : status
+    }, callback );
   },
   
   /**
    * Get the published-date
    * 
-   * @return string
+   * @param {Function} callback The function to call with the published date
    */
-  getPublishedDatetime : function () {
+  getStatus : function ( callback ) {
 
-    return DPEditor.article.getMeta ( 'publishedTimestamp' );
+    DP.request ( 'article-published-get', null, callback );
   },
   
   /**
    * Set the published-date
    * 
-   * @param string Date to be set (YYYY-MM-DD HH:MM:SS)
+   * @param {String} published Date to be set (YYYY-MM-DD HH:MM:SS)
+   * @param {Function} callback The function to call when the publication date
+   *          has been set
    */
-  setPublishedDatetime : function ( _date, readOnly ) {
+  setPublishedDatetime : function ( published, callback ) {
 
-    if ( !_date ) {
-      return false;
-    }
-    var splitDate = _date.split ( " " );
-    var ymd = splitDate[0].split ( ":" );
-    var hms = splitDate[1].split ( ":" );
-    var d = new Date ();
-    d.setYear ( parseInt ( ymd[0], 10 ) );
-    d.setMonth ( parseInt ( ymd[1], 10 ) - 1 );
-    d.setDate ( parseInt ( ymd[2], 10 ) );
-    d.setHours ( parseInt ( hms[0], 10 ) );
-    d.setMinutes ( parseInt ( hms[1], 10 ) );
-    if ( parseInt ( hms[2], 10 ) > 0 ) {
-      d.setSeconds ( parseInt ( hms[2], 10 ) );
-    }
-    DPEditor.article.setMeta ( 'publishedTimestamp', d.getTime () * 1000 );
-    DPArticleRender.renderMetaStatus ( DPEditor.article );
+    DP.request ( 'article-published-set', {
+      published : published
+    }, callback );
   },
   
   /**
    * Get the authors set in the article
    * 
-   * @return array
+   * @param {Function} callback The function to call with the authors
    */
-  getAuthors : function () {
+  getAuthors : function ( callback ) {
 
-    return DPEditor.article.getMeta ( 'authors' );
+    DP.request ( 'article-authors-get', null, callback );
   },
   
   /**
    * Set authors for the article
    * 
-   * @param string Comma-seperated list of authors that should be set
+   * @param {String} categories Comma-separated list of authors that should be set
+   * @param {Function} callback The function to call when the authors have been set
    */
-  setAuthors : function ( authors, readOnly ) {
+  setAuthors : function ( authors, callback ) {
 
-    DPEditor.setAuthors ( authors );
+    DP.request ( 'article-authors-set', {
+      authors : authors
+    }, callback );
   },
   
   /**
-   * Add authors for the article
+   * Add the given authors to the list of authors
    * 
-   * @param string Comma-seperated list of authors that should be added
+   * @param {String} categories Comma-separated list of authors to add
+   * @param {Function} callback The function to call when the authors have been added
    */
-  addAuthors : function ( authors ) {
+  addAuthors : function ( authors, callback ) {
 
-    DPEditor.setAuthors ( authors );
-  },
-  
-  addAuthor : function ( author ) {
-
-    DPEditor.addAuthor ( author );
-  },
-  
-  removeAuthor : function ( author ) {
-
-    DPEditor.removeAuthor ( author );
+    DP.request ( 'article-authors-add', {
+      authors : authors
+    }, callback );
   },
   
   /**
-   * Get pending users for the article
+   * Remove the given authors from the list of authors
    * 
-   * @return array
+   * @param {String} categories Comma-separated list of authors to remove
+   * @param {Function} callback The function to call when the authors have been removed
    */
-  getAwaitingResponseFromUsers : function () {
+  removeCategories : function ( authors, callback ) {
 
-    // return $F('awaiting-response-from-users').split(",").map(function(v) {
-    // return v.strip(); });
-  },
-  
-  /**
-   * Set pending users for the article
-   * 
-   * @param string Comma-seperated list of users that should be set
-   */
-  setAwaitingResponseFromUsers : function ( users, readOnly ) {
-
-    // Listeners.notify('addAwaitingResponseFromUser', users);
-    // $('awaiting-response-from-users').value = users;
-    // if (!readOnly)
-    // AjaxController.post(MODULE_URL+'/ajax.php?do=saveWaitingUsers&id='+this.getId(),
-    // 'users='+users);
-  },
-  
-  /**
-   * Set the waiting message
-   * 
-   * @param string Message
-   */
-  setAwaitingResponseMessage : function ( message, readOnly ) {
-
-    // $('message').value = message;
-    // if (!readOnly)
-    // AjaxController.post(MODULE_URL+'/ajax.php?do=saveWaitingMessage&id='+this.getId(),
-    // 'message='+message);
-  },
-  
-  /**
-   * Get the waiting message
-   */
-  getAwaitingResponseMessage : function ( message ) {
-
-  },
-  
-  /**
-   * Get pending message
-   * 
-   * @return string
-   */
-  getPendingMessage : function () {
-
-  },
-  
-  /**
-   * Set pending message
-   * 
-   * @param string Message to be set
-   */
-  setPendingMessage : function ( msg ) {
-
+    DP.request ( 'article-authors-remove', {
+      authors : authors
+    }, callback );
   },
   
   /**
    * Gets the current article content
+   * 
+   * @param {Function} callback The function to call with the article contents
    */
-  getCurrentContent : function () {
-
-    return DPEditor.article.content;
+  getCurrentContent : function ( callback ) {
+    DP.request ( 'article-content-get', null, callback );
   },
   
   /**
    * Updates current article content
+   * 
+   * @param {String} content The new content for the article
+   * @param {Function} callback The function to call when the contents have been updated
    */
-  setCurrentContent : function ( content ) {
-
-    DPEditor.article.content = content;
-    DPArticleRender.render ( DPEditor.article );
+  setCurrentContent : function ( content, callback ) {
+    DP.request ( 'article-content-set', { content: content }, callback );
   },
   
   /**
-   * Add pending users for the article
+   * Get the article type of the current article
    * 
-   * @param string Comma-seperated list of users that should be added
+   * @param {Function} callback The function to call with the type of the article
    */
-  addAwaitingResponseFromUsers : function ( users ) {
-
+  getArticletypeId : function ( callback ) {
+    DP.request ( 'article-type-get', null, callback );
   },
   
-  setArticletypeId : function ( articletypeId ) {
-
-    DPEditor.article.setArticletypeId ( articletypeId );
-  },
-  
-  getArticletypeId : function () {
-
-    return DPEditor.article.getArticletypeId ();
+  /**
+   * Set the article type of the current article
+   * 
+   * @param {Integer} articletypeId The new article type of the article
+   * @param {Function} callback The function to call when the article type has been changed
+   */
+  setArticletypeId : function ( articletypeId, callback ) {
+    DP.request ( 'article-type-set', { articletype: articletypeId }, callback );
   }
 };
 

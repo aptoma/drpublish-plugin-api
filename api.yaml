@@ -143,6 +143,156 @@ from-plugin:
       value:
         type: string
         desc: The value to set the attribute to
+  - event: plugin-start
+    desc: Start the given plugin
+    parameters:
+      plugin:
+        type: string
+        desc: Name of the plugin to start
+      options:
+        type: JSON
+        desc: Options for starting the plugin
+  - event: plugin-stop
+    desc: Stop the given plugin
+    parameters:
+      plugin:
+        type: string
+        desc: Name of the plugin to start
+  - event: article-id-get
+    desc: Get the ID of the current article
+    returns:
+      type: int
+      desc: ID of the current article
+  - event: article-metainfo-clear
+    desc: Clear the meta info summary
+  - event: article-tags-get
+    desc: Get the tags for the current article
+    returns:
+      type: [string]
+      desc: All tags used in the article
+  - event: article-tags-set
+    desc: Set the tags for the current article
+    parameters:
+      tags: 
+        type: string
+        desc: Comma-separated tags
+  - event: article-tags-add
+    desc: Add the given tag to the tags of the current article
+    parameters:
+      tag:
+        type: string
+        desc: Tag to add
+  - event: article-tags-remove
+    desc: Remove the given tag from the tags of the current article
+    parameters:
+      tag:
+        type: string
+        desc: Tag to remove
+  - event: article-categories-selected-get
+    desc: Get selected categories
+    returns:
+      type: string
+      desc: Comma-separated list of IDs for the selected categories
+  - event: article-categories-selected-set
+    desc: Set selected categories
+    parameters:
+      categories:
+        type: string
+        desc: Comma-separated list of IDs for the selected categories
+  - event: article-categories-add
+    desc: Add the given categories
+    parameters:
+      categories:
+        type: string
+        desc: Comma-separated list of IDs for the categories to add
+  - event: article-categories-remove
+    desc: Remove the given categories
+    returns:
+      type: string
+      desc: Comma-separated list of IDs for the categories to remove
+  - event: article-categories-main-set
+    desc: Set the main category of the current article
+    parameters:
+      category:
+        type: integer
+        desc: ID of the category to set as main category
+  - event: article-source-get
+    desc: Get the source of the current article
+    returns:
+      type: string
+      desc: The source of the current article
+  - event: article-source-set
+    desc: Set the source of the current article
+    parameters:
+      source:
+        type: string
+        desc: What to set the source to
+  - event: article-status-get
+    desc: Get the status of the current article
+    returns:
+      type: string
+      desc: The status of the current article
+  - event: article-status-set
+    desc: Set the status of the current article
+    parameters:
+      status:
+        type: string
+        desc: What to set the status to
+  - event: article-published-get
+    desc: Get the published date of the current article
+    returns:
+      type: string
+      desc: The published date of the current article
+  - event: article-published-set
+    desc: Set the published date of the current article
+    parameters:
+      publish:
+        type: string
+        desc: What to set the published date to
+  - event: article-authors-get
+    desc: Get authors for the current article
+    returns:
+      type: string
+      desc: Comma-separated list of authors
+  - event: article-authors-set
+    desc: Set authors for the current article
+    parameters:
+      categories:
+        type: string
+        desc: Comma-separated list of authors
+  - event: article-authors-add
+    desc: Add the given authors
+    parameters:
+      authors:
+        type: string
+        desc: Comma-separated list of authors to add
+  - event: article-authors-remove
+    desc: Remove the given authors
+    returns:
+      type: string
+      desc: Comma-separated list of authors to remove
+  - event: article-content-get
+    desc: Get the current article content
+    returns:
+      type: string
+      desc: The current article content
+  - event: article-content-set
+    desc: Set the content of the current article
+    parameters:
+      content:
+        type: string
+        desc: The new content of the article
+  - event: article-type-get
+    desc: Get the type of the current article
+    returns:
+      type: integer
+      desc: The ID of the type of the current article
+  - event: article-type-set
+    desc: Set the article type for the current article
+    parameters:
+      articletype:
+        type: integer
+        desc: The new article type of the article
 to-plugin:
   - event: event
     desc: Sent when an event occurs in DrPublish
