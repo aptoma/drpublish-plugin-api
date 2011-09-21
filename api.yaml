@@ -1,4 +1,4 @@
---- Events to be exchanged between DrPublish plugin and DrPublish panel
+# Events to be exchanged between DrPublish plugin and DrPublish panel
 from-plugin:
   - event: plugin-reload
     desc: Reload the given plugin
