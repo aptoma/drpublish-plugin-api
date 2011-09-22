@@ -15,8 +15,7 @@ var DP = {
     this.errorListeners = new Listeners;
     this.eventListeners = new Listeners;
     
-    $.bind ( "event", function ( data ) {
-      
+    pm.bind ( "event", function ( data ) {
       this.eventListeners.notify ( data.event, data.data );
     } );
   },
@@ -33,7 +32,7 @@ var DP = {
     data['src_plugin'] = this.getPluginName ();
     
     var me = this;
-    $.pm ( {
+    pm ( {
       target : parent,
       type : callSpec,
       data : data,
