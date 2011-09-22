@@ -117,4 +117,6 @@ Listeners.prototype.notify = function ( event, data ) {
       }
     } );
   }
+  
+  return true;
 };

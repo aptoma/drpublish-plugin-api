@@ -27,10 +27,11 @@ var DPPAPI = {
    * @param event Type of event
    * @param data Event data
    */
-  directedEvent : function ( plugin, event, data ) {
+  directedEvent : function ( plugin, event, data, callback ) {
     this.send ( plugin, 'event', {
       type : event,
-      data : data
+      data : data,
+      onSuccess : callback
     } );
   },
   
@@ -39,9 +40,16 @@ var DPPAPI = {
    * @param event Type of event
    * @param data Event data
    */
-  event : function ( event, data ) {
+  event : function ( event, data, callback ) {
+    var done = [];
+    var noPlugins = Plugins.list;
     for ( p in Plugins.list ) {
-      this.directedEvent ( p.name, event, data );
+      this.directedEvent ( p.name, event, data, function ( ) {
+        if ( done.length == noPlugins - 1 ) {
+          callback();
+        }
+        done.push ( p.name );
+      } );
     }
   }
 };
