@@ -3,7 +3,7 @@
  * 
  * Add the given authors
  */
-$.pm.bind ( 'article-authors-add', function ( data ) {
+pm.bind ( 'article-authors-add', function ( data ) {
   var authors = data.authors; // array; List of authors to add  
   
   for ( a in authors ) {
@@ -18,7 +18,7 @@ $.pm.bind ( 'article-authors-add', function ( data ) {
  * 
  * Get authors for the current article
  */
-$.pm.bind ( 'article-authors-get', function ( data ) {
+pm.bind ( 'article-authors-get', function ( data ) {
   
   return DPEditor.article.getMeta ( 'authors' ).split ( "," ); // array; List of authors    
 } );
@@ -28,7 +28,7 @@ $.pm.bind ( 'article-authors-get', function ( data ) {
  * 
  * Remove the given authors
  */
-$.pm.bind ( 'article-authors-remove', function ( data ) {
+pm.bind ( 'article-authors-remove', function ( data ) {
   var authors = data.authors; // array; List of authors to remove  
   
   for ( a in authors ) {
@@ -43,7 +43,7 @@ $.pm.bind ( 'article-authors-remove', function ( data ) {
  * 
  * Set authors for the current article
  */
-$.pm.bind ( 'article-authors-set', function ( data ) {
+pm.bind ( 'article-authors-set', function ( data ) {
   var authors = data.authors; // array; List of authors  
   
   DPEditor.setAuthors ( authors );
@@ -56,7 +56,7 @@ $.pm.bind ( 'article-authors-set', function ( data ) {
  * 
  * Add the given categories
  */
-$.pm.bind ( 'article-categories-add', function ( data ) {
+pm.bind ( 'article-categories-add', function ( data ) {
   var categories = data.categories; // array; List of IDs for the categories to add  
   
   DPEditor.addCategories ( categories.join ( "," ) );
@@ -69,7 +69,7 @@ $.pm.bind ( 'article-categories-add', function ( data ) {
  * 
  * Set the main category of the current article
  */
-$.pm.bind ( 'article-categories-main-set', function ( data ) {
+pm.bind ( 'article-categories-main-set', function ( data ) {
   var category = data.category; // integer; ID of the category to set as main category  
   
   DPEditor.setMainCategory ( category );
@@ -82,7 +82,7 @@ $.pm.bind ( 'article-categories-main-set', function ( data ) {
  * 
  * Remove the given categories
  */
-$.pm.bind ( 'article-categories-remove', function ( data ) {
+pm.bind ( 'article-categories-remove', function ( data ) {
   var categories = data.categories; // array; List of IDs for the categories to remove  
   
   DPEditor.removeCategories ( categories.join ( "," ) );
@@ -95,7 +95,7 @@ $.pm.bind ( 'article-categories-remove', function ( data ) {
  * 
  * Get selected categories
  */
-$.pm.bind ( 'article-categories-selected-get', function ( data ) {
+pm.bind ( 'article-categories-selected-get', function ( data ) {
   
   return DPEditor.article.getMeta ( 'categories' ).split ( "," ); // array; List of IDs for the selected categories    
 } );
@@ -105,7 +105,7 @@ $.pm.bind ( 'article-categories-selected-get', function ( data ) {
  * 
  * Set selected categories
  */
-$.pm.bind ( 'article-categories-selected-set', function ( data ) {
+pm.bind ( 'article-categories-selected-set', function ( data ) {
   var categories = data.categories; // array; List of IDs for the selected categories  
   
   DPEditor.setCategories ( categories.join ( "," ) );
@@ -118,7 +118,7 @@ $.pm.bind ( 'article-categories-selected-set', function ( data ) {
  * 
  * Get the current article content
  */
-$.pm.bind ( 'article-content-get', function ( data ) {
+pm.bind ( 'article-content-get', function ( data ) {
   
   return DPEditor.article.content; // string; The current article content    
 } );
@@ -128,7 +128,7 @@ $.pm.bind ( 'article-content-get', function ( data ) {
  * 
  * Set the content of the current article
  */
-$.pm.bind ( 'article-content-set', function ( data ) {
+pm.bind ( 'article-content-set', function ( data ) {
   var content = data.content; // string; The new content of the article  
   
   DPEditor.article.content = content;
@@ -142,7 +142,7 @@ $.pm.bind ( 'article-content-set', function ( data ) {
  * 
  * Get the ID of the current article
  */
-$.pm.bind ( 'article-id-get', function ( data ) {
+pm.bind ( 'article-id-get', function ( data ) {
   
   return DPEditor.article.id; // int; ID of the current article    
 } );
@@ -152,7 +152,7 @@ $.pm.bind ( 'article-id-get', function ( data ) {
  * 
  * Clear the meta info summary
  */
-$.pm.bind ( 'article-metainfo-clear', function ( data ) {
+pm.bind ( 'article-metainfo-clear', function ( data ) {
   
   this.setTags ( '', true );
   this.setCategories ( '', true );
@@ -172,7 +172,7 @@ $.pm.bind ( 'article-metainfo-clear', function ( data ) {
  * 
  * Get the published date of the current article
  */
-$.pm.bind ( 'article-published-get', function ( data ) {
+pm.bind ( 'article-published-get', function ( data ) {
   
   return DPEditor.article.getMeta ( 'publishedTimestamp' ); // string; The published date of the current article    
 } );
@@ -182,7 +182,7 @@ $.pm.bind ( 'article-published-get', function ( data ) {
  * 
  * Set the published date of the current article
  */
-$.pm.bind ( 'article-published-set', function ( data ) {
+pm.bind ( 'article-published-set', function ( data ) {
   var published = data.published; // string; What to set the published date to  
   
   if ( !published ) {
@@ -212,7 +212,7 @@ $.pm.bind ( 'article-published-set', function ( data ) {
  * 
  * Get the source of the current article
  */
-$.pm.bind ( 'article-source-get', function ( data ) {
+pm.bind ( 'article-source-get', function ( data ) {
   
   return DPEditor.article.getMeta ( 'source' ); // string; The source of the current article    
 } );
@@ -222,7 +222,7 @@ $.pm.bind ( 'article-source-get', function ( data ) {
  * 
  * Set the source of the current article
  */
-$.pm.bind ( 'article-source-set', function ( data ) {
+pm.bind ( 'article-source-set', function ( data ) {
   var source = data.source; // string; What to set the source to  
   
   DPEditor.setSource ( source );
@@ -235,7 +235,7 @@ $.pm.bind ( 'article-source-set', function ( data ) {
  * 
  * Get the status of the current article
  */
-$.pm.bind ( 'article-status-get', function ( data ) {
+pm.bind ( 'article-status-get', function ( data ) {
   
   return DPEditor.article.getMeta ( 'status' ); // string; The status of the current article    
 } );
@@ -245,7 +245,7 @@ $.pm.bind ( 'article-status-get', function ( data ) {
  * 
  * Set the status of the current article
  */
-$.pm.bind ( 'article-status-set', function ( data ) {
+pm.bind ( 'article-status-set', function ( data ) {
   var status = data.status; // string; What to set the status to  
   
   DPEditor.article.setMeta ( 'status', status );
@@ -259,7 +259,7 @@ $.pm.bind ( 'article-status-set', function ( data ) {
  * 
  * Add the given tag to the tags of the current article
  */
-$.pm.bind ( 'article-tags-add', function ( data ) {
+pm.bind ( 'article-tags-add', function ( data ) {
   var tag = data.tag; // string; Tag to add  
   
   DPEditor.addTag ( tag );
@@ -273,7 +273,7 @@ $.pm.bind ( 'article-tags-add', function ( data ) {
  * 
  * Get the tags for the current article
  */
-$.pm.bind ( 'article-tags-get', function ( data ) {
+pm.bind ( 'article-tags-get', function ( data ) {
   
   return DPEditor.article.getMeta ( 'tags' ).split ( "," ); // Array; All tags used in the article    
 } );
@@ -283,7 +283,7 @@ $.pm.bind ( 'article-tags-get', function ( data ) {
  * 
  * Remove the given tag from the tags of the current article
  */
-$.pm.bind ( 'article-tags-remove', function ( data ) {
+pm.bind ( 'article-tags-remove', function ( data ) {
   var tag = data.tag; // string; Tag to remove  
   
   DPEditor.removeTag ( tag );
@@ -297,7 +297,7 @@ $.pm.bind ( 'article-tags-remove', function ( data ) {
  * 
  * Set the tags for the current article
  */
-$.pm.bind ( 'article-tags-set', function ( data ) {
+pm.bind ( 'article-tags-set', function ( data ) {
   var tags = data.tags; // array; Tags to set  
   
   DPEditor.setTags ( tags.join ( "," ) );
@@ -311,7 +311,7 @@ $.pm.bind ( 'article-tags-set', function ( data ) {
  * 
  * Get the type of the current article
  */
-$.pm.bind ( 'article-type-get', function ( data ) {
+pm.bind ( 'article-type-get', function ( data ) {
   
   return DPEditor.article.getArticletypeId (); // integer; The ID of the type of the current article    
 } );
@@ -321,7 +321,7 @@ $.pm.bind ( 'article-type-get', function ( data ) {
  * 
  * Set the article type for the current article
  */
-$.pm.bind ( 'article-type-set', function ( data ) {
+pm.bind ( 'article-type-set', function ( data ) {
   var articletype = data.articletype; // integer; The new article type of the article  
   
   DPEditor.article.setArticletypeId ( articletype );

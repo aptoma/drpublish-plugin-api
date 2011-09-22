@@ -17,7 +17,7 @@ usort ( $data['from-plugin'], "event_cmp" );
  * <?php echo $call['desc']; ?>
 
  */
-$.pm.bind ( '<?php echo $call['event']; ?>', function ( data ) {
+pm.bind ( '<?php echo $call['event']; ?>', function ( data ) {
 <?php
   
   if ( array_key_exists ( 'parameters', $call ) ):
