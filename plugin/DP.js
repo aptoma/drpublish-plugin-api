@@ -18,6 +18,14 @@ var DP = {
     pm.bind ( "event", function ( data ) {
       this.eventListeners.notify ( data.event, data.data );
     } );
+    
+    pm ( {
+      target : self.parent,
+      type : "plugin-loaded",
+      data : {
+        plugin : this.getPluginName ()
+      }
+    } );
   },
   
   /**
