@@ -37,19 +37,32 @@ var DPPAPI = {
   
   /**
    * Send an event to all loaded plugins
+   * 
+   * Plugin events will be sent to one plugin at the time sequentially,
+   * and will pass data from each one into the next
+   * 
    * @param event Type of event
    * @param data Event data
    */
   event : function ( event, data, callback ) {
+    
     var done = [];
-    var noPlugins = Plugins.list;
-    for ( p in Plugins.list ) {
-      this.directedEvent ( p.name, event, data, function ( ) {
-        if ( done.length == noPlugins - 1 ) {
-          callback();
+    var notify = Plugins.list;
+    
+    function doMore ( data ) {
+      this.directedEvent ( notify[done.length].name, event, data, function ( data ) {
+        done.push ( true );
+        
+        if ( done.length == done.length ) {
+          callback ( data.data );
+        } else {
+          doMore ( data );
         }
-        done.push ( p.name );
       } );
+    }
+    
+    if ( notify.length ) {
+      doMore ( { data: data } );
     }
   }
 };

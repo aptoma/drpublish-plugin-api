@@ -105,6 +105,8 @@ Listeners.prototype.removeAll = function ( event ) {
 /**
  * Notifies all registered listeners that an event has occurred
  * 
+ * Each listener should return the incoming data (modified if necessary)
+ * 
  * @param {String} event Event type
  * @param {Object} data The event data
  */
@@ -113,10 +115,10 @@ Listeners.prototype.notify = function ( event, data ) {
   if ( this._listeners[event] != undefined ) {
     $.each ( this.eventListeners[event], function () {
       if ( this ) {
-        this ( data );
+        data = this ( data.data );
       }
     } );
   }
   
-  return true;
+  return { data : data };
 };
