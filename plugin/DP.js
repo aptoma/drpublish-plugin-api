@@ -19,6 +19,7 @@ var DP = {
       this.eventListeners.notify ( data.event, data.data );
     } );
     
+    console.log ( "Sending plugin-loaded signal from plugin " + this.getPluginName() + " to DrPublish" );
     pm ( {
       target : self.parent,
       type : "plugin-loaded",
