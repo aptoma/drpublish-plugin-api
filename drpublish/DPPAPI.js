@@ -9,13 +9,32 @@ var DPPAPI = {
    * @param callSpec Type of message to send
    * @param data Data contained in message
    * @param callback Function to call on success
+   * @param errorCallback Function to call on failure (i.e. plugin not loaded)
    */
-  send : function ( plugin, callSpec, data, callback ) {
+  send : function ( plugin, callSpec, data, callback, errorCallback ) {
+    
+    if ( callSpec == "event" ) {
+      console.log ( "notifying " + plugin + " of event " + data.type );
+    } else {
+      console.log ( 'sending ' + callSpec + ' signal to plugin ' + plugin );
+    }
+    
+    var target = document.getElementById ( 'dp-plugin-' + plugin );
+    
+    if ( !target ) {
+      console.log ( 'failed: plugin not loaded' );
+      if ( typeof errorCallback == "function" ) {
+        errorCallback ( 'plugin not loaded' );
+      }
+      return;
+    }
+    
     $.pm ( {
-      target : document.getElementById ( 'dp-plugin-' + plugin ).frameElement.window,
+      target : target.frameElement.window,
       type : callSpec,
       data : data,
       success : callback,
+      error: errorCallback,
       origin : "*", // TODO: Find a way of avoiding all-origins
       hash : false
     } );
@@ -27,12 +46,11 @@ var DPPAPI = {
    * @param event Type of event
    * @param data Event data
    */
-  directedEvent : function ( plugin, event, data, callback ) {
+  directedEvent : function ( plugin, event, data, callback, errorCallback ) {
     this.send ( plugin, 'event', {
       type : event,
-      data : data,
-      onSuccess : callback
-    } );
+      data : data
+    }, callback, errorCallback );
   },
   
   /**
@@ -48,21 +66,30 @@ var DPPAPI = {
     
     var done = [];
     var notify = Plugins.list;
+    var _this = this;
+    
+    console.log ( "Notifying plugins ", notify, " of " + event + " event" );
     
     function doMore ( data ) {
-      this.directedEvent ( notify[done.length].name, event, data, function ( data ) {
+      var complete = function ( data ) {
         done.push ( true );
         
-        if ( done.length == done.length ) {
-          callback ( data.data );
+        if ( done.length == notify.length ) {
+          if ( typeof callback == "function" ) {
+            callback ( data.data );
+          }
         } else {
           doMore ( data );
         }
-      } );
+      };
+      
+      _this.directedEvent ( notify[done.length].name, event, data, complete, complete );
     }
     
     if ( notify.length ) {
       doMore ( { data: data } );
+    } else if ( typeof callback == "function" ) {
+      callback ( data );
     }
   }
 };
