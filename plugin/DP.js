@@ -38,6 +38,10 @@ var DP = {
    */
   request : function ( callSpec, data, callback ) {
     
+    if ( data == null ) {
+      data = {};
+    }
+    
     data['src_plugin'] = this.getPluginName ();
     
     var me = this;
