@@ -6,7 +6,9 @@
 pm.bind ( 'create-tag', function ( data ) {
   var tag = data.tag; // string; The tag to create  
   
-  DPEditor.createNewTag ( null, tag );
+  DPEditor.createNewTag ( function ( tag ) {
+    DPPAPI.event ( 'tag-created', tag );
+  }, tag );
   
   return true;
 } );

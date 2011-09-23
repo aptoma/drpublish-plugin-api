@@ -1,3 +1,6 @@
+// To avoid telling the Dev multiple times that a plugin is not new
+var _saidNotNew = [];
+
 /**
  * Methods for interacting with DrPublish Plugins
  */
@@ -5,6 +8,7 @@ var DPPAPI = {
   
   /**
    * Sends a message to the given plugin's iframe
+   * 
    * @param plugin Name of plugin to send message to
    * @param callSpec Type of message to send
    * @param data Data contained in message
@@ -14,27 +18,36 @@ var DPPAPI = {
   send : function ( plugin, callSpec, data, callback, errorCallback ) {
     
     if ( callSpec == "event" ) {
-      console.log ( "notifying " + plugin + " of event " + data.type );
+      //console.log ( 'DPPAPI: Notifying ' + plugin + ' of ' + data.type + ' event ', data.data );
     } else {
-      console.log ( 'sending ' + callSpec + ' signal to plugin ' + plugin );
+      console.log ( 'DPPAPI: Sending ' + callSpec + ' signal to plugin ' + plugin );
     }
     
-    var target = document.getElementById ( 'dp-plugin-' + plugin );
-    
-    if ( !target ) {
-      console.log ( 'failed: plugin not loaded' );
+    if ( !document.getElementById ( 'plugin-' + plugin ) ) {
+      console.warn ( 'DPPAPI: Plugin ' + plugin + ' does not have a frame, and thus cannot be contacted' );
+      if ( typeof errorCallback == "function" ) {
+        errorCallback ( 'plugin not loaded' );
+      }
+      return
+    }
+      
+    if ( !Plugins.get ( plugin ).sentLoaded ) {
+      if ( _saidNotNew.indexOf ( plugin ) < 0 ) {
+        console.warn ( 'DPPAPI: Could not notify ' + plugin + ': Plugin not new' );
+        _saidNotNew.push ( plugin );
+      }
       if ( typeof errorCallback == "function" ) {
         errorCallback ( 'plugin not loaded' );
       }
       return;
     }
     
-    $.pm ( {
-      target : target.frameElement.window,
+    pm ( {
+      target : window.frames['plugin-' + plugin],
       type : callSpec,
       data : data,
       success : callback,
-      error: errorCallback,
+      error : errorCallback,
       origin : "*", // TODO: Find a way of avoiding all-origins
       hash : false
     } );
@@ -42,6 +55,7 @@ var DPPAPI = {
   
   /**
    * Send an event to a single plugin
+   * 
    * @param plugin Name of plugin to send event to
    * @param event Type of event
    * @param data Event data
@@ -56,8 +70,7 @@ var DPPAPI = {
   /**
    * Send an event to all loaded plugins
    * 
-   * Plugin events will be sent to one plugin at the time sequentially,
-   * and will pass data from each one into the next
+   * Plugin events will be sent to one plugin at the time sequentially, and will pass data from each one into the next
    * 
    * @param event Type of event
    * @param data Event data
@@ -68,28 +81,36 @@ var DPPAPI = {
     var notify = Plugins.list;
     var _this = this;
     
-    console.log ( "Notifying plugins ", notify, " of " + event + " event" );
+    if ( !notify.length ) {
+      console.log ( "DPPAPI: No plugins loaded, and thus event " + event + " is ignored" );
+      
+      if ( typeof callback == "function" ) {
+        callback ( data );
+      }
+      return;
+    }
     
-    function doMore ( data ) {
+    function _doMore ( data ) {
       var complete = function ( data ) {
+        
         done.push ( true );
         
         if ( done.length == notify.length ) {
+          if ( event != 'modifiedContent' ) {
+            // Because it's sent ALL THE TIME
+            console.log ( 'DPPAPI: All plugins notified of ' + event + ' (' + notify.length + ')' );
+          }
           if ( typeof callback == "function" ) {
-            callback ( data.data );
+            callback ( data );
           }
         } else {
-          doMore ( data );
+          _doMore ( data );
         }
       };
       
-      _this.directedEvent ( notify[done.length].name, event, data, complete, complete );
+      _this.directedEvent ( notify[done.length].name, event, data, complete, function ( d ) { complete ( data ); } );
     }
     
-    if ( notify.length ) {
-      doMore ( { data: data } );
-    } else if ( typeof callback == "function" ) {
-      callback ( data );
-    }
+    _doMore ( data );
   }
 };

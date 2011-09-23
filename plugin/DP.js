@@ -16,13 +16,16 @@ var DP = {
     this.eventListeners = new Listeners;
     
     pm.bind ( "event", function ( data ) {
+      console.log ( this.getPluginName() + ": Received " + event.type + " event", data.data );
       this.eventListeners.notify ( data.event, data.data );
-    } );
+      return true;
+    }, "*" );
     
-    console.log ( "Sending plugin-loaded signal from plugin " + this.getPluginName() + " to DrPublish" );
+    console.log ( this.getPluginName() + ": Sent plugin-loaded signal to DrPublish" );
     pm ( {
       target : self.parent,
       type : "plugin-loaded",
+      origin : "*", 
       data : {
         plugin : this.getPluginName ()
       }
@@ -32,7 +35,7 @@ var DP = {
   /**
    * Dispatches a request to DrPublish, and returns the reply to callback On error, notifies all error listeners based on the index .type of the thrown object
    * 
-   * @param {String} callSpec What do you want to call?
+   * @param {String} callSpec What do you want to call?
    * @param {Object} data The data attached to the request
    * @param {Function} callback The function to call upon return
    */
@@ -62,7 +65,7 @@ var DP = {
   /**
    * Creates a new jQuery dialog
    * 
-   * @param {Object} options Dialog options
+   * @param {Object} options Dialog options
    * @returns {jQuery.dialog} New dialog
    */
   createDialog : function ( options ) {
@@ -74,8 +77,8 @@ var DP = {
   /**
    * Creates a new tag
    * 
-   * @param {String} tag The tag to create
-   * @param {Function} callback What do do when the tag was created
+   * @param {String} tag The tag to create
+   * @param {Function} callback What do do when the tag was created
    */
   createNewTag : function ( tag, callback ) {
     
@@ -101,9 +104,13 @@ var DP = {
   /**
    * Get the name of the loaded plugin
    * 
-   * @returns {String} The name of the plugin, or false if it couldn't be detected
+   * @returns {String} The name of the plugin, or false if it couldn't be detected
    */
   getPluginName : function () {
+    
+    if ( !self.window.frameElement ) {
+      return false;
+    }
     
     var name = self.window.frameElement.id;
     if ( name.match ( 'plugin-' ) ) {
