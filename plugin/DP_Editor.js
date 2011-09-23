@@ -17,6 +17,17 @@ DP_Editor = {
   },
   
   /**
+   * Returns all the parent categories of the given category
+   * 
+   * @param {Object} category The category to find parents of
+   * @param {Function} callback The function to call with the list of parents
+   * @returns {Array} parent categories
+   */
+  getParentCategories : function ( category, callback ) {
+    DP.request ( 'get-parent-categories', category, callback );
+  },
+  
+  /**
    * Gives callback all tag types
    * 
    * @param {Function} callback The function to call with fetched data

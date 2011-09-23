@@ -41,6 +41,15 @@ from-plugin:
     returns:
       type: set
       desc: Set of all categories
+  - event: get-parent-categories
+    desc: Gets all parent categories of the given category
+    parameters:
+      category:
+        type: object
+        desc: The category to get the parents of
+    returns:
+      type: array
+      desc: Array of parent category objects
   - event: get-tag-types
     desc: Gets all tag types
     returns:

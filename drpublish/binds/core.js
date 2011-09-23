@@ -22,6 +22,23 @@ pm.bind ( 'get-categories', function ( data ) {
 } );
 
 /**
+ * get-parent-categories
+ * 
+ * Returns all the parent categories of the given category
+ */
+pm.bind ( 'get-parent-categories', function ( category ) {
+  var id = category.pid;
+  var pars = [];
+  while (id != null) {
+    var par = getCategoryObject(id);  
+    pars.push(par);
+    id = par.pid;
+  }
+
+  return pars;
+} );
+
+/**
  * get-tag-type
  * 
  * Gets data about the given tag type
