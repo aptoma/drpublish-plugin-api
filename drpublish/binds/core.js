@@ -68,8 +68,7 @@ pm.bind ( 'get-tag-type', function ( data ) {
  */
 pm.bind ( 'get-tag-types', function ( data ) {
   
-  return DPEditor.tagTypes;
-  ; // set; Set of all tag types    
+  return DPEditor.tagTypes; // set; Set of all tag types    
 } );
 
 /**
