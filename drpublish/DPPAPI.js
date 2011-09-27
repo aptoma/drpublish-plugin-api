@@ -31,9 +31,9 @@ var DPPAPI = {
       return
     }
       
-    if ( !Plugins.get ( plugin ).sentLoaded ) {
+    if ( !Plugins.get ( plugin ).isReady ) {
       if ( _saidNotNew.indexOf ( plugin ) < 0 ) {
-        console.warn ( 'DPPAPI: Could not notify ' + plugin + ': Plugin not new' );
+        console.warn ( 'DPPAPI: Could not notify ' + plugin + ': Plugin not authenticated' );
         _saidNotNew.push ( plugin );
       }
       if ( typeof errorCallback == "function" ) {
@@ -61,10 +61,16 @@ var DPPAPI = {
    * @param data Event data
    */
   directedEvent : function ( plugin, event, data, callback, errorCallback ) {
-    this.send ( plugin, 'event', {
-      type : event,
-      data : data
-    }, callback, errorCallback );
+    var plugin = Plugins.get ( plugin );
+    
+    if ( !plugin || !plugin.isLoaded ) {
+      errorCallback ( data );
+    } else {
+      this.send ( plugin, 'event', {
+        type : event,
+        data : data
+      }, callback, errorCallback );
+    }
   },
   
   /**
@@ -112,5 +118,33 @@ var DPPAPI = {
     }
     
     _doMore ( data );
+  },
+  
+  bind_c : function ( event, callback ) {
+    pm.bind ( event, function ( data, replyCallback, e ) {
+      if ( DPPAPI._verify ( data.src_plugin, e ) ) {
+        callback ( data, replyCallback );
+      }
+    } );
+  },
+  
+  bind : function ( event, callback ) {
+    pm.bind ( event, function ( data, replyCallback, e ) {
+      if ( DPPAPI._verify ( data.src_plugin, e ) ) {
+        return callback ( data );
+      }
+    } );
+  },
+  
+  _verify : function ( plugin, frame ) {
+    if ( frame.id == 'plugin-' + plugin ) {
+      var plugin = Plugins.get ( plugin );
+      if ( plugin && plugin.isReady ) {
+        return true;
+      }
+    }
+    
+    console.warn ( "DPPAPI: Unauthenticated plugin " + plugin + " attempted to use API" );
+    return false;
   }
 };

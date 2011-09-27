@@ -21,15 +21,35 @@ var DP = {
       return true;
     }, "*" );
     
-    console.log ( this.getPluginName() + ": Sent plugin-loaded signal to DrPublish" );
-    pm ( {
-      target : self.parent,
-      type : "plugin-loaded",
-      origin : "*", 
-      data : {
-        plugin : this.getPluginName ()
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for ( var i = 0; i < hashes.length; i++ ) {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    
+    var _this = this;
+    jQuery.get ( 'ajax.php?do=authenticate-plugin', { plugin: this.getPluginName(), auth: decodeURIComponent ( vars['auth'] ), iv: vars['iv'] },
+      function ( reply ) {
+        if ( reply ) {
+          console.log ( _this.getPluginName() + ": Sent plugin-loaded signal with auth token to DrPublish" );
+          pm ( {
+            target : self.parent,
+            type : "plugin-loaded",
+            origin : "*", 
+            data : {
+              plugin: _this.getPluginName (),
+              signature: reply.signature,
+              iv: reply.iv
+            }
+          } );
+        } else {
+          console.err ( _this.getPluginName() + ": Invalid auth from DrPublish! Quitting" );
+          self.close();
+        }
       }
-    } );
+    );
   },
   
   /**
@@ -45,7 +65,7 @@ var DP = {
       data = {};
     }
     
-    data['src_plugin'] = this.getPluginName ();
+    data['src_plugin'] = this.getPluginName (); 
     
     var me = this;
     pm ( {

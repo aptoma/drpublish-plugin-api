@@ -3,7 +3,7 @@
  * 
  * Clear the editor
  */
-pm.bind ( 'editor-clear', function ( data ) {
+DPPAPI.bind ( 'editor-clear', function ( data ) {
   
   tinyMCE.activeEditor.execCommand ( 'mceSetContent', false, '' );
   var name = editor.editorId.replace ( 'editor-', '' );
@@ -26,7 +26,7 @@ function getEditorElementBySelector ( selector ) {
 /**
  * editor-element-attribute-set-byid Set an attribute value by element ID
  */
-pm.bind ( 'editor-element-attribute-set-byid', function ( data ) {
+DPPAPI.bind ( 'editor-element-attribute-set-byid', function ( data ) {
   
   var id = data.id; // string; ID of the element to change the attribute of  
   var attribute = data.attribute; // string; The attribute to set  
@@ -43,7 +43,7 @@ pm.bind ( 'editor-element-attribute-set-byid', function ( data ) {
  * 
  * Set an attribute value by element selector
  */
-pm.bind ( 'editor-element-attribute-set-byselector', function ( data ) {
+DPPAPI.bind ( 'editor-element-attribute-set-byselector', function ( data ) {
   
   var selector = data.selector; // string; The selector for finding the element to set the attribute on  
   var attribute = data.attribute; // string; The attribute to set  
@@ -60,7 +60,7 @@ pm.bind ( 'editor-element-attribute-set-byselector', function ( data ) {
  * 
  * Set a style attribute value by element ID
  */
-pm.bind ( 'editor-element-style-set-byid', function ( data ) {
+DPPAPI.bind ( 'editor-element-style-set-byid', function ( data ) {
   
   var id = data.id; // string; ID of the element to change the attribute of  
   var attribute = data.attribute; // string; The style attribute to set  
@@ -77,7 +77,7 @@ pm.bind ( 'editor-element-style-set-byid', function ( data ) {
  * 
  * Set a style attribute value by element selector
  */
-pm.bind ( 'editor-element-style-set-byselector', function ( data ) {
+DPPAPI.bind ( 'editor-element-style-set-byselector', function ( data ) {
   
   var selector = data.selector; // string; The selector for finding the element to set the attribute on  
   var attribute = data.attribute; // string; The style attribute to set  
@@ -99,7 +99,7 @@ var increment = 0;
  * 
  * Insert element into editor
  */
-pm.bind ( 'editor-insert', function ( data ) {
+DPPAPI.bind ( 'editor-insert', function ( data ) {
   
   var element = data.element; // DOMElement|string; The element or string to insert  
   
@@ -167,7 +167,7 @@ pm.bind ( 'editor-insert', function ( data ) {
  * 
  * Add an element to the editor menu
  */
-pm.bind ( 'editor-menu-element-add', function ( data ) {
+DPPAPI.bind ( 'editor-menu-element-add', function ( data ) {
   var element = data.element; // string; The name of the menu item to add  
   var event = data.event; // string; The event type to send when the menu item is clicked  
   var prepend = data.prepend; // boolean; True to prepend, False to append  
@@ -190,7 +190,7 @@ pm.bind ( 'editor-menu-element-add', function ( data ) {
  * 
  * Hide an element from the editor menu panel
  */
-pm.bind ( 'editor-menu-element-hide', function ( data ) {
+DPPAPI.bind ( 'editor-menu-element-hide', function ( data ) {
   var element = data.element; // string; The name of the item to remove  
   
   DPTiny.pluginElements.menu.item.hide ( element );
@@ -203,7 +203,7 @@ pm.bind ( 'editor-menu-element-hide', function ( data ) {
  * 
  * Add a label to the editor menu
  */
-pm.bind ( 'editor-menu-label-add', function ( data ) {
+DPPAPI.bind ( 'editor-menu-label-add', function ( data ) {
   var label = data.label; // string; The label to add  
   
   DPTiny.pluginElements.menu.item.append ( label + ':', false, {
@@ -218,7 +218,7 @@ pm.bind ( 'editor-menu-label-add', function ( data ) {
  * 
  * Seek to a position in the editor
  */
-pm.bind ( 'editor-seek', function ( data ) {
+DPPAPI.bind ( 'editor-seek', function ( data ) {
   var position = data.position; // integer|end; The character to place the cursor before (end means at the end)  
   
   var ed = tinyMCE.activeEditor;
@@ -265,7 +265,7 @@ pm.bind ( 'editor-seek', function ( data ) {
  * 
  * Update the editor
  */
-pm.bind ( 'editor-update', function ( data ) {
+DPPAPI.bind ( 'editor-update', function ( data ) {
   
   tinyMCE.activeEditor.nodeChanged ();
   

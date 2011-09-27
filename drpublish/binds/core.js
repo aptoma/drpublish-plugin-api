@@ -3,14 +3,12 @@
  * 
  * Create a new tag
  */
-pm.bind ( 'create-tag', function ( data ) {
+DPPAPI.bind_c ( 'create-tag', function ( data, replyCallback ) {
   var tag = data.tag; // string; The tag to create  
   
   DPEditor.createNewTag ( function ( tag ) {
-    DPPAPI.event ( 'tag-created', tag );
+    replyCallback ( tag );
   }, tag );
-  
-  return true;
 } );
 
 /**
@@ -18,7 +16,7 @@ pm.bind ( 'create-tag', function ( data ) {
  * 
  * Gets all categories
  */
-pm.bind ( 'get-categories', function ( data ) {
+DPPAPI.bind ( 'get-categories', function ( data ) {
   
   return DPEditor.categories; // set; Set of all categories    
 } );
@@ -28,7 +26,7 @@ pm.bind ( 'get-categories', function ( data ) {
  * 
  * Returns all the parent categories of the given category
  */
-pm.bind ( 'get-parent-categories', function ( category ) {
+DPPAPI.bind ( 'get-parent-categories', function ( category ) {
   var id = category.pid;
   var pars = [];
   while (id != null) {
@@ -45,7 +43,7 @@ pm.bind ( 'get-parent-categories', function ( category ) {
  * 
  * Gets data about the given tag type
  */
-pm.bind ( 'get-tag-type', function ( data ) {
+DPPAPI.bind ( 'get-tag-type', function ( data ) {
   var id = data.id; // integer; The id of the tag type  
   
   if ( DPEditor.tagTypes === null || typeof DPEditor.tagTypes !== 'object' || typeof DPEditor.tagTypes.length !== 'number' ) {
@@ -66,8 +64,7 @@ pm.bind ( 'get-tag-type', function ( data ) {
  * 
  * Gets all tag types
  */
-pm.bind ( 'get-tag-types', function ( data ) {
-  
+DPPAPI.bind ( 'get-tag-types', function ( data ) {
   return DPEditor.tagTypes; // set; Set of all tag types    
 } );
 
@@ -76,7 +73,7 @@ pm.bind ( 'get-tag-types', function ( data ) {
  * 
  * Load the given revision of the current article
  */
-pm.bind ( 'load-revision', function ( data ) {
+DPPAPI.bind ( 'load-revision', function ( data ) {
   var revision = data.revision; // integer; The revision to load  
   
   activeArticle.getRevision ( revision );
@@ -89,7 +86,7 @@ pm.bind ( 'load-revision', function ( data ) {
  * 
  * Reload the given plugin
  */
-pm.bind ( 'plugin-reload', function ( data ) {
+DPPAPI.bind ( 'plugin-reload', function ( data ) {
   var plugin = data.plugin; // string; Used to identify the plugin to reload  
   
   Plugins.stop ( plugin );
@@ -104,7 +101,7 @@ pm.bind ( 'plugin-reload', function ( data ) {
  * 
  * Start the given plugin
  */
-pm.bind ( 'plugin-start', function ( data ) {
+DPPAPI.bind ( 'plugin-start', function ( data ) {
   var plugin = data.plugin; // string; Name of the plugin to start  
   var options = data.options; // JSON; Options for starting the plugin  
   
@@ -118,7 +115,7 @@ pm.bind ( 'plugin-start', function ( data ) {
  * 
  * Stop the given plugin
  */
-pm.bind ( 'plugin-stop', function ( data ) {
+DPPAPI.bind ( 'plugin-stop', function ( data ) {
   var plugin = data.plugin; // string; Name of the plugin to start  
   
   Plugins.stop ( plugin );
@@ -131,7 +128,7 @@ pm.bind ( 'plugin-stop', function ( data ) {
  * 
  * Show an error message to the user
  */
-pm.bind ( 'show-message-error', function ( data ) {
+DPPAPI.bind ( 'show-message-error', function ( data ) {
   var message = data.message; // string; The message to display  
   
   showErrorMsg ( message );
@@ -144,7 +141,7 @@ pm.bind ( 'show-message-error', function ( data ) {
  * 
  * Show an info message to the user
  */
-pm.bind ( 'show-message-info', function ( data ) {
+DPPAPI.bind ( 'show-message-info', function ( data ) {
   var message = data.message; // string; The message to display  
   
   showInfoMsg ( message );
@@ -157,7 +154,7 @@ pm.bind ( 'show-message-info', function ( data ) {
  * 
  * Show a warning message to the user
  */
-pm.bind ( 'show-message-warning', function ( data ) {
+DPPAPI.bind ( 'show-message-warning', function ( data ) {
   var message = data.message; // string; The message to display  
   
   showWarningMsg ( message );
