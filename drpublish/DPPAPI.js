@@ -63,7 +63,7 @@ var DPPAPI = {
   directedEvent : function ( plugin, event, data, callback, errorCallback ) {
     var plugin = Plugins.get ( plugin );
     
-    if ( !plugin || !plugin.isLoaded ) {
+    if ( !plugin || !plugin.isReady ) {
       errorCallback ( data );
     } else {
       this.send ( plugin, 'event', {
