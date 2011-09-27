@@ -20,7 +20,7 @@ var DPPAPI = {
     if ( callSpec == "event" ) {
       //console.log ( 'DPPAPI: Notifying ' + plugin + ' of ' + data.type + ' event ', data.data );
     } else {
-      console.log ( 'DPPAPI: Sending ' + callSpec + ' signal to plugin ' + plugin );
+      console.info ( 'DPPAPI: Sending ' + callSpec + ' signal to plugin ' + plugin );
     }
     
     if ( !document.getElementById ( 'plugin-' + plugin ) ) {

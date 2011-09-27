@@ -16,7 +16,6 @@ var DP = {
     this.eventListeners = new Listeners;
     
     pm.bind ( "event", function ( data ) {
-      console.log ( this.getPluginName() + ": Received " + event.type + " event", data.data );
       this.eventListeners.notify ( data.event, data.data );
       return true;
     }, "*" );
