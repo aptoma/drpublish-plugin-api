@@ -16,7 +16,7 @@ var DP = {
     this.eventListeners = new Listeners;
     
     pm.bind ( "event", function ( data ) {
-      this.eventListeners.notify ( data.event, data.data );
+      _this.eventListeners.notify ( data.type, data.data );
       return true;
     }, "*" );
     
@@ -60,6 +60,8 @@ var DP = {
    */
   request : function ( callSpec, data, callback ) {
     
+    console.info ( this.getPluginName() + ': Requesting ' + callSpec + ' from parent with data', data );
+
     if ( data == null ) {
       data = {};
     }

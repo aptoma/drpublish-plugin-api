@@ -28,7 +28,7 @@ Listeners.prototype.addAll = function ( events ) {
   
   var out = {};
   for ( event in events ) {
-    out[event] = this.add ( event, events.event );
+    out[event] = this.add ( event, events[event] );
   }
   
   return out;
@@ -113,12 +113,12 @@ Listeners.prototype.removeAll = function ( event ) {
 Listeners.prototype.notify = function ( event, data ) {
   
   if ( this._listeners[event] != undefined ) {
-    $.each ( this._listeners[event], function () {
-      if ( this ) {
-        data = this ( data.data );
+    jQuery.each ( this._listeners[event], function ( i, e ) {
+      if ( e && typeof e == "function" ) {
+        data = e ( data );
       }
     } );
   }
   
-  return { data : data };
+  return data;
 };

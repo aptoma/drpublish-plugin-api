@@ -66,7 +66,7 @@ var DPPAPI = {
     if ( !plugin || !plugin.isReady ) {
       errorCallback ( data );
     } else {
-      this.send ( plugin, 'event', {
+      this.send ( plugin['name'], 'event', {
         type : event,
         data : data
       }, callback, errorCallback );
@@ -121,24 +121,27 @@ var DPPAPI = {
   },
   
   bind_c : function ( event, callback ) {
+    var _this = this;
     pm.bind ( event, function ( data, replyCallback, e ) {
-      if ( DPPAPI._verify ( data.src_plugin, e ) ) {
+      if ( _this._verify ( event, data.src_plugin, e ) ) {
         callback ( data, replyCallback );
       }
     } );
   },
   
   bind : function ( event, callback ) {
-    pm.bind ( event, function ( data, replyCallback, e ) {
-      if ( DPPAPI._verify ( data.src_plugin, e ) ) {
+    var _this = this;
+    pm.bind ( event, function ( data, e ) {
+      if ( _this._verify ( event, data.src_plugin, e ) ) {
         return callback ( data );
       }
     } );
   },
   
-  _verify : function ( plugin, frame ) {
-    if ( frame.id == 'plugin-' + plugin ) {
-      var plugin = Plugins.get ( plugin );
+  _verify : function ( call, pluginName, messageEvent ) {
+    var frame = messageEvent.source.frameElement;
+    if ( frame.id == 'plugin-' + pluginName ) {
+      var plugin = Plugins.get ( pluginName );
       if ( plugin && plugin.isReady ) {
         return true;
       }
