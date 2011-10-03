@@ -45,10 +45,9 @@ var DP = {
         vars[hash[0]] = hash[1];
     }
     
-    jQuery.get ( 'ajax.php?do=authenticate-plugin', { plugin: this.getPluginName(), auth: decodeURIComponent ( vars['auth'] ), iv: vars['iv'] },
+    jQuery.getJSON ( 'ajax.php?do=authenticate-plugin', { plugin: this.getPluginName(), auth: decodeURIComponent ( vars['auth'] ), iv: vars['iv'] },
       function ( reply ) {
         if ( reply ) {
-          console.log ( _this.getPluginName() + ": Sent plugin-loaded signal with auth token to DrPublish" );
           pm ( {
             target : self.parent,
             type : "plugin-loaded",
@@ -59,6 +58,7 @@ var DP = {
               iv: reply.iv
             }
           } );
+          console.log ( _this.getPluginName() + ": Sent plugin-loaded signal with auth token to DrPublish" );
         } else {
           console.err ( _this.getPluginName() + ": Invalid auth from DrPublish! Quitting" );
           self.close();
