@@ -14,6 +14,22 @@ var DP = {
     this.Article = null;
     this.errorListeners = new Listeners;
     this.eventListeners = new Listeners;
+    this.authenticated = false;
+    
+    var _this = this;
+    
+    // Stores requests that couldn't be sent until we've been auth'd
+    this.queuedRequests = [];
+    this.eventListeners.add ( 'pluginAuthenticated', function ( ) {
+      _this.authenticated = true;
+      
+      if ( _this.queuedRequests.length > 0 ) {
+        for ( var i = _this.queuedRequests.length; i >= 0; i-- ) {
+          _this.request ( _this.queuedRequests[i]['spec'], _this.queuedRequests[i]['data'], _this.queuedRequests[i]['callback'] );
+          _this.queuedRequests.splice ( i, 1 );
+        } 
+      }
+    } );
     
     pm.bind ( "event", function ( data ) {
       _this.eventListeners.notify ( data.type, data.data );
@@ -28,7 +44,6 @@ var DP = {
         vars[hash[0]] = hash[1];
     }
     
-    var _this = this;
     jQuery.get ( 'ajax.php?do=authenticate-plugin', { plugin: this.getPluginName(), auth: decodeURIComponent ( vars['auth'] ), iv: vars['iv'] },
       function ( reply ) {
         if ( reply ) {
@@ -68,7 +83,13 @@ var DP = {
     
     data['src_plugin'] = this.getPluginName (); 
     
-    var me = this;
+    if ( !this.authenticated ) {
+      console.warn ( "Call for " + callSpec + " delayed until plugin is authenticated" );
+      this.queuedRequests.push ( { spec: callSpec, data: data, callback: callback } );
+      return;
+    }
+    
+    var _this = this;
     pm ( {
       target : parent,
       type : callSpec,
@@ -76,7 +97,7 @@ var DP = {
       success : callback,
       error : function ( data ) {
         
-        me.errorListeners.notify ( data.type, data );
+        _this.errorListeners.notify ( data.type, data );
       },
       origin : "*", // TODO: Find a way of avoiding all-origins
       hash : false
