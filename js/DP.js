@@ -36,35 +36,45 @@ var DP = {
       _this.eventListeners.notify ( data.type, data.data );
       return true;
     }, "*" );
+  },
+  
+  /**
+   * Performs authentication to DrPublish by sending a GET request
+   * to the given URL (or ajax.php?do=authenticate-plugin if nothing
+   * else is specified), and using .signature and .iv from the response
+   * object as the authentication reply to the DrPublish API
+   */
+  doStandardAuthentication : function ( url ) {
+    url = url || 'ajax.php?do=authenticate-plugin';
     
-    var vars = [], hash;
-    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    for ( var i = 0; i < hashes.length; i++ ) {
-        hash = hashes[i].split('=');
-        vars.push(hash[0]);
-        vars[hash[0]] = hash[1];
-    }
-    
-    jQuery.getJSON ( 'ajax.php?do=authenticate-plugin', { plugin: this.getPluginName(), auth: decodeURIComponent ( vars['auth'] ), iv: vars['iv'] },
+    jQuery.getJSON ( url, { plugin: this.getPluginName() },
       function ( reply ) {
         if ( reply ) {
-          pm ( {
-            target : self.parent,
-            type : "plugin-loaded",
-            origin : "*", 
-            data : {
-              plugin: _this.getPluginName (),
-              signature: reply.signature,
-              iv: reply.iv
-            }
-          } );
-          console.log ( _this.getPluginName() + ": Sent plugin-loaded signal with auth token to DrPublish" );
+          DP.doDirectAuthentication ( reply.signature, reply.iv );
         } else {
-          console.err ( _this.getPluginName() + ": Invalid auth from DrPublish! Quitting" );
+          console.err ( _this.getPluginName() + ": No authentication token provided by backend", reply );
           self.close();
         }
       }
     );
+  },
+  
+  /**
+   * Directly authenticates with the DrPublish API with the given
+   * signature and iv
+   */
+  doDirectAuthentication : function ( signature, iv ) {
+    pm ( {
+      target : self.parent,
+      type : "plugin-loaded",
+      origin : "*", 
+      data : {
+        plugin: this.getPluginName (),
+        signature: signature,
+        iv: iv
+      }
+    } );
+    console.log ( this.getPluginName() + ": Sent plugin-loaded signal with auth token to DrPublish" );
   },
   
   /**
