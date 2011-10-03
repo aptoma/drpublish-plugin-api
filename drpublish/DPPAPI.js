@@ -17,14 +17,14 @@ var DPPAPI = {
    */
   send : function ( plugin, callSpec, data, callback, errorCallback ) {
     
-    if ( callSpec == "event" ) {
-      //console.log ( 'DPPAPI: Notifying ' + plugin + ' of ' + data.type + ' event ', data.data );
+    if ( callSpec == "event" && data.type != 'modifiedContent' ) {
+      console.info ( 'DPPAPI: Notifying ' + plugin + ' of ' + data.type + ' event ', data.data );
     } else {
       console.info ( 'DPPAPI: Sending ' + callSpec + ' signal to plugin ' + plugin );
     }
     
     if ( !document.getElementById ( 'plugin-' + plugin ) ) {
-      console.warn ( 'DPPAPI: Plugin ' + plugin + ' does not have a frame, and thus cannot be contacted' );
+      console.warn ( 'DPPAPI: Plugin ' + plugin + ' does not have a frame, and thus cannot be contacted (called from: ' + arguments.callee.caller.toString() + ')' );
       if ( typeof errorCallback == "function" ) {
         errorCallback ( 'plugin not loaded' );
       }
@@ -144,7 +144,7 @@ var DPPAPI = {
       }
     }
     
-    console.warn ( "DPPAPI: Unauthenticated plugin " + plugin + " attempted to use API" );
+    console.warn ( "DPPAPI: Unauthenticated plugin " + pluginName + " attempted to use API call " + call );
     return false;
   }
 };
