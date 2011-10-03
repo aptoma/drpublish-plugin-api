@@ -19,14 +19,15 @@ var DP = {
     var _this = this;
     
     // Stores requests that couldn't be sent until we've been auth'd
-    this.queuedRequests = [];
+    this.backlog = [];
     this.eventListeners.add ( 'pluginAuthenticated', function ( ) {
       _this.authenticated = true;
       
-      if ( _this.queuedRequests.length > 0 ) {
-        for ( var i = _this.queuedRequests.length; i >= 0; i-- ) {
-          _this.request ( _this.queuedRequests[i]['spec'], _this.queuedRequests[i]['data'], _this.queuedRequests[i]['callback'] );
-          _this.queuedRequests.splice ( i, 1 );
+      if ( _this.backlog.length > 0 ) {
+        console.warn ( _this.getPluginName() + ": Authenticated, now executing backlog (" + _this.backlog.length + " items)" );
+        for ( var i = _this.backlog.length - 1; i >= 0; i-- ) {
+          _this.request ( _this.backlog[i]['spec'], _this.backlog[i]['data'], _this.backlog[i]['callback'] );
+          _this.backlog.splice ( i, 1 );
         } 
       }
     } );
@@ -85,7 +86,7 @@ var DP = {
     
     if ( !this.authenticated ) {
       console.warn ( "Call for " + callSpec + " delayed until plugin is authenticated" );
-      this.queuedRequests.push ( { spec: callSpec, data: data, callback: callback } );
+      this.backlog.push ( { spec: callSpec, data: data, callback: callback } );
       return;
     }
     
