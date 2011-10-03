@@ -84,7 +84,7 @@ var DPPAPI = {
   event : function ( event, data, callback ) {
     
     var done = [];
-    var notify = Plugins.list;
+    var notify = Plugins.running;
     var _this = this;
     
     if ( !notify.length ) {
