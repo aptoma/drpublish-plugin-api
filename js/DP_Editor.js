@@ -79,16 +79,30 @@ DP_Editor = {
   },
   
   /**
-   * Insert content into the editor
+   * Insert a string into the editor
    * 
-   * Inserted content may either be an element or pure text. The former will be encapsulated in an element with class dp-plugin-element
+   * @param {String} string The string that should be inserted
+   * @param {Function} callback The function to call when content has been inserted
+   */
+  insertString : function ( string, callback ) {
+    DP.request ( 'editor-insert-string', {
+      string: string
+    }, callback );
+  },
+  
+  /**
+   * Insert an element into the editor
    * 
-   * @param {Element} element The element or string that should be inserted
+   * Note that the HTML of the element is what will be transferred, and nothing else!
+   * The element will be encapsulated in an element with class dp-plugin-element
+   * 
+   * @param {Element} element The element that should be inserted
    * @param {Function} callback The function to call when content has been inserted
    */
   insertElement : function ( element, callback ) {
-    DP.request ( 'editor-insert', {
-      element : element
+    var e = jQuery ( element );
+    DP.request ( 'editor-insert-element', {
+      element : jQuery ( '<div>' ).append ( element ).html()
     }, callback );
   },
   
@@ -101,6 +115,20 @@ DP_Editor = {
   fetch : function ( selector, callback ) {
     DP.request ( 'editor-fetch', {
       selector: selector
+    }, function ( html ) { callback ( jQuery ( html )[0] ); } );
+  },
+  
+  removeClasses : function ( selector, classes, callback ) {
+    DP.request ( 'editor-classes-remove', {
+      selector: selector,
+      classes: classes
+    }, callback );
+  },
+  
+  addClasses : function ( selector, classes, callback ) {
+    DP.request ( 'editor-classes-add', {
+      selector: selector,
+      classes: classes
     }, callback );
   },
   
