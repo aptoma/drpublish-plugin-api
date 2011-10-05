@@ -210,6 +210,24 @@ var DP = {
   },
   
   /**
+   * Show the loader
+   * 
+   * @param {String} Message to display in progress loader
+   */
+  showLoader : function ( msg ) {
+    this.request ( "show-loader", {
+      message: msg
+    } );
+  },
+  
+  /**
+   * Hide the loader
+   */
+  hideLoader : function ( ) {
+    this.request ( "hide-loader" );
+  },
+  
+  /**
    * Loads an old revision
    * 
    * @param {Integer} id The id of the revision to load
