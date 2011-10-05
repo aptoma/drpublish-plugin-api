@@ -213,12 +213,13 @@ var DP = {
    * Loads an old revision
    * 
    * @param {Integer} id The id of the revision to load
+   * @param {Function} callback The function to call when the new revision has been loaded
    */
-  __loadArticleRevision : function ( id ) {
+  __loadArticleRevision : function ( id, callback ) {
     
     this.request ( "load-revision", {
       revision : id
-    } );
+    }, callback );
   }
 };
 

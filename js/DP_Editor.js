@@ -83,14 +83,24 @@ DP_Editor = {
    * 
    * Inserted content may either be an element or pure text. The former will be encapsulated in an element with class dp-plugin-element
    * 
-   * TODO: Handle insertion of DOM nodes
-   * 
    * @param {Element} element The element or string that should be inserted
    * @param {Function} callback The function to call when content has been inserted
    */
   insertElement : function ( element, callback ) {
     DP.request ( 'editor-insert', {
       element : element
+    }, callback );
+  },
+  
+  /**
+   * Returns the first DOM object in the editor that matches the given selector
+   * 
+   * @param {String} selector The selector to select by
+   * 
+   */
+  fetch : function ( selector, callback ) {
+    DP.request ( 'editor-fetch', {
+      selector: selector
     }, callback );
   },
   
