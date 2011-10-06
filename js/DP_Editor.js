@@ -94,7 +94,7 @@ DP_Editor = {
    * Insert an element into the editor
    * 
    * Note that the HTML of the element is what will be transferred, and nothing else!
-   * The element will be encapsulated in an element with class dp-plugin-element
+   * The element will be given the class dp-plugin-element, and given a unique ID (if none is present)
    * 
    * @param {Element} element The element that should be inserted
    * @param {Function} callback The function to call when content has been inserted
@@ -213,7 +213,7 @@ DP_Editor = {
    * @param {String} value What to set the attribute to
    * @param {Function} callback The function to call when the attribute has been set
    */
-  setAttributeByCSS : function ( elector, attribute, value, callback ) {
+  setAttributeByCSS : function ( selector, attribute, value, callback ) {
     DP.request ( 'editor-element-attribute-set-byselector', {
       selector : selector,
       attribute : attribute,
@@ -245,12 +245,27 @@ DP_Editor = {
    * @param {String} value What to set the attribute to
    * @param {Function} callback The function to call when the attribute has been set
    */
-  setStyleByCSS : function ( elector, attribute, value, callback ) {
+  setStyleByCSS : function ( selector, attribute, value, callback ) {
     DP.request ( 'editor-element-style-set-byselector', {
       selector : selector,
       attribute : attribute,
       value : value
     }, callback );
+  },
+  
+  maximizePluginPane : function ( title, onClose ) {
+    var event = 'editor-pane-close-' + new Date().getTime();
+    
+    DP.request ( 'editor-pane-maximize', {
+      title : title,
+      event : event
+    } );
+    DP.eventListeners.removeAll ( event );
+    DP.eventListeners.add ( event, onClose );
+  },
+  
+  restorePluginPane : function ( callback ) {
+    DP.request ( 'editor-pane-restore', null, callback );
   },
 
 /**
