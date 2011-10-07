@@ -49,6 +49,7 @@ Luckily, thanks to the files in this repository, you don't really have to do muc
 First, your backend should include php/auth.php and do something like this:
 
 ```php
+<?php
 require 'php/auth.php';
 $plugin = new DPPlugin ( 'penguin-plugin', 'super-secret-key', 'http://myhost.com:80' );
 
@@ -73,13 +74,10 @@ This will both check that the token from DrPublish is valid and store the fact t
 Then, in your AJAX controller somewhere (which should also check that a valid session is in place), you add another action like so:
 
 ```php
-    // 
-    //
-    case 'get-authentication-token':
-      echo json_encode ( $plugin -> getAuthenticationToken() ); // Will include two values, signature and iv
-      break;
-    //
-    //
+<?php
+case 'get-authentication-token':
+  echo json_encode ( $plugin -> getAuthenticationToken() ); // Will include two values, signature and iv
+  break;
 ```
     
 Now, in your HTML, all you need to do is include Listeners.js and DP.js, and optionally DP_Editor.js and DP_Article.js if you need their functionality, and run either DP.doStandardAuthentication or DP.doDirectAuthentication.
