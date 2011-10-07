@@ -1,13 +1,13 @@
 How does the API work?
 ==========================
 First and foremost, all plugins are now loaded directly in iframes (i.e. the src= of the iframe points directly to the URL as given in the DrPublish config).
-Next, all communication between the plugin and DrPublish is sent using [postMessage{https://developer.mozilla.org/en/DOM/window.postMessage}, a standardized method for cross-domain frame communication.
+Next, all communication between the plugin and DrPublish is sent using [postMessage](https://developer.mozilla.org/en/DOM/window.postMessage), a standardized method for cross-domain frame communication.
 
 PostMessage works by one side listening for incoming messages, and determining whether to act upon that message or not depending on its origin host, its origin frame and its contents.
 In DrPublish, these binding are written in js/classes/binds/\*.js, and are mapped through js/classes/DPPAPI.js, which also handles delegation of events from DrPublish to plugins.
 On the plugin side, the files DP.js, DP\_Editor.js and DP\_Article.js provide functions for sending all the supported postMessage calls without the caller having to know that that's what's being done.
 
-Behind the scenes, the DP\*.js files wrap the incoming parameters in a JSON object, adds on the name of sending plugin and what method on the remote side it wants to call (RPC anyone?), and send this over postMessage using a [thin jQuery PM wrapper]{http://postmessage.freebaseapps.com/}.
+Behind the scenes, the DP\*.js files wrap the incoming parameters in a JSON object, adds on the name of sending plugin and what method on the remote side it wants to call (RPC anyone?), and send this over postMessage using a [thin jQuery PM wrapper](http://postmessage.freebaseapps.com/).
 
 On the other side, DPPAPPI.js determines which function should be called, executes it, wraps its response in a JSON object, and returns it to the sending plugin. The plugin side (DP.js) then receives this reply, and sends the received data to a callback (if any is specified).
 
@@ -48,34 +48,39 @@ So what do I do?
 Luckily, thanks to the files in this repository, you don't really have to do much to write an authenticated plugin.
 First, your backend should include php/auth.php and do something like this:
 
-    require 'php/auth.php';
-    $plugin = new DPPlugin ( 'penguin-plugin', 'super-secret-key', 'http://myhost.com:80' );
-    
-    session_start ( 'penguin-plugin' );
-    
-    if ( !array_key_exists ( 'authenticated', $_SESSION ) || $_SESSION['authenticated'] !== "yes" ) {
-      if ( !array_key_exists ( 'auth', $_GET ) || !array_key_exists ( 'iv', $_GET ) ) {
-        die ( "Get outta' here scum!" );
-      }
-    
-      $dpdata = $plugin -> validate ( $_GET['auth'], $_GET['iv'] );
-    
-      if ( $dpdata === false ) {
-        die ( 'Invalid DrPublish token received; giving up' );
-      }
-    
-      $_SESSION['authenticated'] = "yes";
-    }
+```php
+require 'php/auth.php';
+$plugin = new DPPlugin ( 'penguin-plugin', 'super-secret-key', 'http://myhost.com:80' );
+
+session_start ( 'penguin-plugin' );
+
+if ( !array_key_exists ( 'authenticated', $_SESSION ) || $_SESSION['authenticated'] !== "yes" ) {
+  if ( !array_key_exists ( 'auth', $_GET ) || !array_key_exists ( 'iv', $_GET ) ) {
+    die ( "Get outta' here scum!" );
+  }
+
+  $dpdata = $plugin -> validate ( $_GET['auth'], $_GET['iv'] );
+
+  if ( $dpdata === false ) {
+    die ( 'Invalid DrPublish token received; giving up' );
+  }
+
+  $_SESSION['authenticated'] = "yes";
+}
+```
+
 This will both check that the token from DrPublish is valid and store the fact that the user is authenticated to his/her session so you can check it later on in your application as well (or during AJAX calls, etc...)
 Then, in your AJAX controller somewhere (which should also check that a valid session is in place), you add another action like so:
 
-    .
-    .
+```php
+    // 
+    //
     case 'get-authentication-token':
       echo json_encode ( $plugin -> getAuthenticationToken() ); // Will include two values, signature and iv
       break;
-    .
-    .
+    //
+    //
+```
     
 Now, in your HTML, all you need to do is include Listeners.js and DP.js, and optionally DP_Editor.js and DP_Article.js if you need their functionality, and run either DP.doStandardAuthentication or DP.doDirectAuthentication.
 The former takes a URL that it will send an AJAX request to, expecting to get back a JSON object containing the indices, signature and iv (which is what you get with the above code), that it will then send to DrPublish.
