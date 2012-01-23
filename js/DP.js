@@ -34,8 +34,9 @@ var DP = {
     } );
 
     pm.bind ( "event", function ( data ) {
-      _this.eventListeners.notify ( data.type, data.data );
-      return true;
+		console.debug('bind.event', data.type);
+		_this.eventListeners.notify ( data.type, data.data );
+		return true;
     }, "*" );
   },
 
