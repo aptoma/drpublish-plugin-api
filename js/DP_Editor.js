@@ -13,11 +13,8 @@ DP_Editor = {
 	 * @param {Function} callback The function to call with fetched data
 	 */
 	registerMenuAction: function (action) {
-		console.debug('registerMenuAction', arguments);
 		DP.request('register-menu-action', action, function(data) {
-			console.debug('registerMenuAction - request', data);
 			DP.eventListeners.add(data.typeName, function(data) {
-				console.debug('callback', action.callback);
 				if (typeof action.callback === 'function') {
 					action.callback(data.id, $(data.element).get(0));
 				}
@@ -26,9 +23,7 @@ DP_Editor = {
 	},
 
 	registerMenuActionGroup: function (group) {
-		console.debug('registerMenuActionGroup', arguments);
 		DP.request('register-menu-action-group', group, function(data) {
-			console.debug('registerMenuActionGroup - request', data);
 			if (data.typeNames.length !== group.actions.length) {
 				console.warn('wrong amount of callback events recieved, not good');
 				return;
@@ -36,9 +31,8 @@ DP_Editor = {
 			for (var i=0; i<data.typeNames.length; i++) {
 				var callback = (function(func) {
 					return function(data) {
-						console.debug('callback', data);
 						if (typeof func === 'function') {
-							func(data.id, $(data.element).get(0));
+							func(data.id);
 						}
 					}
 				})(group.actions[i].callback);
@@ -52,6 +46,12 @@ DP_Editor = {
 		DP.request('editor-element-set-byid', {
 			id: id,
 			element: element
+		}, callback);
+	},
+
+	getElementById : function(id, callback) {
+		DP.request('editor-element-get-byid', {
+			id: id
 		}, callback);
 	},
 	
