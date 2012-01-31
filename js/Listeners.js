@@ -114,7 +114,6 @@ Listeners.prototype.notify = function(event, data) {
 	if (this._listeners[event] != undefined) {
 		jQuery.each (this._listeners[event], function (i, e) {
 			if (e && typeof e == "function") {
-				console.debug('hurray', e);
 				data = e(data);
 			} else {
 				console.debug('hmm', e);
