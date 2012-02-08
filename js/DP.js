@@ -20,7 +20,6 @@ var DP = {
 
 		// Stores requests that couldn't be sent until we've been auth'd
 		this.backlog = [];
-		console.debug('init!');
 		this.eventListeners.add ( 'appAuthenticated', function ( ) {
 			_this.authenticated = true;
 			if ( _this.backlog.length > 0 ) {

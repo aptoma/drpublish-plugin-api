@@ -158,7 +158,6 @@ var DP_Article = {
 	 * @param {Function} callback The function to call when the categories have been removed
 	 */
 	removeCategories: function(categories, callback) {
-
 		DP.request('article-categories-remove', {
 			categories: categories
 		}, callback);
@@ -288,7 +287,7 @@ var DP_Article = {
 	 * @param {Array} authors List of authors to remove
 	 * @param {Function} callback The function to call when the authors have been removed
 	 */
-	removeCategories: function(authors, callback) {
+	removeAuthors: function(authors, callback) {
 
 		DP.request('article-authors-remove', {
 			authors: authors
