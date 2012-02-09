@@ -1,9 +1,9 @@
 /**
  * Namespace for all public Dr.Published methods available from apps.
  *
- * Listeners can be added through the Listeners objects DP.errorListeners and DP.eventListeners
+ * Listeners can be added through the Listeners objects AppMediator.errorListeners and AppMediator.eventListeners
  */
-var DP = {
+var AppMediator = {
 	/**
 	 * Constructor for this class
 	 */
@@ -49,7 +49,7 @@ var DP = {
 		jQuery.getJSON ( url, { app: this.getAppName() },
 			function ( reply ) {
 				if ( reply ) {
-					DP.doDirectAuthentication ( reply.signature, reply.iv );
+					AppMediator.doDirectAuthentication ( reply.signature, reply.iv );
 				} else {
 					console.err ( _this.getAppName() + ": No authentication token provided by backend", reply );
 					self.close();
@@ -133,7 +133,6 @@ var DP = {
 	 * @param {Function} callback What do do when the tag was created
 	 */
 	createNewTag : function ( tag, callback ) {
-
 		this.request ( "create-tag", {
 			tag : tag
 		}, callback );
@@ -240,4 +239,4 @@ var DP = {
 	}
 };
 
-DP.initialize ();
+AppMediator.initialize ();

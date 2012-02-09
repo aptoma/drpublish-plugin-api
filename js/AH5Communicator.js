@@ -3,9 +3,9 @@
  *
  * Should be used like this:
  *
- * DP.Editor.insert('string');
+ * AppMediator.Editor.insert('string');
  */
-DP_Editor = {
+AH5Communicator = {
 
 	/**
 	 * Registers/Modifies menu items for a app element
@@ -13,8 +13,8 @@ DP_Editor = {
 	 * @param {Function} callback The function to call with fetched data
 	 */
 	registerMenuAction: function (action) {
-		DP.request('register-menu-action', action, function(data) {
-			DP.eventListeners.add(data.typeName, function(data) {
+		AppMediator.request('register-menu-action', action, function(data) {
+			AppMediator.eventListeners.add(data.typeName, function(data) {
 				if (typeof action.callback === 'function') {
 					action.callback(data.id, $(data.element).get(0));
 				}
@@ -23,7 +23,7 @@ DP_Editor = {
 	},
 
 	registerMenuActionGroup: function (group) {
-		DP.request('register-menu-action-group', group, function(data) {
+		AppMediator.request('register-menu-action-group', group, function(data) {
 			if (data.typeNames.length !== group.actions.length) {
 				console.warn('wrong amount of callback events recieved, not good');
 				return;
@@ -37,20 +37,20 @@ DP_Editor = {
 					}
 				})(group.actions[i].callback);
 
-				DP.eventListeners.add(data.typeNames[i], callback);
+				AppMediator.eventListeners.add(data.typeNames[i], callback);
 			}
 		});
 	},
 
 	setElementById : function(id, element, callback) {
-		DP.request('editor-element-set-byid', {
+		AppMediator.request('editor-element-set-byid', {
 			id: id,
 			element: element
 		}, callback);
 	},
 
 	getElementById : function(id, callback) {
-		DP.request('editor-element-get-byid', {
+		AppMediator.request('editor-element-get-byid', {
 			id: id
 		}, callback);
 	},
@@ -61,7 +61,7 @@ DP_Editor = {
 	 * @param {Function} callback The function to call with fetched data
 	 */
 	getCategories : function(callback) {
-		DP.request('get-categories', null, callback);
+		AppMediator.request('get-categories', null, callback);
 	},
 
 	/**
@@ -72,7 +72,7 @@ DP_Editor = {
 	 * @returns {Array} parent categories
 	 */
 	getParentCategories : function(category, callback) {
-		DP.request('get-parent-categories', category, callback);
+		AppMediator.request('get-parent-categories', category, callback);
 	},
 
 	/**
@@ -81,7 +81,7 @@ DP_Editor = {
 	 * @param {Function} callback The function to call with fetched data
 	 */
 	getTagTypes : function(callback) {
-		DP.request('get-tag-types', null, callback);
+		AppMediator.request('get-tag-types', null, callback);
 	},
 
 	/**
@@ -90,7 +90,7 @@ DP_Editor = {
 	 * @param {Function} callback The function to call with fetched data
 	 */
 	getTagType : function(id, callback) {
-		DP.request('get-tag-type', {
+		AppMediator.request('get-tag-type', {
 			id : id
 		}, callback);
 	},
@@ -101,7 +101,7 @@ DP_Editor = {
 	 * @param {Function} callback The function to call when editor has been cleared
 	 */
 	clear : function(callback) {
-		DP.request('editor-clear', null, callback);
+		AppMediator.request('editor-clear', null, callback);
 	},
 
 	/**
@@ -110,7 +110,7 @@ DP_Editor = {
 	 * @param {Function} callback The function to call when cursor has been moved
 	 */
 	moveToStart : function(callback) {
-		DP.request('editor-seek', {
+		AppMediator.request('editor-seek', {
 			position : 'start'
 		}, callback);
 	},
@@ -121,7 +121,7 @@ DP_Editor = {
 	 * @param {Function} callback The function to call when cursor has been moved
 	 */
 	moveToEnd : function(callback) {
-		DP.request('editor-seek', {
+		AppMediator.request('editor-seek', {
 			position : 'end'
 		}, callback);
 	},
@@ -133,7 +133,7 @@ DP_Editor = {
 	 * @param {Function} callback The function to call when content has been inserted
 	 */
 	insertString : function(string, callback) {
-		DP.request('editor-insert-string', {
+		AppMediator.request('editor-insert-string', {
 			string: string
 		}, callback);
 	},
@@ -149,7 +149,7 @@ DP_Editor = {
 	 */
 	insertElement : function(element, callback) {
 		var e = jQuery(element);
-		DP.request('editor-insert-element', {
+		AppMediator.request('editor-insert-element', {
 			element : jQuery('<div>').append(element).html()
 		}, callback);
 	},
@@ -161,20 +161,20 @@ DP_Editor = {
 	 *
 	 */
 	fetch : function(selector, callback) {
-		DP.request('editor-fetch', {
+		AppMediator.request('editor-fetch', {
 			selector: selector
 		}, function(html) { callback(jQuery(html)[0]); });
 	},
 
 	removeClasses : function(selector, classes, callback) {
-		DP.request('editor-classes-remove', {
+		AppMediator.request('editor-classes-remove', {
 			selector: selector,
 			classes: classes
 		}, callback);
 	},
 
 	addClasses : function(selector, classes, callback) {
-		DP.request('editor-classes-add', {
+		AppMediator.request('editor-classes-add', {
 			selector: selector,
 			classes: classes
 		}, callback);
@@ -191,7 +191,7 @@ DP_Editor = {
 	 * @param {Function} callback The function to call when the item has been hidden
 	 */
 	hideElementMenuItem : function(name, callback) {
-		DP.request('editor-menu-element-hide', {
+		AppMediator.request('editor-menu-element-hide', {
 			element : name
 		}, callback);
 	},
@@ -207,13 +207,13 @@ DP_Editor = {
 	addElementMenuItem : function(name, action, callback, prepend) {
 		var event = 'menu-click-' + name;
 
-		DP.request('editor-menu-element-add', {
+		AppMediator.request('editor-menu-element-add', {
 			element : name,
 			event : event,
 			prepend : prepend
 		}, callback);
-		DP.eventListeners.removeAll(event);
-		DP.eventListeners.add(event, action);
+		AppMediator.eventListeners.removeAll(event);
+		AppMediator.eventListeners.add(event, action);
 	},
 
 	/**
@@ -223,7 +223,7 @@ DP_Editor = {
 	 * @param {Function} allback The function to call when the label has been added
 	 */
 	appendElementMenuLabel : function(name, callback) {
-		DP.request('editor-menu-label-add', {
+		AppMediator.request('editor-menu-label-add', {
 			label : name
 		}, callback);
 	},
@@ -234,7 +234,7 @@ DP_Editor = {
 	 * @param {Function} callback The function to call when the editor has been updated
 	 */
 	update : function(callback) {
-		DP.request('editor-update', null, callback);
+		AppMediator.request('editor-update', null, callback);
 	},
 
 	/**
@@ -246,7 +246,7 @@ DP_Editor = {
 	 * @param {Function} callback The function to call when the attribute has been set
 	 */
 	setAttributeById : function(id, attribute, value, callback) {
-		DP.request('editor-element-attribute-set-byid', {
+		AppMediator.request('editor-element-attribute-set-byid', {
 			id : id,
 			attribute : attribute,
 			value : value
@@ -262,7 +262,7 @@ DP_Editor = {
 	 * @param {Function} callback The function to call when the attribute has been set
 	 */
 	setAttributeByCSS : function(selector, attribute, value, callback) {
-		DP.request('editor-element-attribute-set-byselector', {
+		AppMediator.request('editor-element-attribute-set-byselector', {
 			selector : selector,
 			attribute : attribute,
 			value : value
@@ -278,7 +278,7 @@ DP_Editor = {
 	 * @param {Function} callback The function to call when the attribute has been set
 	 */
 	setStyleById : function(id, attribute, value, callback) {
-		DP.request('editor-element-style-set-byid', {
+		AppMediator.request('editor-element-style-set-byid', {
 			id : id,
 			attribute : attribute,
 			value : value
@@ -294,7 +294,7 @@ DP_Editor = {
 	 * @param {Function} callback The function to call when the attribute has been set
 	 */
 	setStyleByCSS : function(selector, attribute, value, callback) {
-		DP.request('editor-element-style-set-byselector', {
+		AppMediator.request('editor-element-style-set-byselector', {
 			selector : selector,
 			attribute : attribute,
 			value : value
@@ -304,18 +304,18 @@ DP_Editor = {
 	maximizeAppPane : function(title, onClose) {
 		var event = 'editor-pane-close-' + new Date().getTime();
 
-		DP.request('editor-pane-maximize', {
+		AppMediator.request('editor-pane-maximize', {
 			title : title,
 			event : event
 		});
-		DP.eventListeners.removeAll(event);
-		DP.eventListeners.add(event, onClose);
+		AppMediator.eventListeners.removeAll(event);
+		AppMediator.eventListeners.add(event, onClose);
 	},
 
 	restoreAppPane : function(callback) {
-		DP.request('editor-pane-restore', null, callback);
+		AppMediator.request('editor-pane-restore', null, callback);
 	},
 
 };
 
-DP.Editor = DP_Editor;
+AppMediator.Editor = AH5Communicator;

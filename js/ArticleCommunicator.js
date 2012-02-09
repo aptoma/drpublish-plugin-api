@@ -3,7 +3,7 @@
  *
  * TODO: Find the necessity of getDocument, getContent, getAside, setContent
  */
-var DP_Article = {
+var ArticleCommunicator = {
 
 	/**
 	 * Start the given app
@@ -14,7 +14,7 @@ var DP_Article = {
 	 */
 	startApp: function(name, options, callback) {
 
-		DP.request("app-start", {
+		AppMediator.request("app-start", {
 			app: name,
 			option: options
 		}, callback);
@@ -28,7 +28,7 @@ var DP_Article = {
 	 */
 	stopApp: function(name) {
 
-		DP.request("app-stop", {
+		AppMediator.request("app-stop", {
 			app: name
 		}, callback);
 	},
@@ -40,7 +40,7 @@ var DP_Article = {
 	 */
 	getId: function(callback) {
 
-		DP.request('article-id-get', null, callback);
+		AppMediator.request('article-id-get', null, callback);
 	},
 
 	/**
@@ -50,7 +50,7 @@ var DP_Article = {
 	 */
 	clearMetaInfo: function(callback) {
 
-		DP.request("article-metainfo-clear", null, callback);
+		AppMediator.request("article-metainfo-clear", null, callback);
 	},
 
 	/**
@@ -60,7 +60,7 @@ var DP_Article = {
 	 */
 	getTags: function(callback) {
 
-		DP.request("article-tags-get", null, callback);
+		AppMediator.request("article-tags-get", null, callback);
 	},
 
 	/**
@@ -71,7 +71,7 @@ var DP_Article = {
 	 */
 	setTags: function(tags, callback) {
 
-		DP.request('article-tags-set', {
+		AppMediator.request('article-tags-set', {
 			tags: tags
 		}, callback);
 	},
@@ -84,7 +84,7 @@ var DP_Article = {
 	 */
 	addTag: function(tag, callback) {
 
-		DP.request('article-tags-add', {
+		AppMediator.request('article-tags-add', {
 			tag: tag
 		}, callback);
 	},
@@ -95,9 +95,9 @@ var DP_Article = {
 	 * @param {String} tag Tag to remove
 	 * @param {Function} callback The function to call when tag has been removed
 	 */
-	removeTag: function(tag) {
+	removeTag: function(tag, callback) {
 
-		DP.request('article-tags-remove', {
+		AppMediator.request('article-tags-remove', {
 			tag: tag
 		}, callback);
 	},
@@ -109,7 +109,7 @@ var DP_Article = {
 	 */
 	getSelectedCategories: function(callback) {
 
-		DP.request('article-categories-selected-get', null, callback);
+		AppMediator.request('article-categories-selected-get', null, callback);
 	},
 
 	/**
@@ -133,7 +133,7 @@ var DP_Article = {
 	 */
 	setCategories: function(categories, callback) {
 
-		DP.request('article-categories-selected-set', {
+		AppMediator.request('article-categories-selected-set', {
 			categories: categories
 		}, callback);
 	},
@@ -146,7 +146,7 @@ var DP_Article = {
 	 */
 	addCategories: function(categories, callback) {
 
-		DP.request('article-categories-add', {
+		AppMediator.request('article-categories-add', {
 			categories: categories
 		}, callback);
 	},
@@ -158,7 +158,7 @@ var DP_Article = {
 	 * @param {Function} callback The function to call when the categories have been removed
 	 */
 	removeCategories: function(categories, callback) {
-		DP.request('article-categories-remove', {
+		AppMediator.request('article-categories-remove', {
 			categories: categories
 		}, callback);
 	},
@@ -171,7 +171,7 @@ var DP_Article = {
 	 */
 	setMainCategory: function(category, callback) {
 
-		DP.request('article-categories-main-set', {
+		AppMediator.request('article-categories-main-set', {
 			category: category
 		}, callback);
 	},
@@ -183,7 +183,7 @@ var DP_Article = {
 	 */
 	getSource: function(callback) {
 
-		DP.request('article-source-get', null, callback);
+		AppMediator.request('article-source-get', null, callback);
 	},
 
 	/**
@@ -194,7 +194,7 @@ var DP_Article = {
 	 */
 	setSource: function(value, callback) {
 
-		DP.request('article-source-set', {
+		AppMediator.request('article-source-set', {
 			source: value
 		}, callback);
 	},
@@ -206,7 +206,7 @@ var DP_Article = {
 	 */
 	getStatus: function(callback) {
 
-		DP.request('article-status-get', null, callback);
+		AppMediator.request('article-status-get', null, callback);
 	},
 
 	/**
@@ -217,7 +217,7 @@ var DP_Article = {
 	 */
 	setStatus: function(status, callback) {
 
-		DP.request('article-status-set', {
+		AppMediator.request('article-status-set', {
 			status: status
 		}, callback);
 	},
@@ -229,7 +229,7 @@ var DP_Article = {
 	 */
 	getStatus: function(callback) {
 
-		DP.request('article-published-get', null, callback);
+		AppMediator.request('article-published-get', null, callback);
 	},
 
 	/**
@@ -240,7 +240,7 @@ var DP_Article = {
 	 */
 	setPublishedDatetime: function(published, callback) {
 
-		DP.request('article-published-set', {
+		AppMediator.request('article-published-set', {
 			published: published
 		}, callback);
 	},
@@ -252,7 +252,7 @@ var DP_Article = {
 	 */
 	getAuthors: function(callback) {
 
-		DP.request('article-authors-get', null, callback);
+		AppMediator.request('article-authors-get', null, callback);
 	},
 
 	/**
@@ -263,7 +263,7 @@ var DP_Article = {
 	 */
 	setAuthors: function(authors, callback) {
 
-		DP.request('article-authors-set', {
+		AppMediator.request('article-authors-set', {
 			authors: authors
 		}, callback);
 	},
@@ -276,7 +276,7 @@ var DP_Article = {
 	 */
 	addAuthors: function(authors, callback) {
 
-		DP.request('article-authors-add', {
+		AppMediator.request('article-authors-add', {
 			authors: authors
 		}, callback);
 	},
@@ -289,7 +289,7 @@ var DP_Article = {
 	 */
 	removeAuthors: function(authors, callback) {
 
-		DP.request('article-authors-remove', {
+		AppMediator.request('article-authors-remove', {
 			authors: authors
 		}, callback);
 	},
@@ -301,7 +301,7 @@ var DP_Article = {
 	 */
 	getCurrentContent: function(callback) {
 
-		DP.request('article-content-get', null, callback);
+		AppMediator.request('article-content-get', null, callback);
 	},
 
 	/**
@@ -312,7 +312,7 @@ var DP_Article = {
 	 */
 	setCurrentContent: function(content, callback) {
 
-		DP.request('article-content-set', {
+		AppMediator.request('article-content-set', {
 			content: content
 		}, callback);
 	},
@@ -324,7 +324,7 @@ var DP_Article = {
 	 */
 	getArticletypeId: function(callback) {
 
-		DP.request('article-type-get', null, callback);
+		AppMediator.request('article-type-get', null, callback);
 	},
 
 	/**
@@ -335,10 +335,12 @@ var DP_Article = {
 	 */
 	setArticletypeId: function(articletypeId, callback) {
 
-		DP.request('article-type-set', {
+		AppMediator.request('article-type-set', {
 			articletype: articletypeId
 		}, callback);
 	}
 };
 
-DP.Article = DP_Article;
+
+
+AppMediator.Article = ArticleCommunicator;
