@@ -42,6 +42,13 @@ AH5Communicator = {
 		});
 	},
 
+	replaceElementById : function(id, element, callback) {
+		AppMediator.request('editor-element-replace-byid', {
+			id: id,
+			element: element
+		}, callback);
+	},
+
 	setElementById : function(id, element, callback) {
 		AppMediator.request('editor-element-set-byid', {
 			id: id,
@@ -150,7 +157,7 @@ AH5Communicator = {
 	insertElement : function(element, callback) {
 		var e = jQuery(element);
 		AppMediator.request('editor-insert-element', {
-			element : jQuery('<div>').append(element).html()
+			element: jQuery('<div>').append(element).html()
 		}, callback);
 	},
 

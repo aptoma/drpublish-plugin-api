@@ -338,6 +338,14 @@ var ArticleCommunicator = {
 		AppMediator.request('article-type-set', {
 			articletype: articletypeId
 		}, callback);
+	},
+
+	maximizeAppWindow: function(articletypeId, callback) {
+		AppMediator.request('maximize-app-window', {}, callback);
+	},
+
+	restoreAppWindow: function(articletypeId, callback) {
+		AppMediator.request('restore-app-window', {}, callback);
 	}
 };
 
