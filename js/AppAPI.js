@@ -1,9 +1,9 @@
 /**
  * Namespace for all public Dr.Published methods available from apps.
  *
- * Listeners can be added through the Listeners objects AppMediator.errorListeners and AppMediator.eventListeners
+ * Listeners can be added through the Listeners objects AppAPI.errorListeners and AppAPI.eventListeners
  */
-var AppMediator = {
+var AppAPI = {
 	/**
 	 * Constructor for this class
 	 */
@@ -49,7 +49,7 @@ var AppMediator = {
 		jQuery.getJSON ( url, { app: this.getAppName() },
 			function ( reply ) {
 				if ( reply ) {
-					AppMediator.doDirectAuthentication ( reply.signature, reply.iv );
+					AppAPI.doDirectAuthentication ( reply.signature, reply.iv );
 				} else {
 					console.err ( _this.getAppName() + ": No authentication token provided by backend", reply );
 					self.close();
@@ -239,4 +239,4 @@ var AppMediator = {
 	}
 };
 
-AppMediator.initialize ();
+AppAPI.initialize ();

@@ -3,7 +3,7 @@
  *
  * Should be used like this:
  *
- * AppMediator.Editor.insert('string');
+ * AppAPI.Editor.insert('string');
  */
 AH5Communicator = {
 
@@ -13,8 +13,8 @@ AH5Communicator = {
 	 * @param {Function} callback The function to call with fetched data
 	 */
 	registerMenuAction: function (action) {
-		AppMediator.request('register-menu-action', action, function(data) {
-			AppMediator.eventListeners.add(data.typeName, function(data) {
+		AppAPI.request('register-menu-action', action, function(data) {
+			AppAPI.eventListeners.add(data.typeName, function(data) {
 				if (typeof action.callback === 'function') {
 					action.callback(data.id, $(data.element).get(0));
 				}
@@ -23,7 +23,7 @@ AH5Communicator = {
 	},
 
 	registerMenuActionGroup: function (group) {
-		AppMediator.request('register-menu-action-group', group, function(data) {
+		AppAPI.request('register-menu-action-group', group, function(data) {
 			if (data.typeNames.length !== group.actions.length) {
 				console.warn('wrong amount of callback events recieved, not good');
 				return;
@@ -37,27 +37,27 @@ AH5Communicator = {
 					}
 				})(group.actions[i].callback);
 
-				AppMediator.eventListeners.add(data.typeNames[i], callback);
+				AppAPI.eventListeners.add(data.typeNames[i], callback);
 			}
 		});
 	},
 
 	replaceElementById : function(id, element, callback) {
-		AppMediator.request('editor-element-replace-byid', {
+		AppAPI.request('editor-element-replace-byid', {
 			id: id,
 			element: element
 		}, callback);
 	},
 
 	setElementById : function(id, element, callback) {
-		AppMediator.request('editor-element-set-byid', {
+		AppAPI.request('editor-element-set-byid', {
 			id: id,
 			element: element
 		}, callback);
 	},
 
 	getElementById : function(id, callback) {
-		AppMediator.request('editor-element-get-byid', {
+		AppAPI.request('editor-element-get-byid', {
 			id: id
 		}, callback);
 	},
@@ -68,7 +68,7 @@ AH5Communicator = {
 	 * @param {Function} callback The function to call with fetched data
 	 */
 	getCategories : function(callback) {
-		AppMediator.request('get-categories', null, callback);
+		AppAPI.request('get-categories', null, callback);
 	},
 
 	/**
@@ -79,7 +79,7 @@ AH5Communicator = {
 	 * @returns {Array} parent categories
 	 */
 	getParentCategories : function(category, callback) {
-		AppMediator.request('get-parent-categories', category, callback);
+		AppAPI.request('get-parent-categories', category, callback);
 	},
 
 	/**
@@ -88,7 +88,7 @@ AH5Communicator = {
 	 * @param {Function} callback The function to call with fetched data
 	 */
 	getTagTypes : function(callback) {
-		AppMediator.request('get-tag-types', null, callback);
+		AppAPI.request('get-tag-types', null, callback);
 	},
 
 	/**
@@ -97,7 +97,7 @@ AH5Communicator = {
 	 * @param {Function} callback The function to call with fetched data
 	 */
 	getTagType : function(id, callback) {
-		AppMediator.request('get-tag-type', {
+		AppAPI.request('get-tag-type', {
 			id : id
 		}, callback);
 	},
@@ -108,7 +108,7 @@ AH5Communicator = {
 	 * @param {Function} callback The function to call when editor has been cleared
 	 */
 	clear : function(callback) {
-		AppMediator.request('editor-clear', null, callback);
+		AppAPI.request('editor-clear', null, callback);
 	},
 
 	/**
@@ -117,7 +117,7 @@ AH5Communicator = {
 	 * @param {Function} callback The function to call when cursor has been moved
 	 */
 	moveToStart : function(callback) {
-		AppMediator.request('editor-seek', {
+		AppAPI.request('editor-seek', {
 			position : 'start'
 		}, callback);
 	},
@@ -128,7 +128,7 @@ AH5Communicator = {
 	 * @param {Function} callback The function to call when cursor has been moved
 	 */
 	moveToEnd : function(callback) {
-		AppMediator.request('editor-seek', {
+		AppAPI.request('editor-seek', {
 			position : 'end'
 		}, callback);
 	},
@@ -140,7 +140,7 @@ AH5Communicator = {
 	 * @param {Function} callback The function to call when content has been inserted
 	 */
 	insertString : function(string, callback) {
-		AppMediator.request('editor-insert-string', {
+		AppAPI.request('editor-insert-string', {
 			string: string
 		}, callback);
 	},
@@ -156,7 +156,7 @@ AH5Communicator = {
 	 */
 	insertElement : function(element, callback) {
 		var e = jQuery(element);
-		AppMediator.request('editor-insert-element', {
+		AppAPI.request('editor-insert-element', {
 			element: jQuery('<div>').append(element).html()
 		}, callback);
 	},
@@ -168,20 +168,20 @@ AH5Communicator = {
 	 *
 	 */
 	fetch : function(selector, callback) {
-		AppMediator.request('editor-fetch', {
+		AppAPI.request('editor-fetch', {
 			selector: selector
 		}, function(html) { callback(jQuery(html)[0]); });
 	},
 
 	removeClasses : function(selector, classes, callback) {
-		AppMediator.request('editor-classes-remove', {
+		AppAPI.request('editor-classes-remove', {
 			selector: selector,
 			classes: classes
 		}, callback);
 	},
 
 	addClasses : function(selector, classes, callback) {
-		AppMediator.request('editor-classes-add', {
+		AppAPI.request('editor-classes-add', {
 			selector: selector,
 			classes: classes
 		}, callback);
@@ -198,7 +198,7 @@ AH5Communicator = {
 	 * @param {Function} callback The function to call when the item has been hidden
 	 */
 	hideElementMenuItem : function(name, callback) {
-		AppMediator.request('editor-menu-element-hide', {
+		AppAPI.request('editor-menu-element-hide', {
 			element : name
 		}, callback);
 	},
@@ -214,13 +214,13 @@ AH5Communicator = {
 	addElementMenuItem : function(name, action, callback, prepend) {
 		var event = 'menu-click-' + name;
 
-		AppMediator.request('editor-menu-element-add', {
+		AppAPI.request('editor-menu-element-add', {
 			element : name,
 			event : event,
 			prepend : prepend
 		}, callback);
-		AppMediator.eventListeners.removeAll(event);
-		AppMediator.eventListeners.add(event, action);
+		AppAPI.eventListeners.removeAll(event);
+		AppAPI.eventListeners.add(event, action);
 	},
 
 	/**
@@ -230,7 +230,7 @@ AH5Communicator = {
 	 * @param {Function} allback The function to call when the label has been added
 	 */
 	appendElementMenuLabel : function(name, callback) {
-		AppMediator.request('editor-menu-label-add', {
+		AppAPI.request('editor-menu-label-add', {
 			label : name
 		}, callback);
 	},
@@ -241,7 +241,7 @@ AH5Communicator = {
 	 * @param {Function} callback The function to call when the editor has been updated
 	 */
 	update : function(callback) {
-		AppMediator.request('editor-update', null, callback);
+		AppAPI.request('editor-update', null, callback);
 	},
 
 	/**
@@ -253,7 +253,7 @@ AH5Communicator = {
 	 * @param {Function} callback The function to call when the attribute has been set
 	 */
 	setAttributeById : function(id, attribute, value, callback) {
-		AppMediator.request('editor-element-attribute-set-byid', {
+		AppAPI.request('editor-element-attribute-set-byid', {
 			id : id,
 			attribute : attribute,
 			value : value
@@ -269,7 +269,7 @@ AH5Communicator = {
 	 * @param {Function} callback The function to call when the attribute has been set
 	 */
 	setAttributeByCSS : function(selector, attribute, value, callback) {
-		AppMediator.request('editor-element-attribute-set-byselector', {
+		AppAPI.request('editor-element-attribute-set-byselector', {
 			selector : selector,
 			attribute : attribute,
 			value : value
@@ -285,7 +285,7 @@ AH5Communicator = {
 	 * @param {Function} callback The function to call when the attribute has been set
 	 */
 	setStyleById : function(id, attribute, value, callback) {
-		AppMediator.request('editor-element-style-set-byid', {
+		AppAPI.request('editor-element-style-set-byid', {
 			id : id,
 			attribute : attribute,
 			value : value
@@ -301,7 +301,7 @@ AH5Communicator = {
 	 * @param {Function} callback The function to call when the attribute has been set
 	 */
 	setStyleByCSS : function(selector, attribute, value, callback) {
-		AppMediator.request('editor-element-style-set-byselector', {
+		AppAPI.request('editor-element-style-set-byselector', {
 			selector : selector,
 			attribute : attribute,
 			value : value
@@ -311,18 +311,18 @@ AH5Communicator = {
 	maximizeAppPane : function(title, onClose) {
 		var event = 'editor-pane-close-' + new Date().getTime();
 
-		AppMediator.request('editor-pane-maximize', {
+		AppAPI.request('editor-pane-maximize', {
 			title : title,
 			event : event
 		});
-		AppMediator.eventListeners.removeAll(event);
-		AppMediator.eventListeners.add(event, onClose);
+		AppAPI.eventListeners.removeAll(event);
+		AppAPI.eventListeners.add(event, onClose);
 	},
 
 	restoreAppPane : function(callback) {
-		AppMediator.request('editor-pane-restore', null, callback);
+		AppAPI.request('editor-pane-restore', null, callback);
 	},
 
 };
 
-AppMediator.Editor = AH5Communicator;
+AppAPI.Editor = AH5Communicator;

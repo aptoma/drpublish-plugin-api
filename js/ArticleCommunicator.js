@@ -14,7 +14,7 @@ var ArticleCommunicator = {
 	 */
 	startApp: function(name, options, callback) {
 
-		AppMediator.request("app-start", {
+		AppAPI.request("app-start", {
 			app: name,
 			option: options
 		}, callback);
@@ -28,7 +28,7 @@ var ArticleCommunicator = {
 	 */
 	stopApp: function(name) {
 
-		AppMediator.request("app-stop", {
+		AppAPI.request("app-stop", {
 			app: name
 		}, callback);
 	},
@@ -40,7 +40,7 @@ var ArticleCommunicator = {
 	 */
 	getId: function(callback) {
 
-		AppMediator.request('article-id-get', null, callback);
+		AppAPI.request('article-id-get', null, callback);
 	},
 
 	/**
@@ -50,7 +50,7 @@ var ArticleCommunicator = {
 	 */
 	clearMetaInfo: function(callback) {
 
-		AppMediator.request("article-metainfo-clear", null, callback);
+		AppAPI.request("article-metainfo-clear", null, callback);
 	},
 
 	/**
@@ -60,7 +60,7 @@ var ArticleCommunicator = {
 	 */
 	getTags: function(callback) {
 
-		AppMediator.request("article-tags-get", null, callback);
+		AppAPI.request("article-tags-get", null, callback);
 	},
 
 	/**
@@ -71,7 +71,7 @@ var ArticleCommunicator = {
 	 */
 	setTags: function(tags, callback) {
 
-		AppMediator.request('article-tags-set', {
+		AppAPI.request('article-tags-set', {
 			tags: tags
 		}, callback);
 	},
@@ -84,7 +84,7 @@ var ArticleCommunicator = {
 	 */
 	addTag: function(tag, callback) {
 
-		AppMediator.request('article-tags-add', {
+		AppAPI.request('article-tags-add', {
 			tag: tag
 		}, callback);
 	},
@@ -97,7 +97,7 @@ var ArticleCommunicator = {
 	 */
 	removeTag: function(tag, callback) {
 
-		AppMediator.request('article-tags-remove', {
+		AppAPI.request('article-tags-remove', {
 			tag: tag
 		}, callback);
 	},
@@ -109,7 +109,7 @@ var ArticleCommunicator = {
 	 */
 	getSelectedCategories: function(callback) {
 
-		AppMediator.request('article-categories-selected-get', null, callback);
+		AppAPI.request('article-categories-selected-get', null, callback);
 	},
 
 	/**
@@ -133,7 +133,7 @@ var ArticleCommunicator = {
 	 */
 	setCategories: function(categories, callback) {
 
-		AppMediator.request('article-categories-selected-set', {
+		AppAPI.request('article-categories-selected-set', {
 			categories: categories
 		}, callback);
 	},
@@ -146,7 +146,7 @@ var ArticleCommunicator = {
 	 */
 	addCategories: function(categories, callback) {
 
-		AppMediator.request('article-categories-add', {
+		AppAPI.request('article-categories-add', {
 			categories: categories
 		}, callback);
 	},
@@ -158,7 +158,7 @@ var ArticleCommunicator = {
 	 * @param {Function} callback The function to call when the categories have been removed
 	 */
 	removeCategories: function(categories, callback) {
-		AppMediator.request('article-categories-remove', {
+		AppAPI.request('article-categories-remove', {
 			categories: categories
 		}, callback);
 	},
@@ -171,7 +171,7 @@ var ArticleCommunicator = {
 	 */
 	setMainCategory: function(category, callback) {
 
-		AppMediator.request('article-categories-main-set', {
+		AppAPI.request('article-categories-main-set', {
 			category: category
 		}, callback);
 	},
@@ -183,7 +183,7 @@ var ArticleCommunicator = {
 	 */
 	getSource: function(callback) {
 
-		AppMediator.request('article-source-get', null, callback);
+		AppAPI.request('article-source-get', null, callback);
 	},
 
 	/**
@@ -194,7 +194,7 @@ var ArticleCommunicator = {
 	 */
 	setSource: function(value, callback) {
 
-		AppMediator.request('article-source-set', {
+		AppAPI.request('article-source-set', {
 			source: value
 		}, callback);
 	},
@@ -206,7 +206,7 @@ var ArticleCommunicator = {
 	 */
 	getStatus: function(callback) {
 
-		AppMediator.request('article-status-get', null, callback);
+		AppAPI.request('article-status-get', null, callback);
 	},
 
 	/**
@@ -217,7 +217,7 @@ var ArticleCommunicator = {
 	 */
 	setStatus: function(status, callback) {
 
-		AppMediator.request('article-status-set', {
+		AppAPI.request('article-status-set', {
 			status: status
 		}, callback);
 	},
@@ -229,7 +229,7 @@ var ArticleCommunicator = {
 	 */
 	getStatus: function(callback) {
 
-		AppMediator.request('article-published-get', null, callback);
+		AppAPI.request('article-published-get', null, callback);
 	},
 
 	/**
@@ -240,7 +240,7 @@ var ArticleCommunicator = {
 	 */
 	setPublishedDatetime: function(published, callback) {
 
-		AppMediator.request('article-published-set', {
+		AppAPI.request('article-published-set', {
 			published: published
 		}, callback);
 	},
@@ -252,7 +252,7 @@ var ArticleCommunicator = {
 	 */
 	getAuthors: function(callback) {
 
-		AppMediator.request('article-authors-get', null, callback);
+		AppAPI.request('article-authors-get', null, callback);
 	},
 
 	/**
@@ -263,7 +263,7 @@ var ArticleCommunicator = {
 	 */
 	setAuthors: function(authors, callback) {
 
-		AppMediator.request('article-authors-set', {
+		AppAPI.request('article-authors-set', {
 			authors: authors
 		}, callback);
 	},
@@ -276,7 +276,7 @@ var ArticleCommunicator = {
 	 */
 	addAuthors: function(authors, callback) {
 
-		AppMediator.request('article-authors-add', {
+		AppAPI.request('article-authors-add', {
 			authors: authors
 		}, callback);
 	},
@@ -289,7 +289,7 @@ var ArticleCommunicator = {
 	 */
 	removeAuthors: function(authors, callback) {
 
-		AppMediator.request('article-authors-remove', {
+		AppAPI.request('article-authors-remove', {
 			authors: authors
 		}, callback);
 	},
@@ -301,7 +301,7 @@ var ArticleCommunicator = {
 	 */
 	getCurrentContent: function(callback) {
 
-		AppMediator.request('article-content-get', null, callback);
+		AppAPI.request('article-content-get', null, callback);
 	},
 
 	/**
@@ -312,7 +312,7 @@ var ArticleCommunicator = {
 	 */
 	setCurrentContent: function(content, callback) {
 
-		AppMediator.request('article-content-set', {
+		AppAPI.request('article-content-set', {
 			content: content
 		}, callback);
 	},
@@ -324,7 +324,7 @@ var ArticleCommunicator = {
 	 */
 	getArticletypeId: function(callback) {
 
-		AppMediator.request('article-type-get', null, callback);
+		AppAPI.request('article-type-get', null, callback);
 	},
 
 	/**
@@ -335,20 +335,20 @@ var ArticleCommunicator = {
 	 */
 	setArticletypeId: function(articletypeId, callback) {
 
-		AppMediator.request('article-type-set', {
+		AppAPI.request('article-type-set', {
 			articletype: articletypeId
 		}, callback);
 	},
 
 	maximizeAppWindow: function(articletypeId, callback) {
-		AppMediator.request('maximize-app-window', {}, callback);
+		AppAPI.request('maximize-app-window', {}, callback);
 	},
 
 	restoreAppWindow: function(articletypeId, callback) {
-		AppMediator.request('restore-app-window', {}, callback);
+		AppAPI.request('restore-app-window', {}, callback);
 	}
 };
 
 
 
-AppMediator.Article = ArticleCommunicator;
+AppAPI.Article = ArticleCommunicator;
