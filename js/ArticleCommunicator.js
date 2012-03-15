@@ -340,11 +340,18 @@ var ArticleCommunicator = {
 		}, callback);
 	},
 
-	maximizeAppWindow: function(articletypeId, callback) {
-		AppAPI.request('maximize-app-window', {}, callback);
+	maximizeAppWindow: function(title, onClose) {
+		var event = 'editor-pane-close-' + new Date().getTime();
+
+		AppAPI.request('editor-pane-maximize', {
+			title : title,
+			event : event
+		});
+		AppAPI.eventListeners.removeAll(event);
+		AppAPI.eventListeners.add(event, onClose);
 	},
 
-	restoreAppWindow: function(articletypeId, callback) {
+	restoreAppWindow: function(callback) {
 		AppAPI.request('restore-app-window', {}, callback);
 	}
 };
