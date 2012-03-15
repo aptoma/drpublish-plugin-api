@@ -322,6 +322,11 @@ AH5Communicator = {
 	restoreAppPane : function(callback) {
 		AppAPI.request('editor-pane-restore', null, callback);
 	},
+	initMenu: function(menus) {
+		AppAPI.request('editor-initialize-menu', {
+			menus: menus
+		});
+	}
 
 };
 
