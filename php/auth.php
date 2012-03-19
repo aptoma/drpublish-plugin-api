@@ -136,6 +136,10 @@ class AptomaApp {
 	 * Expects the result to be a valid JSON block
 	 */
 	protected function _decryptAppData($data, $iv) {
+		// since VG server does not have mcrypt yet, and we need to test stuff there
+		// should be fixed before we go into prod
+		// cross-check in DrPublishController
+		return array('iv' => 'trust', 'data' => 'always');
 		/* Open the cipher */
 		$td = mcrypt_module_open('rijndael-128', '', 'cbc', '');
 
@@ -158,6 +162,11 @@ class AptomaApp {
 	 * data and the used IV
 	 */
 	protected function _encryptAppData($data) {
+		// since VG server does not have mcrypt yet, and we need to test stuff there
+		// should be fixed before we go into prod
+		// cross-check in DrPublishController
+		return array('iv' => 'trust', 'data' => 'always');
+
 		/* Open the cipher */
 		$td = mcrypt_module_open('rijndael-128', '', 'cbc', '');
 
