@@ -161,28 +161,16 @@ AH5Communicator = {
 		}, callback);
 	},
 
-	/**
-	 * Returns the first DOM object in the editor that matches the given selector
-	 *
-	 * @param {String} selector The selector to select by
-	 *
-	 */
-	fetch : function(selector, callback) {
-		AppAPI.request('editor-fetch', {
-			selector: selector
-		}, function(html) { callback(jQuery(html)[0]); });
-	},
-
-	removeClasses : function(selector, classes, callback) {
+	removeClasses : function(id, classes, callback) {
 		AppAPI.request('editor-classes-remove', {
-			selector: selector,
+			id: id,
 			classes: classes
 		}, callback);
 	},
 
-	addClasses : function(selector, classes, callback) {
+	addClasses : function(id, classes, callback) {
 		AppAPI.request('editor-classes-add', {
-			selector: selector,
+			id: id,
 			classes: classes
 		}, callback);
 	},
