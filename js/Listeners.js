@@ -115,7 +115,7 @@ Listeners.prototype.notify = function(event, data) {
 			if (e && typeof e === "function") {
 				data = e(data);
 			} else {
-				console.debug('hmm', e);
+				//console.debug('hmm', e);
 		}
 		});
 	}

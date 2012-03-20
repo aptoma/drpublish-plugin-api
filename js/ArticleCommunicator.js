@@ -6,6 +6,17 @@
 var ArticleCommunicator = {
 
 	/**
+	 * Give focus to yourself
+	 *
+	 * @param {String} name Name of the app from settings.php
+	 * @param {Object} options Options for initializing the app
+	 * @param {Function} callback The function to call when the app has been started
+	 */
+	focusApp: function(callback) {
+
+		AppAPI.request("app-focus", {}, callback);
+	},
+	/**
 	 * Start the given app
 	 *
 	 * @param {String} name Name of the app from settings.php
