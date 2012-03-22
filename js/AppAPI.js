@@ -8,6 +8,7 @@ var AppAPI = {
 	 * Constructor for this class
 	 */
 	initialize : function () {
+		this.DEBUG = false;
 
 		this.Version = '1.0a';
 		this.Editor = null;
@@ -23,7 +24,7 @@ var AppAPI = {
 		this.eventListeners.add ( 'appAuthenticated', function ( ) {
 			_this.authenticated = true;
 			if ( _this.backlog.length > 0 ) {
-				console.warn ( _this.getAppName() + ": Authenticated, now executing backlog (" + _this.backlog.length + " items)" );
+				if (this.DEBUG) console.warn ( _this.getAppName() + ": Authenticated, now executing backlog (" + _this.backlog.length + " items)" );
 				for ( var i = _this.backlog.length - 1; i >= 0; i-- ) {
 					_this.request ( _this.backlog[i]['spec'], _this.backlog[i]['data'], _this.backlog[i]['callback'] );
 					_this.backlog.splice ( i, 1 );
@@ -51,7 +52,7 @@ var AppAPI = {
 				if ( reply ) {
 					AppAPI.doDirectAuthentication ( reply.signature, reply.iv );
 				} else {
-					console.err ( _this.getAppName() + ": No authentication token provided by backend", reply );
+					if (this.DEBUG) console.err ( _this.getAppName() + ": No authentication token provided by backend", reply );
 					self.close();
 				}
 			}
@@ -73,7 +74,7 @@ var AppAPI = {
 				iv: iv
 			}
 		} );
-		console.log ( this.getAppName() + ": Sent app-loaded signal with auth token to DrPublish" );
+		if (this.DEBUG) console.log ( this.getAppName() + ": Sent app-loaded signal with auth token to DrPublish" );
 	},
 
 	/**
@@ -85,7 +86,7 @@ var AppAPI = {
 	 */
 	request : function ( callSpec, data, callback ) {
 
-		console.info ( this.getAppName() + ': Requesting ' + callSpec + ' from parent with data', data );
+		if (this.DEBUG) console.info ( this.getAppName() + ': Requesting ' + callSpec + ' from parent with data', data );
 
 		if ( data == null ) {
 			data = {};
@@ -94,7 +95,7 @@ var AppAPI = {
 		data['src_app'] = this.getAppName ();
 
 		if ( !this.authenticated ) {
-			console.warn ( "Call for " + callSpec + " delayed until app is authenticated" );
+			if (this.DEBUG) console.warn ( "Call for " + callSpec + " delayed until app is authenticated" );
 			this.backlog.push ( { spec: callSpec, data: data, callback: callback } );
 			return;
 		}

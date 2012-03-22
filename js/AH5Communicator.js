@@ -25,7 +25,7 @@ AH5Communicator = {
 	registerMenuActionGroup: function (group) {
 		AppAPI.request('register-menu-action-group', group, function(data) {
 			if (data.typeNames.length !== group.actions.length) {
-				console.warn('wrong amount of callback events recieved, not good');
+				if (this.DEBUG) console.warn('wrong amount of callback events recieved, not good');
 				return;
 			}
 			for (var i=0; i<data.typeNames.length; i++) {
