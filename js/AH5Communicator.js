@@ -56,7 +56,7 @@ AH5Communicator = {
 		}, callback);
 	},
 
-	getElementById : function(id, callback) {
+	getHTMLById : function(id, callback) {
 		AppAPI.request('editor-element-get-byid', {
 			id: id
 		}, callback);
@@ -176,7 +176,7 @@ AH5Communicator = {
 	},
 
 	/**
-	 * TODO: Figure out how to bypass the need to interact directly with the editor getElementById getElementByCSS select
+	 * TODO: Figure out how to bypass the need to interact directly with the editor getHTMLById getHTMLByCSS select
 	 */
 
 	/**
