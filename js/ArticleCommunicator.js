@@ -305,6 +305,42 @@ var ArticleCommunicator = {
 		}, callback);
 	},
 
+   
+    /**
+     * Get the dossiers set in the article
+     *
+     * @param {Function} callback The function to call with the authors
+     */
+    getDossiers: function(callback) {
+        console.debug('ArticleCommunicator.getDossiers() called');
+        AppAPI.request('article-dossiers-get', null, callback);
+    },
+
+    /**
+     * Add the given dossiers to the list of dossiers
+     *
+     * @param {Array} dossiers List of dossiers to add
+     * @param {Function} callback The function to call when the dossiers have been added
+     */
+    addDossiers: function(dossiers, callback) {
+        console.debug('ArticleCommunicator.addDossiers()', dossiers);
+        AppAPI.request('article-dossiers-add', {
+            dossiers: dossiers
+        }, callback);
+    },
+
+    /**
+     * Remove the given dossiers from the list of dossiers
+     *
+     * @param {Array} dossiers List of authors to remove
+     * @param {Function} callback The function to call when the dossiers have been removed
+     */
+    removeDossiers: function(dossiers, callback) {
+        AppAPI.request('article-dossiers-remove', {
+            dossiers: dossiers
+        }, callback);
+    },
+
 	/**
 	 * Gets the current article content
 	 *
