@@ -139,7 +139,12 @@ class AptomaApp {
 		// since VG server does not have mcrypt yet, and we need to test stuff there
 		// should be fixed before we go into prod
 		// cross-check in DrPublishController
-		return array('iv' => 'trust', 'data' => 'always');
+		return (object) array(
+			'iv' => 'trust',
+			'data' => 'always',
+			'time' => time(),
+			'app' => $this->_name
+		);
 		/* Open the cipher */
 		$td = mcrypt_module_open('rijndael-128', '', 'cbc', '');
 
