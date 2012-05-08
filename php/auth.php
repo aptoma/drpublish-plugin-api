@@ -136,15 +136,22 @@ class AptomaApp {
 	 * Expects the result to be a valid JSON block
 	 */
 	protected function _decryptAppData($data, $iv) {
-		// since VG server does not have mcrypt yet, and we need to test stuff there
-		// should be fixed before we go into prod
-		// cross-check in DrPublishController
-		return (object) array(
-			'iv' => 'trust',
-			'data' => 'always',
-			'time' => time(),
-			'app' => $this->_name
-		);
+		/**
+		 * Servers that do not have mcrypt installed will get a dummy object
+		 * Avoid this at all costs!
+		 * Note especially that the path to DrPublish is then unknown, making all
+		 * non-AFW modules break.
+		 * cross-check in DrPublishController
+		 */
+		if (!function_exists('mcrypt_module_open')) {
+			return (object) array(
+				'iv' => 'trust',
+				'data' => 'always',
+				'time' => time(),
+				'app' => $this->_name,
+				'drpublish' => ''
+			);
+		}
 		/* Open the cipher */
 		$td = mcrypt_module_open('rijndael-128', '', 'cbc', '');
 
