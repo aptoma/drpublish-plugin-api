@@ -312,7 +312,6 @@ var ArticleCommunicator = {
      * @param {Function} callback The function to call with the authors
      */
     getDossiers: function(callback) {
-        console.debug('ArticleCommunicator.getDossiers() called');
         AppAPI.request('article-dossiers-get', null, callback);
     },
 
