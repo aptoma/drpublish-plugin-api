@@ -322,7 +322,6 @@ var ArticleCommunicator = {
      * @param {Function} callback The function to call when the dossiers have been added
      */
     addDossiers: function(dossiers, callback) {
-        console.debug('ArticleCommunicator.addDossiers()', dossiers);
         AppAPI.request('article-dossiers-add', {
             dossiers: dossiers
         }, callback);
