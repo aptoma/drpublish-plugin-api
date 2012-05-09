@@ -175,6 +175,12 @@ AH5Communicator = {
 		}, callback);
 	},
 
+	markAsActive : function(id, callback) {
+		AppAPI.request('editor-mark-as-active', {
+			id: id
+		}, callback);
+	},
+
 	/**
 	 * TODO: Figure out how to bypass the need to interact directly with the editor getHTMLById getHTMLByCSS select
 	 */
