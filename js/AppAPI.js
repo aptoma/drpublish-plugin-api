@@ -16,6 +16,7 @@ var AppAPI = {
 		this.errorListeners = new Listeners;
 		this.eventListeners = new Listeners;
 		this.authenticated = false;
+		this.appName = '';
 
 		var _this = this;
 
@@ -159,17 +160,16 @@ var AppAPI = {
 	 * @returns {String} The name of the app, or false if it couldn't be detected
 	 */
 	getAppName : function () {
+		return this.appName;
+	},
 
-		if ( !self.window.frameElement ) {
-			return false;
-		}
-
-		var name = self.window.frameElement.id;
-		if ( name.match ( 'app-' ) ) {
-			return name.replace ( 'app\-', '' );
-		} else {
-			return false;
-		}
+	/**
+	 * Set the name of the app
+	 *
+	 * @returns {String} The name of the app, or false if it couldn't be detected
+	 */
+	setAppName : function (name) {
+		this.appName = name;
 	},
 
 	/**
