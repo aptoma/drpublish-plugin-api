@@ -25,7 +25,7 @@ var AppAPI = {
 		this.eventListeners.add ( 'appAuthenticated', function ( ) {
 			_this.authenticated = true;
 			if ( _this.backlog.length > 0 ) {
-				if (this.DEBUG) console.warn ( _this.getAppName() + ": Authenticated, now executing backlog (" + _this.backlog.length + " items)" );
+				if (_this.DEBUG) console.warn ( _this.getAppName() + ": Authenticated, now executing backlog (" + _this.backlog.length + " items)" );
 				for ( var i = _this.backlog.length - 1; i >= 0; i-- ) {
 					_this.request ( _this.backlog[i]['spec'], _this.backlog[i]['data'], _this.backlog[i]['callback'] );
 					_this.backlog.splice ( i, 1 );
