@@ -1,7 +1,6 @@
 /**
- * This class is used for communicating with the article in DOM, typically setting and getting values of metadata or in the article content itself.
+ * This class is used for communicating with the article, typically setting and getting values of metadata or in the article content itself.
  *
- * TODO: Find the necessity of getDocument, getContent, getAside, setContent
  */
 var ArticleCommunicator = {
 
@@ -385,6 +384,12 @@ var ArticleCommunicator = {
 		}, callback);
 	},
 
+	/**
+	 * Maximize the app view
+	 *
+	 * @param {String} title Title to give the maximized view
+	 * @param {function} onClose Function to call when the window is closed/minimized
+	 */
 	maximizeAppWindow: function(title, onClose) {
 		var event = 'editor-pane-close-' + new Date().getTime();
 
@@ -396,6 +401,11 @@ var ArticleCommunicator = {
 		AppAPI.eventListeners.add(event, onClose);
 	},
 
+	/**
+	 * Restore the app pane to the default size
+	 *
+	 * @param {function} callback Callback to call after everything is done
+	 */
 	restoreAppWindow: function(callback) {
 		AppAPI.request('restore-app-window', {}, callback);
 	}

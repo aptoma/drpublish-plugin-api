@@ -44,6 +44,8 @@ var AppAPI = {
 	 * to the given URL (or ajax.php?do=authenticate-app if nothing
 	 * else is specified), and using .signature and .iv from the response
 	 * object as the authentication reply to the DrPublish API
+	 *
+	 * @param {String} url Url to call, default is 'ajax.php?do=authentication-app'
 	 */
 	doStandardAuthentication : function ( url ) {
 		url = url || 'ajax.php?do=authenticate-app';
@@ -63,6 +65,9 @@ var AppAPI = {
 	/**
 	 * Directly authenticates with the DrPublish API with the given
 	 * signature and iv
+	 *
+	 * @param {String} signature Signature to send
+	 * @param {String} iv Iv to send
 	 */
 	doDirectAuthentication : function ( signature, iv ) {
 		pm ( {
@@ -116,17 +121,6 @@ var AppAPI = {
 		} );
 	},
 
-	/**
-	 * Creates a new jQuery dialog
-	 *
-	 * @param {Object} options Dialog options
-	 * @returns {jQuery.dialog} New dialog
-	 */
-	createDialog : function ( options ) {
-
-		var dialog = jQuery ( '<div />' );
-		return dialog.dialog ( options );
-	},
 
 	/**
 	 * Creates a new tag
@@ -150,10 +144,6 @@ var AppAPI = {
 		} );
 	},
 
-	log : function ( str ) {
-
-	},
-
 	/**
 	 * Get the name of the loaded app
 	 *
@@ -166,7 +156,7 @@ var AppAPI = {
 	/**
 	 * Set the name of the app
 	 *
-	 * @returns {String} The name of the app, or false if it couldn't be detected
+	 * @param {String} name The name of the app
 	 */
 	setAppName : function (name) {
 		this.appName = name;
@@ -227,7 +217,7 @@ var AppAPI = {
 	},
 
 	/**
-	 * Loads an old revision
+	 * Loads an old revision of an article
 	 *
 	 * @param {Integer} id The id of the revision to load
 	 * @param {Function} callback The function to call when the new revision has been loaded

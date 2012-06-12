@@ -6,11 +6,20 @@
  * AppAPI.Editor.insert('string');
  */
 AH5Communicator = {
-
 	/**
-	 * Registers/Modifies menu items for a app element
+	 * Registers/Modifies a context menu items for a app element
+	 * The object send should have the following structure
+	 *	{
+	 *		app: <name of the app>
+	 *		label: <label in the menu>
+	 *		icon: <optional url to possible icon image>
+	 * 		trigger: <optional css selector, only show menu element when this matches the element>
+	 *		callback: function(id) {
+	 *			// callback function, paramter is the id of the element clicked
+	 *		}
+	 *	}
 	 *
-	 * @param {Function} callback The function to call with fetched data
+	 * @param {Object} action The action object
 	 */
 	registerMenuAction: function (action) {
 		AppAPI.request('register-menu-action', action, function(data) {
@@ -22,6 +31,25 @@ AH5Communicator = {
 		});
 	},
 
+	/**
+	 * Registers/Modifies a group of items to in the context menu
+	 * The object send should have the following structure
+	 *	{
+	 *		app: <name of the app>,
+	 *		label: <label for the group in the menu>,
+	 *		icon: <optional url to possible icon image>,
+	 *		actions: [
+	 *			{
+	 *				label: <label for the action>,
+	 *				callback: function(id) {
+	 *					// callback function, paramter is the id of the element clicked
+	 *				}
+	 *			}
+	 *		]
+	 *	}
+	 *
+	 * @param {Object} action The action object
+	 */
 	registerMenuActionGroup: function (group) {
 		AppAPI.request('register-menu-action-group', group, function(data) {
 			if (data.typeNames.length !== group.actions.length) {
@@ -42,6 +70,13 @@ AH5Communicator = {
 		});
 	},
 
+	/**
+	 * Replace an element in the article
+	 *
+	 * @param {String} id Id of the element
+	 * @param {String} element The new element
+	 * @param {function} callback Callback to call afte the replacement is done
+	 */
 	replaceElementById : function(id, element, callback) {
 		AppAPI.request('editor-element-replace-byid', {
 			id: id,
@@ -49,6 +84,13 @@ AH5Communicator = {
 		}, callback);
 	},
 
+	/**
+	 * Replace the element content in the article
+	 *
+	 * @param {String} id Id of the element
+	 * @param {String} element The new content to give the element
+	 * @param {function} callback Callback to call afte the replacement is done
+	 */
 	setElementById : function(id, element, callback) {
 		AppAPI.request('editor-element-set-byid', {
 			id: id,
@@ -56,6 +98,12 @@ AH5Communicator = {
 		}, callback);
 	},
 
+	/**
+	 * Get HTML code of an element
+	 *
+	 * @param {String} id The element id
+	 * @param {function} callback Callback to call with the content
+	 */
 	getHTMLById : function(id, callback) {
 		AppAPI.request('editor-element-get-byid', {
 			id: id
@@ -76,7 +124,6 @@ AH5Communicator = {
 	 *
 	 * @param {Object} category The category to find parents of
 	 * @param {Function} callback The function to call with the list of parents
-	 * @returns {Array} parent categories
 	 */
 	getParentCategories : function(category, callback) {
 		AppAPI.request('get-parent-categories', category, callback);
@@ -94,6 +141,7 @@ AH5Communicator = {
 	/**
 	 * Gives callback data about the given tag type
 	 *
+	 * @param {String} id The element id
 	 * @param {Function} callback The function to call with fetched data
 	 */
 	getTagType : function(id, callback) {
@@ -109,28 +157,6 @@ AH5Communicator = {
 	 */
 	clear : function(callback) {
 		AppAPI.request('editor-clear', null, callback);
-	},
-
-	/**
-	 * Moves editor cursor to the beginning
-	 *
-	 * @param {Function} callback The function to call when cursor has been moved
-	 */
-	moveToStart : function(callback) {
-		AppAPI.request('editor-seek', {
-			position : 'start'
-		}, callback);
-	},
-
-	/**
-	 * Moves editor cursor to the end
-	 *
-	 * @param {Function} callback The function to call when cursor has been moved
-	 */
-	moveToEnd : function(callback) {
-		AppAPI.request('editor-seek', {
-			position : 'end'
-		}, callback);
 	},
 
 	/**
@@ -161,6 +187,13 @@ AH5Communicator = {
 		}, callback);
 	},
 
+	/**
+	 * Remove classes from the element an element in the article
+	 *
+	 * @param {String} id Id of the element
+	 * @param {Array} classes Array of class names
+	 * @param {function} callback Callback to call after everything is done
+	 */
 	removeClasses : function(id, classes, callback) {
 		AppAPI.request('editor-classes-remove', {
 			id: id,
@@ -168,6 +201,13 @@ AH5Communicator = {
 		}, callback);
 	},
 
+	/**
+	 * Add new classes to an element
+	 *
+	 * @param {String} id Id of the element
+	 * @param {Array} classes Array of class names
+	 * @param {function} callback Callback to call after everything is done
+	 */
 	addClasses : function(id, classes, callback) {
 		AppAPI.request('editor-classes-add', {
 			id: id,
@@ -175,57 +215,15 @@ AH5Communicator = {
 		}, callback);
 	},
 
+	/**
+	 * Mark an element as currently selected (green border with default styling)
+	 *
+	 * @param {String} id Id of the element
+	 * @param {function} callback Callback to call after everything is done
+	 */
 	markAsActive : function(id, callback) {
 		AppAPI.request('editor-mark-as-active', {
 			id: id
-		}, callback);
-	},
-
-	/**
-	 * TODO: Figure out how to bypass the need to interact directly with the editor getHTMLById getHTMLByCSS select
-	 */
-
-	/**
-	 * Hide an element from the app element menu
-	 *
-	 * @param {String} name The name of the element to hide
-	 * @param {Function} callback The function to call when the item has been hidden
-	 */
-	hideElementMenuItem : function(name, callback) {
-		AppAPI.request('editor-menu-element-hide', {
-			element : name
-		}, callback);
-	},
-
-	/**
-	 * Adds a menu item to the editor with a callback for on click handling
-	 *
-	 * @param {String} name The name of the element to add
-	 * @param {Function} action The function to call upon click
-	 * @param {Function} callback The function to call when the menu item has been added
-	 * @param {Boolean} prepend True to prepend instead of append
-	 */
-	addElementMenuItem : function(name, action, callback, prepend) {
-		var event = 'menu-click-' + name;
-
-		AppAPI.request('editor-menu-element-add', {
-			element : name,
-			event : event,
-			prepend : prepend
-		}, callback);
-		AppAPI.eventListeners.removeAll(event);
-		AppAPI.eventListeners.add(event, action);
-	},
-
-	/**
-	 * Adds a menu label to the editor
-	 *
-	 * @param {String} name The name to add to the menu (will be suffixed with a colon)
-	 * @param {Function} allback The function to call when the label has been added
-	 */
-	appendElementMenuLabel : function(name, callback) {
-		AppAPI.request('editor-menu-label-add', {
-			label : name
 		}, callback);
 	},
 
@@ -302,20 +300,12 @@ AH5Communicator = {
 		}, callback);
 	},
 
-	maximizeAppPane : function(title, onClose) {
-		var event = 'editor-pane-close-' + new Date().getTime();
-
-		AppAPI.request('editor-pane-maximize', {
-			title : title,
-			event : event
-		});
-		AppAPI.eventListeners.removeAll(event);
-		AppAPI.eventListeners.add(event, onClose);
-	},
-
-	restoreAppPane : function(callback) {
-		AppAPI.request('editor-pane-restore', null, callback);
-	},
+	/**
+	 * Initialize pre registered menus
+	 * available options are: simplePluginMenu, editContext
+	 *
+	 * @param {Array} menus Array of menu names
+	 */
 	initMenu: function(menus) {
 		AppAPI.request('editor-initialize-menu', {
 			menus: menus

@@ -5,15 +5,15 @@ Next, all communication between the plugin and DrPublish is sent using [postMess
 
 PostMessage works by one side listening for incoming messages, and determining whether to act upon that message or not depending on its origin host, its origin frame and its contents.
 In DrPublish, these binding are written in js/classes/binds/\*.js, and are mapped through js/classes/DPPAPI.js, which also handles delegation of events from DrPublish to plugins.
-On the plugin side, the files DP.js, DP\_Editor.js and DP\_Article.js provide functions for sending all the supported postMessage calls without the caller having to know that that's what's being done.
+On the plugin side, the files AppAPI.js, AH5Communicator.js and ArticleCommunicator.js provide functions for sending all the supported postMessage calls without the caller having to know that that's what's being done.
 
-Behind the scenes, the DP\*.js files wrap the incoming parameters in a JSON object, adds on the name of sending plugin and what method on the remote side it wants to call (RPC anyone?), and send this over postMessage using a [thin jQuery PM wrapper](http://postmessage.freebaseapps.com/).
+Behind the scenes, the API files wrap the incoming parameters in a JSON object, adds on the name of sending plugin and what method on the remote side it wants to call (RPC anyone?), and send this over postMessage using a [thin jQuery PM wrapper](http://postmessage.freebaseapps.com/).
 
-On the other side, DPPAPPI.js determines which function should be called, executes it, wraps its response in a JSON object, and returns it to the sending plugin. The plugin side (DP.js) then receives this reply, and sends the received data to a callback (if any is specified).
+On the other side, DPPAPPI.js determines which function should be called, executes it, wraps its response in a JSON object, and returns it to the sending plugin. The plugin side (AppAPI.js) then receives this reply, and sends the received data to a callback (if any is specified).
 
 Authentication
 ==============
-DrPublish now always sends an encrypted token to all plugins that are being loaded so that the plugin can check that they are in fact being loaded by DrPublish with a valid user logged in.
+DrPublish always sends an encrypted token to all plugins that are being loaded so that the plugin can check that they are in fact being loaded by DrPublish with a valid user logged in.
 Plugins should therefore always verify this token.
 Conversely, plugins now also have to authenticate themselves to DrPublish before they are allowed to access the API. They are also hidden until this has been done.
 If a plugin does not authenticate itself within 60 seconds of being loaded, it is killed.
@@ -51,42 +51,43 @@ First, your backend should include php/auth.php and do something like this:
 ```php
 <?php
 require 'php/auth.php';
-$plugin = new DPPlugin ( 'penguin-plugin', 'super-secret-key', 'http://myhost.com:80' );
+$app = new AppAPI('penguin-app', 'super-secret-key', 'http://myhost.com:80');
 
-session_start ( 'penguin-plugin' );
+session_start('penguin-app');
 
-if ( !array_key_exists ( 'authenticated', $_SESSION ) || $_SESSION['authenticated'] !== "yes" ) {
-  if ( !array_key_exists ( 'auth', $_GET ) || !array_key_exists ( 'iv', $_GET ) ) {
-    die ( "Get outta' here scum!" );
+if (!array_key_exists('authenticated', $_SESSION) || $_SESSION['authenticated'] !== "yes") {
+  if (!array_key_exists('auth', $_GET) || !array_key_exists('iv', $_GET)) {
+    die("Get outta' here scum!");
   }
 
-  $dpdata = $plugin -> validate ( $_GET['auth'], $_GET['iv'] );
+  $dpdata = $app->validate($_GET['auth'], $_GET['iv']);
 
-  if ( $dpdata === false ) {
-    die ( 'Invalid DrPublish token received; giving up' );
+  if ($dpdata === false) {
+    die('Invalid DrPublish token received; giving up');
   }
 
   $_SESSION['authenticated'] = "yes";
 }
 ```
 
+}
 This will both check that the token from DrPublish is valid and store the fact that the user is authenticated to his/her session so you can check it later on in your application as well (or during AJAX calls, etc...)
 Then, in your AJAX controller somewhere (which should also check that a valid session is in place), you add another action like so:
 
 ```php
 <?php
 case 'get-authentication-token':
-  echo json_encode ( $plugin -> getAuthenticationToken() ); // Will include two values, signature and iv
+  echo json_encode($app->getAuthenticationToken()); // Will include two values, signature and iv
   break;
 ```
     
-Now, in your HTML, all you need to do is include Listeners.js and DP.js, and optionally DP_Editor.js and DP_Article.js if you need their functionality, and run either DP.doStandardAuthentication or DP.doDirectAuthentication.
-The former takes a URL that it will send an AJAX request to, expecting to get back a JSON object containing the indices, signature and iv (which is what you get with the above code), that it will then send to DrPublish.
+Now, in your HTML, all you need to do is include Listeners.js and AppAPI.js, and optionally AH5Communicator.js and ArticleCommunicator.js if you need their functionality, and run either AppAPI.doStandardAuthentication or AppAPI.doDirectAuthentication.
+The former takes a URL that it will send an AJAX request to, expecting to get back a JSON object containing the indices, signature and iv (which is what you get with the above 'get-authentication-token' code), that it will then send to DrPublish.
 The latter takes signature and iv as string parameters, and passes these directly to DrPublish for authentication.
 Choose whichever best fits you application.
 
 What about debugging?
 =====================
-It just so happens that I did a lot of debugging while setting this up, and to be nice, I've left the debugging code in there.
-If you open up your browser JS console, you will see output detailing everything interesting that is happening under the bonnet.
+It just so happens that we did a lot of debugging while setting this up, and to be nice, we've left the debugging code in there. All you need to do to enable it is to set the AppAPI.DEBUG flag to TRUE;
+If you then open up your browser JS console, you will see output detailing everything interesting that is happening under the bonnet.
 Note especially warnings and errors since these indicate that something of special interest has happened.
