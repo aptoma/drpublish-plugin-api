@@ -111,6 +111,18 @@ AH5Communicator = {
 	},
 
 	/**
+	 * Get HTML code of all elements that match the selector
+	 *
+	 * @param {String} selector The CSS selector
+	 * @param {function} callback Callback to call with the content
+	 */
+	getHTMLBySelector : function(selector, callback) {
+		AppAPI.request('editor-elements-get-byselector', {
+			selector: selector
+		}, callback);
+	},
+
+	/**
 	 * Gives callback all categories
 	 *
 	 * @param {Function} callback The function to call with fetched data
