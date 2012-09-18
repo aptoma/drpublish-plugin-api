@@ -70,6 +70,10 @@ AH5Communicator = {
 		});
 	},
 
+	getEditorType: function(callback) {
+		AppAPI.request('editor-get-type', null, callback);
+	},
+
 	/**
 	 * Replace an element in the article
 	 *
