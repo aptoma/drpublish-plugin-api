@@ -34,8 +34,11 @@ var AppAPI = {
 		} );
 
 		pm.bind ( "event", function ( data ) {
-			_this.eventListeners.notify ( data.type, data.data );
-			return true;
+			var data = _this.eventListeners.notify ( data.type, data.data );
+			if (typeof data === 'undefined') {
+				return true;
+			}
+			return data;
 		}, "*" );
 	},
 
@@ -113,7 +116,6 @@ var AppAPI = {
 			data : data,
 			success : callback,
 			error : function ( data ) {
-
 				_this.errorListeners.notify ( data.type, data );
 			},
 			origin : "*", // TODO: Find a way of avoiding all-origins
