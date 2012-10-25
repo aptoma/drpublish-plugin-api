@@ -10,7 +10,7 @@ AH5Communicator = {
 	 * Registers/Modifies a context menu items for a app element
 	 * The object send should have the following structure
 	 *	{
-	 *		app: <name of the app>
+	 *		app: <name of the app to register the new element on>
 	 *		label: <label in the menu>
 	 *		icon: <optional url to possible icon image>
 	 * 		trigger: <optional css selector, only show menu element when this matches the element>
@@ -35,7 +35,7 @@ AH5Communicator = {
 	 * Registers/Modifies a group of items to in the context menu
 	 * The object send should have the following structure
 	 *	{
-	 *		app: <name of the app>,
+	 *		app: <name of the app to register the new element on>,
 	 *		label: <label for the group in the menu>,
 	 *		icon: <optional url to possible icon image>,
 	 *		actions: [
