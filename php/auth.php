@@ -39,7 +39,7 @@ class AptomaApp {
 
 	/**
 	 * @param string $name The app's name as defined in DrPublish
-	 * @param string $key The API key for this app
+	 * @param string $key The API key for this app, default is DrPublish
 	 * @param URL $host The scheme, host and port of the app.
 	 *		Note that this must be in accordance with the URL given
 	 *		in the DrPublish setup
@@ -85,6 +85,8 @@ class AptomaApp {
 			return false;
 		}
 
+		// fix the conversion between + and ' ' that happens when passing stuff through an url
+		$auth = str_replace(' ', '+', $auth);
 		$incoming = $this->_decryptAppData( base64_decode($auth), $iv);
 
 		if(is_null($incoming)) {
