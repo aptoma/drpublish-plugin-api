@@ -2,6 +2,8 @@
  * Namespace for all public Dr.Published methods available from apps.
  *
  * Listeners can be added through the Listeners objects AppAPI.errorListeners and AppAPI.eventListeners
+ * @class
+ * @classdesc The basic API object
  */
 var AppAPI = {
 	/**
@@ -219,6 +221,15 @@ var AppAPI = {
 	},
 
 	/**
+	 * Add listeners.
+     *
+     * @param {Object} An object where Key is event name, and value is the callback function
+	 */
+    addListeners: function(listeners) {
+        AppAPI.eventListeners.addAll(listeners);
+    },
+
+	/**
 	 * Loads an old revision of an article
 	 *
 	 * @param {Integer} id The id of the revision to load
@@ -232,4 +243,4 @@ var AppAPI = {
 	}
 };
 
-AppAPI.initialize ();
+AppAPI.initialize();

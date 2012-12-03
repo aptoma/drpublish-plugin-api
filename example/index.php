@@ -43,7 +43,7 @@
             AppAPI.Editor.insertElement($('<div>'+value+'</div>'));
         });
 
-        AppAPI.eventListeners.addAll({
+        AppAPI.addListeners({
             // triggers each time an element from this app is selected
             pluginElementSelected: function(data) {
                 AppAPI.Editor.getHTMLById(data.id, function(element) {

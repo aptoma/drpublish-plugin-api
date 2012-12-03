@@ -1,6 +1,8 @@
 /**
  * This class is used for communicating with the article, typically setting and getting values of metadata or in the article content itself.
  *
+ * @class
+ * @classdesc Functions for talking with the DrPublish article object. Accessed through AppAPI.Article
  */
 var ArticleCommunicator = {
 

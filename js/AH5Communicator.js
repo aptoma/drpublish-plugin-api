@@ -4,6 +4,9 @@
  * Should be used like this:
  *
  * AppAPI.Editor.insert('string');
+ *
+ * @class
+ * @classdesc Functions for talking with the AH5 editor. Accessed through AppAPI.Editor
  */
 AH5Communicator = {
 	/**
@@ -13,7 +16,7 @@ AH5Communicator = {
 	 *		app: <name of the app to register the new element on>
 	 *		label: <label in the menu>
 	 *		icon: <optional url to possible icon image>
-	 * 		trigger: <optional css selector, only show menu element when this matches the element>
+	 *		trigger: <optional css selector, only show menu element when this matches the element>
 	 *		callback: function(id) {
 	 *			// callback function, paramter is the id of the element clicked
 	 *		}
