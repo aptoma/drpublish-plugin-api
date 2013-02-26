@@ -11,8 +11,9 @@
     <script src="../js/ArticleCommunicator.js"></script>
     <script>
     $(document).ready(function() {
+        var name = "<?=$_GET['appName']?>";
         // register name of the app, sent as a paramter in the iframe url
-        AppAPI.setAppName("<?=$_GET['appName']?>");
+        AppAPI.setAppName(name);
         // authenticate the app, again using variables sent in the iframe url
         AppAPI.doStandardAuthentication("./authenticate.php?auth=<?=($_GET['auth'])?>&iv=<?=$_GET['iv']?>");
 
@@ -51,7 +52,6 @@
                 });
             }
         });
-
     });
     </script>
 </head>
