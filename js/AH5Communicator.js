@@ -149,6 +149,19 @@ AH5Communicator = {
 	},
 
 	/**
+	 * Returns all the parent elements that match the selector
+	 *
+	 * @param {Object} category The category to find parents of
+	 * @param {Function} callback The function to call with the list of parents
+	 */
+	getParentIds : function(id, selector, callback) {
+		AppAPI.request('get-parent-ids', {
+            id: id,
+            selector: selector
+        }, callback);
+	},
+
+	/**
 	 * Gives callback all tag types
 	 *
 	 * @param {Function} callback The function to call with fetched data
