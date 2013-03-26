@@ -70,7 +70,6 @@ if (!array_key_exists('authenticated', $_SESSION) || $_SESSION['authenticated'] 
 }
 ```
 
-}
 This will both check that the token from DrPublish is valid and store the fact that the user is authenticated to his/her session so you can check it later on in your application as well (or during AJAX calls, etc...)
 Then, in your AJAX controller somewhere (which should also check that a valid session is in place), you add another action like so:
 
