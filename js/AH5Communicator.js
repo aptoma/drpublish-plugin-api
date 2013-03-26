@@ -12,17 +12,19 @@ AH5Communicator = {
 	/**
 	 * Registers/Modifies a context menu items for a app element
 	 * The object send should have the following structure
-	 *	{
-	 *		app: <name of the app to register the new element on>
-	 *		label: <label in the menu>
-	 *		icon: <optional url to possible icon image>
-	 *		trigger: <optional css selector, only show menu element when this matches the element>
-	 *		callback: function(id) {
-	 *			// callback function, paramter is the id of the element clicked
-	 *		}
-	 *	}
 	 *
 	 * @param {Object} action The action object
+     *
+     * @example
+	 * AppAPI.Editor.registerMenuAction({
+	 *      app: 'name of the app to register the new element on',
+	 *      label: 'label in the menu',
+	 *      icon: 'optional url to possible icon image',
+	 *      trigger: 'optional css selector, only show menu element when this matches the element',
+	 *      callback: function(id) {
+	 *          // callback function, paramter is the id of the element clicked
+	 *      }
+	 * })
 	 */
 	registerMenuAction: function (action) {
 		AppAPI.request('register-menu-action', action, function(data) {
@@ -37,19 +39,27 @@ AH5Communicator = {
 	/**
 	 * Registers/Modifies a group of items to in the context menu
 	 * The object send should have the following structure
-	 *	{
-	 *		app: <name of the app to register the new element on>,
-	 *		label: <label for the group in the menu>,
-	 *		icon: <optional url to possible icon image>,
-	 *		actions: [
-	 *			{
-	 *				label: <label for the action>,
-	 *				callback: function(id) {
-	 *					// callback function, paramter is the id of the element clicked
-	 *				}
-	 *			}
-	 *		]
-	 *	}
+     *
+     * @example
+	 * AppAPI.Editor.registerMenuActionGroup({
+	 *      app: 'name of the app to register the new element on',
+	 *      label: 'label for the group in the menu',
+	 *      icon: 'optional url to possible icon image',
+	 *      actions: [
+	 *          {
+	 *              label: 'label for the action #1',
+	 *              callback: function(id) {
+	 *                  // callback function, paramter is the id of the element clicked
+	 *              }
+	 *          },
+	 *          {
+	 *              label: 'label for the action #2',
+	 *              callback: function(id) {
+	 *                  // callback function, paramter is the id of the element clicked
+	 *              }
+	 *          }
+	 *      ]
+	 * })
 	 *
 	 * @param {Object} action The action object
 	 */

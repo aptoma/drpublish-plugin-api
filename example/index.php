@@ -41,7 +41,8 @@
                 return false;
             }
             // insert an element at the current cursor position, adding required parameters to make it draggable and non-editable
-            AppAPI.Editor.insertElement($('<div>'+value+'</div>'));
+            var element = $('<div>').append($('<div>').attr('data-source', 'foobar').text(value));
+            AppAPI.Editor.insertElement(element);
         });
 
         AppAPI.addListeners({
