@@ -50,3 +50,8 @@ What about debugging?
 It just so happens that we did a lot of debugging while setting this up, and to be nice, we've left the debugging code in there. All you need to do to enable it is to set the AppAPI.DEBUG flag to TRUE;
 If you then open up your browser JS console, you will see output detailing everything interesting that is happening under the bonnet.
 Note especially warnings and errors since these indicate that something of special interest has happened.
+
+
+Documentation
+=============
+Documentation has been generated using [jsdoc](https://github.com/jsdoc3/jsdoc) and the supplied conf.json file
