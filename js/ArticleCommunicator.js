@@ -81,9 +81,11 @@ var ArticleCommunicator = {
 	 * @param {Array} tags List of tags that should be set
 	 * @param {Function} callback The function to call when tags have been set
 	 */
-	setTags: function(tags, callback) {
-
+	setTags: function(data, callback) {
+        var tags = data.tags;
+        var save = data.save;
 		AppAPI.request('article-tags-set', {
+            save: save,
 			tags: tags
 		}, callback);
 	},
