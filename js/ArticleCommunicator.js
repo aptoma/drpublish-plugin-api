@@ -412,7 +412,22 @@ var ArticleCommunicator = {
 	 */
 	restoreAppWindow: function(callback) {
 		AppAPI.request('restore-app-window', {}, callback);
-	}
+	},
+
+
+   	getByline: function(callback) {
+   		AppAPI.request("article-byline-get", null, callback);
+   	},
+
+    setByline: function(data, callback) {
+        var byline = data.byline;
+         var save = data.save;
+   		AppAPI.request('article-byline-set', {
+               save: save,
+   			   byline: byline
+   		}, callback);
+   	}
+
 };
 
 
