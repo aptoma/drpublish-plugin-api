@@ -111,6 +111,24 @@ var AppAPI = {
 			return;
 		}
 
+        for (var key in data) {
+            var val = data[key];
+            if (typeof val === 'function') {
+                var eventKey = key+'functioncallback'+(new Date()).getTime();
+                var eventFunction = (function(func) {
+                    return function(data) {
+                        func.apply(null, arguments);
+                        AppAPI.eventListeners.remove(eventKey, eventKey);
+                    }
+                })(val);
+                AppAPI.eventListeners.add(eventKey, eventFunction);
+                data[key] = {
+                    type: 'function',
+                    eventKey: eventKey
+                };
+            }
+        };
+
 		var _this = this;
 		pm ( {
 			target : parent,

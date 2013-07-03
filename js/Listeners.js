@@ -93,7 +93,6 @@ Listeners.prototype.removeByCallback = function ( event, callback ) {
  * @param {String} event Event type to remove handlers for (!event for all)
  */
 Listeners.prototype.removeAll = function ( event ) {
-
 	if ( !event ) {
 		this._listeners = [];
 	} else {
