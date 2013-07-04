@@ -96,10 +96,10 @@ var ArticleCommunicator = {
 	 * @param {String} tag Tag to be added
 	 * @param {Function} callback Function to call when tag has been added
 	 */
-	addTag: function(tag, callback) {
-
+	addTag: function(tag, errorFunction, callback) {
 		AppAPI.request('article-tags-add', {
-			tag: tag
+			tag: tag,
+            onError: errorFunction
 		}, callback);
 	},
 

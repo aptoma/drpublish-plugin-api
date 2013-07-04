@@ -9,7 +9,7 @@ var AppAPI = {
 	/**
 	 * Constructor for this class
 	 */
-	initialize : function () {
+	initialize: function () {
 		this.DEBUG = false;
 
 		this.Version = '1.0a';
@@ -52,7 +52,7 @@ var AppAPI = {
 	 *
 	 * @param {String} url Url to call, default is 'ajax.php?do=authentication-app'
 	 */
-	doStandardAuthentication : function ( url ) {
+	doStandardAuthentication: function ( url ) {
 		url = url || 'ajax.php?do=authenticate-app';
 
 		jQuery.getJSON ( url, { app: this.getAppName() },
@@ -74,12 +74,12 @@ var AppAPI = {
 	 * @param {String} signature Signature to send
 	 * @param {String} iv Iv to send
 	 */
-	doDirectAuthentication : function ( signature, iv ) {
+	doDirectAuthentication: function ( signature, iv ) {
 		pm ( {
-			target : self.parent,
-			type : "app-loaded",
-			origin : "*",
-			data : {
+			target: self.parent,
+			type: "app-loaded",
+			origin: "*",
+			data: {
 				app: this.getAppName (),
 				signature: signature,
 				iv: iv
@@ -95,7 +95,7 @@ var AppAPI = {
 	 * @param {Object} data The data attached to the request
 	 * @param {Function} callback The function to call upon return
 	 */
-	request : function ( callSpec, data, callback ) {
+	request: function ( callSpec, data, callback ) {
 
 		if (this.DEBUG) console.info ( this.getAppName() + ': Requesting ' + callSpec + ' from parent with data', data );
 
@@ -116,7 +116,7 @@ var AppAPI = {
             if (typeof val === 'function') {
                 var eventKey = key+'functioncallback'+(new Date()).getTime();
                 var eventFunction = (function(func) {
-                    return function(data) {
+                    return function() {
                         func.apply(null, arguments);
                         AppAPI.eventListeners.remove(eventKey, eventKey);
                     }
@@ -131,15 +131,15 @@ var AppAPI = {
 
 		var _this = this;
 		pm ( {
-			target : parent,
-			type : callSpec,
-			data : data,
-			success : callback,
-			error : function ( data ) {
+			target: parent,
+			type: callSpec,
+			data: data,
+			success: callback,
+			error: function ( data ) {
 				_this.errorListeners.notify ( data.type, data );
 			},
-			origin : "*", // TODO: Find a way of avoiding all-origins
-			hash : false
+			origin: "*", // TODO: Find a way of avoiding all-origins
+			hash: false
 		} );
 	},
 
@@ -150,19 +150,19 @@ var AppAPI = {
 	 * @param {String} tag The tag to create
 	 * @param {Function} callback What do do when the tag was created
 	 */
-	createNewTag : function ( tag, callback ) {
+	openTagCreationDialog: function ( tag, callback ) {
 		this.request ( "create-tag", {
-			tag : tag
+			tag: tag
 		}, callback );
 	},
 
 	/**
 	 * Reloads the app's iframe
 	 */
-	reloadIframe : function () {
+	reloadIframe: function () {
 
 		this.request ( "app-reload", {
-			app : this.getAppName ()
+			app: this.getAppName ()
 		} );
 	},
 
@@ -171,7 +171,7 @@ var AppAPI = {
 	 *
 	 * @returns {String} The name of the app, or false if it couldn't be detected
 	 */
-	getAppName : function () {
+	getAppName: function () {
 		return this.appName;
 	},
 
@@ -180,7 +180,7 @@ var AppAPI = {
 	 *
 	 * @param {String} name The name of the app
 	 */
-	setAppName : function (name) {
+	setAppName: function (name) {
 		this.appName = name;
 	},
 
@@ -189,10 +189,10 @@ var AppAPI = {
 	 *
 	 * @param {String} Message to be displayed
 	 */
-	showInfoMsg : function ( msg ) {
+	showInfoMsg: function ( msg ) {
 
 		this.request ( "show-message-info", {
-			message : msg
+			message: msg
 		} );
 	},
 
@@ -201,10 +201,10 @@ var AppAPI = {
 	 *
 	 * @param {String} Message to be displayed
 	 */
-	showWarningMsg : function ( msg ) {
+	showWarningMsg: function ( msg ) {
 
 		this.request ( "show-message-warning", {
-			message : msg
+			message: msg
 		} );
 	},
 
@@ -213,10 +213,10 @@ var AppAPI = {
 	 *
 	 * @param {String} Message to be displayed
 	 */
-	showErrorMsg : function ( msg ) {
+	showErrorMsg: function ( msg ) {
 
 		this.request ( "show-message-error", {
-			message : msg
+			message: msg
 		} );
 	},
 
@@ -225,7 +225,7 @@ var AppAPI = {
 	 *
 	 * @param {String} Message to display in progress loader
 	 */
-	showLoader : function ( msg ) {
+	showLoader: function ( msg ) {
 		this.request ( "show-loader", {
 			message: msg
 		} );
@@ -234,7 +234,7 @@ var AppAPI = {
 	/**
 	 * Hide the loader
 	 */
-	hideLoader : function ( ) {
+	hideLoader: function ( ) {
 		this.request ( "hide-loader" );
 	},
 
@@ -253,12 +253,24 @@ var AppAPI = {
 	 * @param {Integer} id The id of the revision to load
 	 * @param {Function} callback The function to call when the new revision has been loaded
 	 */
-	__loadArticleRevision : function ( id, callback ) {
-
+	__loadArticleRevision: function ( id, callback ) {
 		this.request ( "load-revision", {
-			revision : id
+			revision: id
 		}, callback );
-	}
+	},
+
+	/**
+	 * Creates a new tag
+	 *
+	 * @param {String} tag JSON object with the tag to create, must contain tagTypeId and name properties
+	 * @param {Function} callback What do do when the tag was created
+	 */
+    createTag: function(tag, callback) {
+        AppAPI.request('tag-create', {
+            tag: tag
+        }, callback);
+    },
+
 };
 
 AppAPI.initialize();
