@@ -27,13 +27,7 @@ AH5Communicator = {
 	 * })
 	 */
 	registerMenuAction: function (action) {
-		AppAPI.request('register-menu-action', action, function(data) {
-			AppAPI.eventListeners.add(data.typeName, function(data) {
-				if (typeof action.callback === 'function') {
-					action.callback(data.id, $(data.element).get(0));
-				}
-			});
-		});
+		AppAPI.request('register-menu-action', action);
 	},
 
 	/**

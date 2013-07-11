@@ -114,7 +114,8 @@ var AppAPI = {
         for (var key in data) {
             var val = data[key];
             if (typeof val === 'function') {
-                var eventKey = key+'functioncallback'+(new Date()).getTime();
+                var random = Math.floor(Math.random()*1000);
+                var eventKey = key+random+'functioncallback'+(new Date()).getTime();
                 var eventFunction = (function(func) {
                     return function() {
                         func.apply(null, arguments);
