@@ -1,5 +1,40 @@
 /**
  * Will hold a list of listeners that are created and should be notified on events
+ *
+ * @description
+ * *Available events are:*
+ *
+ *  `afterCreated`
+ *
+ *  `afterDeleted`
+ *
+ *  `afterLoaded`
+ *
+ *  `afterPublished`
+ *
+ *  `afterSave`
+ *
+ *  `beforeCreated`
+ *
+ *  `beforeLoaded`
+ *
+ *  `beforePreview`
+ *
+ *  `beforeSave`
+ *
+ *  `beforePublished`
+ *
+ *  `editorFocus`
+ *
+ *  `editorReady`
+ *
+ *  `modifiedContent`
+ *
+ *  `pluginElementClicked`
+ *
+ *  `pluginElementSelected`
+ *
+ *  `pluginElementDeselected`
  */
 function Listeners () {
 	this._listeners = [];

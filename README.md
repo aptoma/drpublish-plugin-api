@@ -51,7 +51,6 @@ It just so happens that we did a lot of debugging while setting this up, and to 
 If you then open up your browser JS console, you will see output detailing everything interesting that is happening under the bonnet.
 Note especially warnings and errors since these indicate that something of special interest has happened.
 
-
-Documentation
-=============
+Documentation Generation
+========================
 Documentation has been generated using [jsdoc](https://github.com/jsdoc3/jsdoc) and the supplied conf.json file
