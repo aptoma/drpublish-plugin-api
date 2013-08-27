@@ -14,6 +14,7 @@ AH5Communicator = {
 	 * The object send should have the following structure
 	 *
 	 * @param {Object} action The action object
+	 * @param {function} callback function(String), event name that the menu item has been wired to listen after
      *
      * @example
 	 * AppAPI.Editor.registerMenuAction({
@@ -26,8 +27,8 @@ AH5Communicator = {
 	 *      }
 	 * })
 	 */
-	registerMenuAction: function (action) {
-		AppAPI.request('register-menu-action', action);
+	registerMenuAction: function (action, callback) {
+		AppAPI.request('register-menu-action', action, callback);
 	},
 
 	/**
@@ -56,15 +57,16 @@ AH5Communicator = {
 	 * })
 	 *
 	 * @param {Object} action The action object
+	 * @param {function} callback function([String]), event names that the menu actions has been wired to listen after
 	 */
-	registerMenuActionGroup: function (group) {
-		AppAPI.request('register-menu-action-group', group, function(data) {
-			if (data.typeNames.length !== group.actions.length) {
+	registerMenuActionGroup: function (group, callback) {
+		AppAPI.request('register-menu-action-group', group, function(typeNames) {
+			if (typeNames.length !== group.actions.length) {
 				if (this.DEBUG) console.warn('wrong amount of callback events recieved, not good');
 				return;
 			}
-			for (var i=0; i<data.typeNames.length; i++) {
-				var callback = (function(func) {
+			for (var i=0; i<typeNames.length; i++) {
+				var menuAction = (function(func) {
 					return function(data) {
 						if (typeof func === 'function') {
 							func(data.id);
@@ -72,11 +74,18 @@ AH5Communicator = {
 					}
 				})(group.actions[i].callback);
 
-				AppAPI.eventListeners.add(data.typeNames[i], callback);
+				AppAPI.eventListeners.add(typeNames[i], menuAction);
 			}
+
+            callback(typesNames);
 		});
 	},
 
+	/**
+	 * Retrieves the type of editor that currently has focus
+	 *
+	 * @param {function} callback function(String)
+	 */
 	getEditorType: function(callback) {
 		AppAPI.request('editor-get-type', null, callback);
 	},
@@ -86,24 +95,10 @@ AH5Communicator = {
 	 *
 	 * @param {String} id Id of the element
 	 * @param {String} element The new element
-	 * @param {function} callback Callback to call afte the replacement is done
+	 * @param {function} callback function(Boolean), called after replacement is done
 	 */
-	replaceElementById : function(id, element, callback) {
+	replaceElementById: function(id, element, callback) {
 		AppAPI.request('editor-element-replace-byid', {
-			id: id,
-			element: element
-		}, callback);
-	},
-
-	/**
-	 * Replace the element content in the article
-	 *
-	 * @param {String} id Id of the element
-	 * @param {String} element The new content to give the element
-	 * @param {function} callback Callback to call afte the replacement is done
-	 */
-	setElementById : function(id, element, callback) {
-		AppAPI.request('editor-element-set-byid', {
 			id: id,
 			element: element
 		}, callback);
@@ -113,9 +108,9 @@ AH5Communicator = {
 	 * Get HTML code of an element
 	 *
 	 * @param {String} id The element id
-	 * @param {function} callback Callback to call with the content
+	 * @param {function} callback function(String), html content of the element
 	 */
-	getHTMLById : function(id, callback) {
+	getHTMLById: function(id, callback) {
 		AppAPI.request('editor-element-get-byid', {
 			id: id
 		}, callback);
@@ -125,20 +120,20 @@ AH5Communicator = {
 	 * Get HTML code of all elements that match the selector
 	 *
 	 * @param {String} selector The CSS selector
-	 * @param {function} callback Callback to call with the content
+	 * @param {function} callback function([String]), html content of matching elements
 	 */
-	getHTMLBySelector : function(selector, callback) {
+	getHTMLBySelector: function(selector, callback) {
 		AppAPI.request('editor-elements-get-byselector', {
 			selector: selector
 		}, callback);
 	},
 
 	/**
-	 * Gives callback all categories
+	 * Get all categories
 	 *
-	 * @param {Function} callback The function to call with fetched data
+	 * @param {Function} callback function([Object Category]), list of Category objects with id, name and pid
 	 */
-	getCategories : function(callback) {
+	getCategories: function(callback) {
 		AppAPI.request('get-categories', null, callback);
 	},
 
@@ -146,19 +141,20 @@ AH5Communicator = {
 	 * Returns all the parent categories of the given category
 	 *
 	 * @param {Object} category The category to find parents of
-	 * @param {Function} callback The function to call with the list of parents
+	 * @param {Function} callback function([Object Category]), array of parent Category objects
 	 */
-	getParentCategories : function(category, callback) {
+	getParentCategories: function(category, callback) {
 		AppAPI.request('get-parent-categories', category, callback);
 	},
 
 	/**
 	 * Returns all the parent elements that match the selector
 	 *
-	 * @param {Object} category The category to find parents of
-	 * @param {Function} callback The function to call with the list of parents
+	 * @param {String} id Id of element to find parents of
+	 * @param {String} selector Selector to filter parent elements with
+	 * @param {Function} callback function([String]), array of ids
 	 */
-	getParentIds : function(id, selector, callback) {
+	getParentIds: function(id, selector, callback) {
 		AppAPI.request('get-parent-ids', {
             id: id,
             selector: selector
@@ -166,32 +162,32 @@ AH5Communicator = {
 	},
 
 	/**
-	 * Gives callback all tag types
+	 * Retrieve information about all tagtypes
 	 *
-	 * @param {Function} callback The function to call with fetched data
+	 * @param {Function} callback function([Object Tagtype]), array of tagtypes with id, name and config object
 	 */
-	getTagTypes : function(callback) {
+	getTagTypes: function(callback) {
 		AppAPI.request('get-tag-types', null, callback);
 	},
 
 	/**
-	 * Gives callback data about the given tag type
+	 * Get information about the given tagtype
 	 *
 	 * @param {String} id The element id
-	 * @param {Function} callback The function to call with fetched data
+	 * @param {Function} callback function(Object Tagtype), tagtype object with id, name and config object
 	 */
-	getTagType : function(id, callback) {
+	getTagType: function(id, callback) {
 		AppAPI.request('get-tag-type', {
-			id : id
+			id: id
 		}, callback);
 	},
 
 	/**
 	 * Clears the editor contents
 	 *
-	 * @param {Function} callback The function to call when editor has been cleared
+	 * @param {Function} callback function(Boolean)
 	 */
-	clear : function(callback) {
+	clear: function(callback) {
 		AppAPI.request('editor-clear', null, callback);
 	},
 
@@ -199,9 +195,9 @@ AH5Communicator = {
 	 * Insert a string into the editor
 	 *
 	 * @param {String} string The string that should be inserted
-	 * @param {Function} callback The function to call when content has been inserted
+	 * @param {Function} callback function(String), id of the newly inserted element if it has one
 	 */
-	insertString : function(string, callback) {
+	insertString: function(string, callback) {
 		AppAPI.request('editor-insert-string', {
 			string: string
 		}, callback);
@@ -214,9 +210,9 @@ AH5Communicator = {
 	 * The element will be given the class dp-app-element, and given a unique ID (if none is present)
 	 *
 	 * @param {Element} element The element that should be inserted
-	 * @param {Function} callback The function to call when content has been inserted
+	 * @param {Function} callback function(String), id of the newly inserted element
 	 */
-	insertElement : function(element, callback) {
+	insertElement: function(element, callback) {
 		var e = jQuery(element);
 		AppAPI.request('editor-insert-element', {
 			element: jQuery('<div>').append(element).html()
@@ -228,9 +224,9 @@ AH5Communicator = {
 	 *
 	 * @param {String} id Id of the element
 	 * @param {Array} classes Array of class names
-	 * @param {function} callback Callback to call after everything is done
+	 * @param {function} callback function(Boolean)
 	 */
-	removeClasses : function(id, classes, callback) {
+	removeClasses: function(id, classes, callback) {
 		AppAPI.request('editor-classes-remove', {
 			id: id,
 			classes: classes
@@ -242,9 +238,9 @@ AH5Communicator = {
 	 *
 	 * @param {String} id Id of the element
 	 * @param {Array} classes Array of class names
-	 * @param {function} callback Callback to call after everything is done
+	 * @param {function} callback function(Boolean)
 	 */
-	addClasses : function(id, classes, callback) {
+	addClasses: function(id, classes, callback) {
 		AppAPI.request('editor-classes-add', {
 			id: id,
 			classes: classes
@@ -255,21 +251,12 @@ AH5Communicator = {
 	 * Mark an element as currently selected (green border with default styling)
 	 *
 	 * @param {String} id Id of the element
-	 * @param {function} callback Callback to call after everything is done
+	 * @param {function} callback function(Boolean)
 	 */
-	markAsActive : function(id, callback) {
+	markAsActive: function(id, callback) {
 		AppAPI.request('editor-mark-as-active', {
 			id: id
 		}, callback);
-	},
-
-	/**
-	 * Updates the editor
-	 *
-	 * @param {Function} callback The function to call when the editor has been updated
-	 */
-	update : function(callback) {
-		AppAPI.request('editor-update', null, callback);
 	},
 
 	/**
@@ -278,29 +265,13 @@ AH5Communicator = {
 	 * @param {String} id The ID of the element to set the attribute on
 	 * @param {String} attribute The attribute to set
 	 * @param {String} value What to set the attribute to
-	 * @param {Function} callback The function to call when the attribute has been set
+	 * @param {Function} callback function(Boolean)
 	 */
-	setAttributeById : function(id, attribute, value, callback) {
+	setAttributeById: function(id, attribute, value, callback) {
 		AppAPI.request('editor-element-attribute-set-byid', {
-			id : id,
-			attribute : attribute,
-			value : value
-		}, callback);
-	},
-
-	/**
-	 * Sets the attribute of the element identified by the given selector
-	 *
-	 * @param {String} selector The selector for finding the element to set the attribute on
-	 * @param {String} attribute The attribute to set
-	 * @param {String} value What to set the attribute to
-	 * @param {Function} callback The function to call when the attribute has been set
-	 */
-	setAttributeByCSS : function(selector, attribute, value, callback) {
-		AppAPI.request('editor-element-attribute-set-byselector', {
-			selector : selector,
-			attribute : attribute,
-			value : value
+			id: id,
+			attribute: attribute,
+			value: value
 		}, callback);
 	},
 
@@ -310,42 +281,28 @@ AH5Communicator = {
 	 * @param {String} id The ID of the element to set the attribute on
 	 * @param {String} attribute The style attribute to set
 	 * @param {String} value What to set the attribute to
-	 * @param {Function} callback The function to call when the attribute has been set
+	 * @param {Function} callback function(Boolean)
 	 */
-	setStyleById : function(id, attribute, value, callback) {
+	setStyleById: function(id, attribute, value, callback) {
 		AppAPI.request('editor-element-style-set-byid', {
-			id : id,
-			attribute : attribute,
-			value : value
-		}, callback);
-	},
-
-	/**
-	 * Sets a style of the element identified by the given selector
-	 *
-	 * @param {String} selector The selector for finding the element to set the attribute on
-	 * @param {String} attribute The style attribute to set
-	 * @param {String} value What to set the attribute to
-	 * @param {Function} callback The function to call when the attribute has been set
-	 */
-	setStyleByCSS : function(selector, attribute, value, callback) {
-		AppAPI.request('editor-element-style-set-byselector', {
-			selector : selector,
-			attribute : attribute,
-			value : value
+			id: id,
+			attribute: attribute,
+			value: value
 		}, callback);
 	},
 
 	/**
 	 * Initialize pre registered menus
-	 * available options are: simplePluginMenu, editContext
+     *
+	 * Available options are: simplePluginMenu, editContext
 	 *
 	 * @param {Array} menus Array of menu names
+	 * @param {Function} callback function(Boolean)
 	 */
-	initMenu: function(menus) {
+	initMenu: function(menus, callback) {
 		AppAPI.request('editor-initialize-menu', {
 			menus: menus
-		});
+		}, callback);
 	}
 
 };

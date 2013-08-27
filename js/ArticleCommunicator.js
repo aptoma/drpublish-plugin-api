@@ -11,7 +11,7 @@ var ArticleCommunicator = {
 	 *
 	 * @param {String} name Name of the app from settings.php
 	 * @param {Object} options Options for initializing the app
-	 * @param {Function} callback The function to call when the app has been started
+	 * @param {Function} callback function(Boolean), called as the app gets focus
 	 */
 	focusApp: function(callback) {
 
@@ -22,7 +22,7 @@ var ArticleCommunicator = {
 	 *
 	 * @param {String} name Name of the app from settings.php
 	 * @param {Object} options Options for initializing the app
-	 * @param {Function} callback The function to call when the app has been started
+	 * @param {Function} callback function(Boolean), called after app is started
 	 */
 	startApp: function(name, options, callback) {
 
@@ -36,7 +36,7 @@ var ArticleCommunicator = {
 	 * Stop the given app
 	 *
 	 * @param {String} name Name of the app from settings.php
-	 * @param {Function} callback The function to call when the app has been stopped
+	 * @param {Function} callback function(Boolean), called after app has been stopped
 	 */
 	stopApp: function(name) {
 
@@ -48,7 +48,7 @@ var ArticleCommunicator = {
 	/**
 	 * Get the id of the article currently edited
 	 *
-	 * @param {Function} callback The function to call with the ID of the article
+	 * @param {Function} callback function(Int), id of the current article
 	 */
 	getId: function(callback) {
 
@@ -58,7 +58,7 @@ var ArticleCommunicator = {
 	/**
 	 * Clear the meta information summary
 	 *
-	 * @param {Function} callback The function to call when info has been cleared
+	 * @param {Function} callback function(Boolean), called when meta data has been cleared
 	 */
 	clearMetaInfo: function(callback) {
 
@@ -68,7 +68,7 @@ var ArticleCommunicator = {
 	/**
 	 * Get tags used in the article
 	 *
-	 * @param {Function} callback The function to call with all tags
+	 * @param {Function} callback function([Object Tag]), array with tags connected to an article
 	 */
 	getTags: function(callback) {
 
@@ -79,11 +79,10 @@ var ArticleCommunicator = {
 	 * Set tags for the article
 	 *
 	 * @param {Array} tags List of tags that should be set
-	 * @param {Function} callback The function to call when tags have been set
+	 * @param {Boolean} save Set to true to force save once the tags are updated
+	 * @param {Function} callback function(Boolean), called when tags have been set
 	 */
-	setTags: function(data, callback) {
-        var tags = data.tags;
-        var save = data.save;
+	setTags: function(tags, save, callback) {
 		AppAPI.request('article-tags-set', {
             save: save,
 			tags: tags
@@ -94,7 +93,7 @@ var ArticleCommunicator = {
 	 * Add tag for the article
 	 *
 	 * @param {String} tag Tag to be added
-	 * @param {Function} callback Function to call when tag has been added
+	 * @param {Function} callback function(Boolean), called when tag has been set
 	 */
 	addTag: function(tag, errorFunction, callback) {
 		AppAPI.request('article-tags-add', {
@@ -107,7 +106,7 @@ var ArticleCommunicator = {
 	 * Remove tag from article
 	 *
 	 * @param {String} tag Tag to remove
-	 * @param {Function} callback The function to call when tag has been removed
+	 * @param {Function} callback function(Boolean), called when tag has been removed
 	 */
 	removeTag: function(tag, callback) {
 
@@ -119,7 +118,7 @@ var ArticleCommunicator = {
 	/**
 	 * Get the selected categories
 	 *
-	 * @param {Function} callback The function to call with the selected categories
+	 * @param {Function} callback function([String]), array with category ids
 	 */
 	getSelectedCategories: function(callback) {
 
@@ -129,12 +128,10 @@ var ArticleCommunicator = {
 	/**
 	 * Save the currently selected categories
 	 *
-	 * @param {Function} callback The function to call when the categories have been saved
+	 * @param {Function} callback function(Boolean), called when categories has been saved
 	 */
 	saveCategories: function(callback) {
-
 		this.getSelectedCategories(function(categories) {
-
 			this.setCategories(categories, callback);
 		});
 	},
@@ -143,10 +140,9 @@ var ArticleCommunicator = {
 	 * Set selected categories
 	 *
 	 * @param {Array} categories List of category IDs that should be set
-	 * @param {Function} callback The function to call when the categories have been set
+	 * @param {Function} callback function(Boolean), called when categories have been set
 	 */
 	setCategories: function(categories, callback) {
-
 		AppAPI.request('article-categories-selected-set', {
 			categories: categories
 		}, callback);
@@ -156,7 +152,7 @@ var ArticleCommunicator = {
 	 * Add the given categories to the list of categories
 	 *
 	 * @param {Array} categories List of category IDs to add
-	 * @param {Function} callback The function to call when the categories have been added
+	 * @param {Function} callback function(Boolean), called when the categories have been set
 	 */
 	addCategories: function(categories, callback) {
 
@@ -169,7 +165,7 @@ var ArticleCommunicator = {
 	 * Remove the given categories from the list of categories
 	 *
 	 * @param {Array} categories List of category IDs to remove
-	 * @param {Function} callback The function to call when the categories have been removed
+	 * @param {Function} callback function(Boolean), called when the categories have been removed
 	 */
 	removeCategories: function(categories, callback) {
 		AppAPI.request('article-categories-remove', {
@@ -181,10 +177,9 @@ var ArticleCommunicator = {
 	 * Set the main category of the current article
 	 *
 	 * @param {Integer} category The ID of the category to set as the main category
-	 * @param {Function} callback The function to call when the main category has been updated
+	 * @param {Function} callback function(Boolean), called when the main category has been set
 	 */
 	setMainCategory: function(category, callback) {
-
 		AppAPI.request('article-categories-main-set', {
 			category: category
 		}, callback);
@@ -193,7 +188,7 @@ var ArticleCommunicator = {
 	/**
 	 * Get the source set for the article
 	 *
-	 * @param {Function} callback The function to call with the source
+	 * @param {Function} callback function(String), name of the source
 	 */
 	getSource: function(callback) {
 
@@ -204,10 +199,9 @@ var ArticleCommunicator = {
 	 * Set the source for the article
 	 *
 	 * @param {String} value The new value to be set as source
-	 * @param {Function} callback The function to call when the source has been set
+	 * @param {Function} callback function(Boolean), called when the source has been set
 	 */
 	setSource: function(value, callback) {
-
 		AppAPI.request('article-source-set', {
 			source: value
 		}, callback);
@@ -216,10 +210,9 @@ var ArticleCommunicator = {
 	/**
 	 * Get the status for the article
 	 *
-	 * @param {Function} callback The function to call with the status
+	 * @param {Function} callback function(String), current status
 	 */
 	getStatus: function(callback) {
-
 		AppAPI.request('article-status-get', null, callback);
 	},
 
@@ -227,7 +220,7 @@ var ArticleCommunicator = {
 	 * Set the status for the article
 	 *
 	 * @param {String} status The new status to be set (draft, waiting, published)
-	 * @param {Function} callback The function to call when the status has been set
+	 * @param {Function} callback function(Boolean), called when the source has been set
 	 */
 	setStatus: function(status, callback) {
 
@@ -239,9 +232,9 @@ var ArticleCommunicator = {
 	/**
 	 * Get the published-date
 	 *
-	 * @param {Function} callback The function to call with the published date
+	 * @param {Function} callback function(String), current published datetime
 	 */
-	getStatus: function(callback) {
+	getPublishedDatetime: function(callback) {
 
 		AppAPI.request('article-published-get', null, callback);
 	},
@@ -250,7 +243,7 @@ var ArticleCommunicator = {
 	 * Set the published-date
 	 *
 	 * @param {String} published Date to be set (YYYY-MM-DD HH:MM:SS)
-	 * @param {Function} callback The function to call when the publication date has been set
+	 * @param {Function} callback function(Boolean), called when done
 	 */
 	setPublishedDatetime: function(published, callback) {
 
@@ -262,7 +255,7 @@ var ArticleCommunicator = {
 	/**
 	 * Get the authors set in the article
 	 *
-	 * @param {Function} callback The function to call with the authors
+	 * @param {Function} callback function([String]), currently set authors
 	 */
 	getAuthors: function(callback) {
 
@@ -273,7 +266,7 @@ var ArticleCommunicator = {
 	 * Set authors for the article
 	 *
 	 * @param {Array} authors List of authors that should be set
-	 * @param {Function} callback The function to call when the authors have been set
+	 * @param {Function} callback function(Boolean), called when it has been set
 	 */
 	setAuthors: function(authors, callback) {
 
@@ -286,7 +279,7 @@ var ArticleCommunicator = {
 	 * Add the given authors to the list of authors
 	 *
 	 * @param {Array} authors List of authors to add
-	 * @param {Function} callback The function to call when the authors have been added
+	 * @param {Function} callback function(Boolean), called when it has been set
 	 */
 	addAuthors: function(authors, callback) {
 
@@ -299,7 +292,7 @@ var ArticleCommunicator = {
 	 * Remove the given authors from the list of authors
 	 *
 	 * @param {Array} authors List of authors to remove
-	 * @param {Function} callback The function to call when the authors have been removed
+	 * @param {Function} callback function([String]), author list as it is after the authors has been removed
 	 */
 	removeAuthors: function(authors, callback) {
 
@@ -308,11 +301,10 @@ var ArticleCommunicator = {
 		}, callback);
 	},
 
-   
     /**
      * Get the dossiers set in the article
      *
-     * @param {Function} callback The function to call with the authors
+     * @param {Function} callback function([Object Dossiers]), current dossiers
      */
     getDossiers: function(callback) {
         AppAPI.request('article-dossiers-get', null, callback);
@@ -322,7 +314,7 @@ var ArticleCommunicator = {
      * Add the given dossiers to the list of dossiers
      *
      * @param {Array} dossiers List of dossiers to add
-     * @param {Function} callback The function to call when the dossiers have been added
+	 * @param {Function} callback function(Boolean), called when it has been set
      */
     addDossiers: function(dossiers, callback) {
         AppAPI.request('article-dossiers-add', {
@@ -334,7 +326,7 @@ var ArticleCommunicator = {
      * Remove the given dossiers from the list of dossiers
      *
      * @param {Array} dossiers List of authors to remove
-     * @param {Function} callback The function to call when the dossiers have been removed
+     * @param {Function} callback function([Object Dossiers]), current dossiers
      */
     removeDossiers: function(dossiers, callback) {
         AppAPI.request('article-dossiers-remove', {
@@ -345,7 +337,7 @@ var ArticleCommunicator = {
 	/**
 	 * Gets the current article content
 	 *
-	 * @param {Function} callback The function to call with the article contents
+	 * @param {Function} callback function(Object Content)
 	 */
 	getCurrentContent: function(callback) {
 
@@ -356,7 +348,7 @@ var ArticleCommunicator = {
 	 * Updates current article content
 	 *
 	 * @param {String} content The new content for the article
-	 * @param {Function} callback The function to call when the contents have been updated
+	 * @param {Function} callback function(Boolean), called when it has been set
 	 */
 	setCurrentContent: function(content, callback) {
 
@@ -368,7 +360,7 @@ var ArticleCommunicator = {
 	/**
 	 * Get the article type of the current article
 	 *
-	 * @param {Function} callback The function to call with the type of the article
+	 * @param {Function} callback function(Int)
 	 */
 	getArticletypeId: function(callback) {
 
@@ -379,7 +371,7 @@ var ArticleCommunicator = {
 	 * Set the article type of the current article
 	 *
 	 * @param {Integer} articletypeId The new article type of the article
-	 * @param {Function} callback The function to call when the article type has been changed
+	 * @param {Function} callback function(Boolean), called when it has been set
 	 */
 	setArticletypeId: function(articletypeId, callback) {
 
@@ -414,22 +406,29 @@ var ArticleCommunicator = {
 		AppAPI.request('restore-app-window', {}, callback);
 	},
 
+	/**
+	 * Get the current byline
+	 *
+	 * @param {function} callback function(String), xml string with the current byline
+	 */
+    getByline: function(callback) {
+        AppAPI.request("article-byline-get", null, callback);
+    },
 
-   	getByline: function(callback) {
-   		AppAPI.request("article-byline-get", null, callback);
-   	},
-
-    setByline: function(data, callback) {
-        var byline = data.byline;
-         var save = data.save;
-   		AppAPI.request('article-byline-set', {
+	/**
+	 * Set the byline
+	 *
+	 * @param {String} byline XML version of byline to use
+	 * @param {Boolean} save If true, force save after updating byline information
+	 * @param {Function} callback function(Boolean), called when it has been set
+	 */
+    setByline: function(byline, save, callback) {
+        AppAPI.request('article-byline-set', {
                save: save,
-   			   byline: byline
-   		}, callback);
-   	}
+               byline: byline
+        }, callback);
+    }
 
 };
-
-
 
 AppAPI.Article = ArticleCommunicator;

@@ -12,11 +12,11 @@ var AppAPI = {
 	initialize: function () {
 		this.DEBUG = false;
 
-		this.Version = '1.0a';
+		this.Version = '1.0';
 		this.Editor = null;
 		this.Article = null;
-		this.errorListeners = new Listeners;
-		this.eventListeners = new Listeners;
+		this.errorListeners = new Listeners();
+		this.eventListeners = new Listeners();
 		this.authenticated = false;
 		this.appName = '';
 
@@ -149,9 +149,9 @@ var AppAPI = {
 	 * Creates a new tag
 	 *
 	 * @param {String} tag The tag to create
-	 * @param {Function} callback What do do when the tag was created
+	 * @param {Function} callback function(Boolean)
 	 */
-	openTagCreationDialog: function ( tag, callback ) {
+	openTagCreationDialog: function (tag, callback) {
 		this.request ( "create-tag", {
 			tag: tag
 		}, callback );
@@ -242,7 +242,7 @@ var AppAPI = {
 	/**
 	 * Add listeners.
      *
-     * @param {Object} An object where Key is event name, and value is the callback function
+     * @param {Object} An object where Key is event name, and value is the callback function. See documentation for Listeners for more information
 	 */
     addListeners: function(listeners) {
         AppAPI.eventListeners.addAll(listeners);
@@ -264,7 +264,7 @@ var AppAPI = {
 	 * Creates a new tag
 	 *
 	 * @param {String} tag JSON object with the tag to create, must contain tagTypeId and name properties
-	 * @param {Function} callback What do do when the tag was created
+	 * @param {Function} callback function(Boolean)
 	 */
     createTag: function(tag, callback) {
         AppAPI.request('tag-create', {

@@ -232,7 +232,7 @@
             
             
             
-            <td class="description last"><p>Callback to call after everything is done</p></td>
+            <td class="description last"><p>function(Boolean)</p></td>
         </tr>
 	
 	
@@ -263,7 +263,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 247
+        AH5Communicator.js, line 243
     </li></ul></dd>
     
     
@@ -345,7 +345,7 @@
             
             
             
-            <td class="description last"><p>The function to call when editor has been cleared</p></td>
+            <td class="description last"><p>function(Boolean)</p></td>
         </tr>
 	
 	
@@ -376,7 +376,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 194
+        AH5Communicator.js, line 190
     </li></ul></dd>
     
     
@@ -408,7 +408,7 @@
     
     
     <div class="description">
-        <p>Gives callback all categories</p>
+        <p>Get all categories</p>
     </div>
     
 
@@ -458,7 +458,7 @@
             
             
             
-            <td class="description last"><p>The function to call with fetched data</p></td>
+            <td class="description last"><p>function([Object Category]), list of Category objects with id, name and pid</p></td>
         </tr>
 	
 	
@@ -489,7 +489,120 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 141
+        AH5Communicator.js, line 136
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getEditorType"><span class="type-signature">&lt;static> </span>getEditorType<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Retrieves the type of editor that currently has focus</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>function(String)</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        AH5Communicator.js, line 89
     </li></ul></dd>
     
     
@@ -594,7 +707,7 @@
             
             
             
-            <td class="description last"><p>Callback to call with the content</p></td>
+            <td class="description last"><p>function(String), html content of the element</p></td>
         </tr>
 	
 	
@@ -625,7 +738,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 118
+        AH5Communicator.js, line 113
     </li></ul></dd>
     
     
@@ -730,7 +843,7 @@
             
             
             
-            <td class="description last"><p>Callback to call with the content</p></td>
+            <td class="description last"><p>function([String]), html content of matching elements</p></td>
         </tr>
 	
 	
@@ -761,7 +874,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 130
+        AH5Communicator.js, line 125
     </li></ul></dd>
     
     
@@ -866,7 +979,7 @@
             
             
             
-            <td class="description last"><p>The function to call with the list of parents</p></td>
+            <td class="description last"><p>function([Object Category]), array of parent Category objects</p></td>
         </tr>
 	
 	
@@ -897,7 +1010,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 151
+        AH5Communicator.js, line 146
     </li></ul></dd>
     
     
@@ -921,7 +1034,7 @@
         
             
 <dt>
-    <h4 class="name" id="getParentIds"><span class="type-signature">&lt;static> </span>getParentIds<span class="signature">(category, callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getParentIds"><span class="type-signature">&lt;static> </span>getParentIds<span class="signature">(id, selector, callback)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -963,13 +1076,13 @@
 	
         <tr>
             
-                <td class="name"><code>category</code></td>
+                <td class="name"><code>id</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">String</span>
 
 
             
@@ -979,7 +1092,30 @@
             
             
             
-            <td class="description last"><p>The category to find parents of</p></td>
+            <td class="description last"><p>Id of element to find parents of</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>selector</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>Selector to filter parent elements with</p></td>
         </tr>
 	
 	
@@ -1002,7 +1138,7 @@
             
             
             
-            <td class="description last"><p>The function to call with the list of parents</p></td>
+            <td class="description last"><p>function([String]), array of ids</p></td>
         </tr>
 	
 	
@@ -1033,7 +1169,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 161
+        AH5Communicator.js, line 157
     </li></ul></dd>
     
     
@@ -1065,7 +1201,7 @@
     
     
     <div class="description">
-        <p>Gives callback data about the given tag type</p>
+        <p>Get information about the given tagtype</p>
     </div>
     
 
@@ -1138,7 +1274,7 @@
             
             
             
-            <td class="description last"><p>The function to call with fetched data</p></td>
+            <td class="description last"><p>function(Object Tagtype), tagtype object with id, name and config object</p></td>
         </tr>
 	
 	
@@ -1169,7 +1305,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 183
+        AH5Communicator.js, line 179
     </li></ul></dd>
     
     
@@ -1201,7 +1337,7 @@
     
     
     <div class="description">
-        <p>Gives callback all tag types</p>
+        <p>Retrieve information about all tagtypes</p>
     </div>
     
 
@@ -1251,7 +1387,7 @@
             
             
             
-            <td class="description last"><p>The function to call with fetched data</p></td>
+            <td class="description last"><p>function([Object Tagtype]), array of tagtypes with id, name and config object</p></td>
         </tr>
 	
 	
@@ -1282,7 +1418,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 173
+        AH5Communicator.js, line 169
     </li></ul></dd>
     
     
@@ -1306,7 +1442,7 @@
         
             
 <dt>
-    <h4 class="name" id="initMenu"><span class="type-signature">&lt;static> </span>initMenu<span class="signature">(menus)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="initMenu"><span class="type-signature">&lt;static> </span>initMenu<span class="signature">(menus, callback)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -1314,8 +1450,9 @@
     
     
     <div class="description">
-        <p>Initialize pre registered menus
-available options are: simplePluginMenu, editContext</p>
+        <p>Initialize pre registered menus</p>
+
+<p>Available options are: simplePluginMenu, editContext</p>
     </div>
     
 
@@ -1369,6 +1506,29 @@ available options are: simplePluginMenu, editContext</p>
         </tr>
 	
 	
+	
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>function(Boolean)</p></td>
+        </tr>
+	
+	
 	</tbody>
 </table>
     
@@ -1396,7 +1556,7 @@ available options are: simplePluginMenu, editContext</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 345
+        AH5Communicator.js, line 302
     </li></ul></dd>
     
     
@@ -1504,7 +1664,7 @@ The element will be given the class dp-app-element, and given a unique ID (if no
             
             
             
-            <td class="description last"><p>The function to call when content has been inserted</p></td>
+            <td class="description last"><p>function(String), id of the newly inserted element</p></td>
         </tr>
 	
 	
@@ -1535,7 +1695,7 @@ The element will be given the class dp-app-element, and given a unique ID (if no
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 219
+        AH5Communicator.js, line 215
     </li></ul></dd>
     
     
@@ -1640,7 +1800,7 @@ The element will be given the class dp-app-element, and given a unique ID (if no
             
             
             
-            <td class="description last"><p>The function to call when content has been inserted</p></td>
+            <td class="description last"><p>function(String), id of the newly inserted element if it has one</p></td>
         </tr>
 	
 	
@@ -1671,7 +1831,7 @@ The element will be given the class dp-app-element, and given a unique ID (if no
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 204
+        AH5Communicator.js, line 200
     </li></ul></dd>
     
     
@@ -1776,7 +1936,7 @@ The element will be given the class dp-app-element, and given a unique ID (if no
             
             
             
-            <td class="description last"><p>Callback to call after everything is done</p></td>
+            <td class="description last"><p>function(Boolean)</p></td>
         </tr>
 	
 	
@@ -1807,7 +1967,7 @@ The element will be given the class dp-app-element, and given a unique ID (if no
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 260
+        AH5Communicator.js, line 256
     </li></ul></dd>
     
     
@@ -1831,7 +1991,7 @@ The element will be given the class dp-app-element, and given a unique ID (if no
         
             
 <dt>
-    <h4 class="name" id="registerMenuAction"><span class="type-signature">&lt;static> </span>registerMenuAction<span class="signature">(action)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="registerMenuAction"><span class="type-signature">&lt;static> </span>registerMenuAction<span class="signature">(action, callback)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -1894,6 +2054,29 @@ The object send should have the following structure</p>
         </tr>
 	
 	
+	
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>function(String), event name that the menu item has been wired to listen after</p></td>
+        </tr>
+	
+	
 	</tbody>
 </table>
     
@@ -1921,7 +2104,7 @@ The object send should have the following structure</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 29
+        AH5Communicator.js, line 30
     </li></ul></dd>
     
     
@@ -1958,7 +2141,7 @@ The object send should have the following structure</p>
         
             
 <dt>
-    <h4 class="name" id="registerMenuActionGroup"><span class="type-signature">&lt;static> </span>registerMenuActionGroup<span class="signature">(action)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="registerMenuActionGroup"><span class="type-signature">&lt;static> </span>registerMenuActionGroup<span class="signature">(action, callback)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -2021,6 +2204,29 @@ The object send should have the following structure</p>
         </tr>
 	
 	
+	
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>function([String]), event names that the menu actions has been wired to listen after</p></td>
+        </tr>
+	
+	
 	</tbody>
 </table>
     
@@ -2048,7 +2254,7 @@ The object send should have the following structure</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 60
+        AH5Communicator.js, line 62
     </li></ul></dd>
     
     
@@ -2199,7 +2405,7 @@ The object send should have the following structure</p>
             
             
             
-            <td class="description last"><p>Callback to call after everything is done</p></td>
+            <td class="description last"><p>function(Boolean)</p></td>
         </tr>
 	
 	
@@ -2230,7 +2436,7 @@ The object send should have the following structure</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 233
+        AH5Communicator.js, line 229
     </li></ul></dd>
     
     
@@ -2358,7 +2564,7 @@ The object send should have the following structure</p>
             
             
             
-            <td class="description last"><p>Callback to call afte the replacement is done</p></td>
+            <td class="description last"><p>function(Boolean), called after replacement is done</p></td>
         </tr>
 	
 	
@@ -2389,189 +2595,7 @@ The object send should have the following structure</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 91
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="setAttributeByCSS"><span class="type-signature">&lt;static> </span>setAttributeByCSS<span class="signature">(selector, attribute, value, callback)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Sets the attribute of the element identified by the given selector</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>selector</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>The selector for finding the element to set the attribute on</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>attribute</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>The attribute to set</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>What to set the attribute to</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Function</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>The function to call when the attribute has been set</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 299
+        AH5Communicator.js, line 100
     </li></ul></dd>
     
     
@@ -2722,7 +2746,7 @@ The object send should have the following structure</p>
             
             
             
-            <td class="description last"><p>The function to call when the attribute has been set</p></td>
+            <td class="description last"><p>function(Boolean)</p></td>
         </tr>
 	
 	
@@ -2753,348 +2777,7 @@ The object send should have the following structure</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 283
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="setElementById"><span class="type-signature">&lt;static> </span>setElementById<span class="signature">(id, element, callback)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Replace the element content in the article</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>Id of the element</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>element</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>The new content to give the element</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>Callback to call afte the replacement is done</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 105
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="setStyleByCSS"><span class="type-signature">&lt;static> </span>setStyleByCSS<span class="signature">(selector, attribute, value, callback)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Sets a style of the element identified by the given selector</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>selector</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>The selector for finding the element to set the attribute on</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>attribute</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>The style attribute to set</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>What to set the attribute to</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Function</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>The function to call when the attribute has been set</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 331
+        AH5Communicator.js, line 270
     </li></ul></dd>
     
     
@@ -3245,7 +2928,7 @@ The object send should have the following structure</p>
             
             
             
-            <td class="description last"><p>The function to call when the attribute has been set</p></td>
+            <td class="description last"><p>function(Boolean)</p></td>
         </tr>
 	
 	
@@ -3276,120 +2959,7 @@ The object send should have the following structure</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 315
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="update"><span class="type-signature">&lt;static> </span>update<span class="signature">(callback)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Updates the editor</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Function</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>The function to call when the editor has been updated</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        AH5Communicator.js, line 271
+        AH5Communicator.js, line 286
     </li></ul></dd>
     
     
@@ -3432,7 +3002,7 @@ The object send should have the following structure</p>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Aug 13 2013 16:03:07 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Aug 27 2013 14:15:15 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

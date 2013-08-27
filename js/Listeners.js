@@ -1,7 +1,21 @@
 /**
  * Will hold a list of listeners that are created and should be notified on events
  *
+ * @example
+ * AppAPI.eventListeners.addListeners ( {
+ *  afterCreated: function() {
+ *      AppAPI.Article.setSource('Ny Times');
+ *  },
+ *  pluginElementSelected: function() {
+ *      alert('You cliked me!');
+ *  }
+ * });
+ *
  * @description
+ * Used for event handling in the App API. The only function an app developer needs to care about it the 'addListeners' event, and you can see an example of it down bellow.
+ *
+ * *Planned features:* The next feature planned for the events is the options to stop execution of all before* events.
+ *
  * *Available events are:*
  *
  *  `afterCreated`
@@ -44,15 +58,6 @@ function Listeners () {
  * Adds several listeners
  *
  * Example: <code>
- * var l = new Listeners;
- * l.addListeners ( {
- *	afterCreated: function() {
- *		DP.Article.setSource('Ny Times');
- *	},
- *	beforeSave: function() {
- *		return confirm('Sure you wanna save?');
- *	}
- * });
  * </code>
  *
  * @param {Object} events A list of callbacks that should be called on events
