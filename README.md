@@ -1,7 +1,6 @@
 How does the API work?
 ==========================
-First and foremost, all apps are now loaded directly in iframes (i.e. the src= of the iframe points directly to the URL as given in the DrPublish config).
-Next, all communication between the app and DrPublish is sent using [postMessage](https://developer.mozilla.org/en/DOM/window.postMessage), a standardized method for cross-domain frame communication.
+The apps are loaded directly in iframes (i.e. the src= of the iframe points directly to the URL as given in the DrPublish config) and all communication between the app and DrPublish is sent using [postMessage](https://developer.mozilla.org/en/DOM/window.postMessage) (a standardized method for cross-domain frame communication).
 
 PostMessage works by one side listening for incoming messages, and determining whether to act upon that message or not depending on its origin host, its origin frame and its contents.
 In DrPublish, these binding are written in js/classes/binds/\*.js, and are mapped through js/classes/DPPAPI.js, which also handles delegation of events from DrPublish to apps.
@@ -17,9 +16,8 @@ Take a look at the example app to see how to get started. There you will see an 
 
 Authentication explained
 ==============
-DrPublish always sends an encrypted token to all apps that are being loaded so that the app can check that they are in fact being loaded by DrPublish with a valid user logged in.
-Apps should always verify this token.
-Conversely, apps now also have to authenticate themselves to DrPublish before they are allowed to access the API. They are hidden until this has been done.
+When an app is loaded DrPublish send an encrypted token to the app, this is done so the app can check that it is actually being loaded by a DrPublish instance with a valid user logged in. Apps should always verify this token, otherwise this security aspect dissappears.
+Conversely, apps also have to authenticate themselves to DrPublish before they are allowed to access the API. The iframe that contains them are hidden until this has been done.
 If a app does not authenticate itself within 60 seconds of being loaded, it is killed.
 
 This two-way authentication provides enhanced security both for DrPublish (it won't load unauthorized apps) and for the user (apps may only be accessed through DrPublish).
