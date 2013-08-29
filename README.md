@@ -4,7 +4,7 @@ The apps are loaded directly in iframes (i.e. the src= of the iframe points dire
 
 PostMessage works by one side listening for incoming messages, and determining whether to act upon that message or not depending on its origin host, its origin frame and its contents.
 In DrPublish, these binding are written in js/classes/binds/\*.js, and are mapped through js/classes/DPPAPI.js, which also handles delegation of events from DrPublish to apps.
-On the app side, the files AppAPI.js, AH5Communicator.js and ArticleCommunicator.js provide functions for sending and recieving all the supported postMessage calls without the caller having to know that that's what's being done.
+On the app side, the files AppAPI.js, AH5Communicator.js and ArticleCommunicator.js provide functions for sending and recieving all the supported postMessage calls without the caller having to know what is being done.
 
 Behind the scenes, the API files wrap the incoming parameters in a JSON object, adds on the name of sending app and what method on the remote side it wants to call, and send this over postMessage using a [thin jQuery PM wrapper](http://postmessage.freebaseapps.com/).
 

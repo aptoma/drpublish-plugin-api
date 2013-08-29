@@ -2,7 +2,7 @@
  * Will hold a list of listeners that are created and should be notified on events
  *
  * @example
- * AppAPI.eventListeners.addListeners ( {
+ * AppAPI.addListeners( {
  *  afterCreated: function() {
  *      AppAPI.Article.setSource('Ny Times');
  *  },
@@ -56,9 +56,6 @@ function Listeners () {
 
 /**
  * Adds several listeners
- *
- * Example: <code>
- * </code>
  *
  * @param {Object} events A list of callbacks that should be called on events
  * @returns {Object} A dictionary of events => listener ID for later removal

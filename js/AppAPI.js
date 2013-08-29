@@ -10,7 +10,7 @@ var AppAPI = {
 	 * Constructor for this class
 	 */
 	initialize: function () {
-		this.DEBUG = false;
+		this.DEBUG = true;
 
 		this.Version = '1.0';
 		this.Editor = null;
