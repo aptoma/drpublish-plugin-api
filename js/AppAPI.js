@@ -1,16 +1,19 @@
+/* global Listeners: true, pm: true */
 /**
+ *
  * Namespace for all public Dr.Published methods available from apps.
  *
  * Listeners can be added through the Listeners objects AppAPI.errorListeners and AppAPI.eventListeners
  * @class
  * @classdesc The basic API object
+ *
  */
 var AppAPI = {
 	/**
 	 * Constructor for this class
 	 */
 	initialize: function () {
-		this.DEBUG = true;
+		this.DEBUG = false;
 
 		this.Version = '1.0';
 		this.Editor = null;
@@ -24,24 +27,29 @@ var AppAPI = {
 
 		// Stores requests that couldn't be sent until we've been auth'd
 		this.backlog = [];
-		this.eventListeners.add ( 'appAuthenticated', function ( ) {
+		this.eventListeners.add('appAuthenticated', function() {
 			_this.authenticated = true;
-			if ( _this.backlog.length > 0 ) {
-				if (_this.DEBUG) console.warn ( _this.getAppName() + ": Authenticated, now executing backlog (" + _this.backlog.length + " items)" );
-				for ( var i = _this.backlog.length - 1; i >= 0; i-- ) {
-					_this.request ( _this.backlog[i]['spec'], _this.backlog[i]['data'], _this.backlog[i]['callback'] );
-					_this.backlog.splice ( i, 1 );
+			if(_this.backlog.length > 0) {
+				if (_this.DEBUG) {
+                    console.warn(_this.getAppName() + ": Authenticated, now executing backlog (" + _this.backlog.length + " items)");
+                }
+				for(var i = _this.backlog.length - 1; i >= 0; i--) {
+					_this.request(_this.backlog[i]['spec'], _this.backlog[i]['data'], _this.backlog[i]['callback']);
+					_this.backlog.splice(i, 1);
 				}
 			}
-		} );
+		});
 
-		pm.bind ( "event", function ( data ) {
-			var data = _this.eventListeners.notify ( data.type, data.data );
+		pm.bind("event", function(data) {
+			data = _this.eventListeners.notify(data.type, data.data);
 			if (typeof data === 'undefined') {
 				return true;
 			}
+            if (data === false) {
+                return {'abort': true};
+            }
 			return data;
-		}, "*" );
+		}, "*");
 	},
 
 	/**
@@ -52,16 +60,18 @@ var AppAPI = {
 	 *
 	 * @param {String} url Url to call, default is 'ajax.php?do=authentication-app'
 	 */
-	doStandardAuthentication: function ( url ) {
+	doStandardAuthentication: function(url) {
+        var _this = this;
 		url = url || 'ajax.php?do=authenticate-app';
 
-		jQuery.getJSON ( url, { app: this.getAppName() },
-			function ( reply ) {
-				if ( reply ) {
-					AppAPI.doDirectAuthentication ( reply.signature, reply.iv );
+		jQuery.getJSON(url, { app: this.getAppName() },
+			function(reply) {
+				if(reply) {
+					AppAPI.doDirectAuthentication(reply.signature, reply.iv);
 				} else {
-					if (this.DEBUG) console.err ( _this.getAppName() + ": No authentication token provided by backend", reply );
-					self.close();
+					if (this.DEBUG) {
+                        console.err(_this.getAppName() + ": No authentication token provided by backend", reply);
+                    }
 				}
 			}
 		);
@@ -74,9 +84,9 @@ var AppAPI = {
 	 * @param {String} signature Signature to send
 	 * @param {String} iv Iv to send
 	 */
-	doDirectAuthentication: function ( signature, iv ) {
-		pm ( {
-			target: self.parent,
+	doDirectAuthentication: function(signature, iv) {
+		pm({
+			target: parent,
 			type: "app-loaded",
 			origin: "*",
 			data: {
@@ -84,8 +94,10 @@ var AppAPI = {
 				signature: signature,
 				iv: iv
 			}
-		} );
-		if (this.DEBUG) console.log ( this.getAppName() + ": Sent app-loaded signal with auth token to DrPublish" );
+		});
+		if (this.DEBUG) {
+            console.log(this.getAppName() + ": Sent app-loaded signal with auth token to DrPublish");
+        }
 	},
 
 	/**
@@ -95,53 +107,59 @@ var AppAPI = {
 	 * @param {Object} data The data attached to the request
 	 * @param {Function} callback The function to call upon return
 	 */
-	request: function ( callSpec, data, callback ) {
+	request: function(callSpec, data, callback) {
 
-		if (this.DEBUG) console.info ( this.getAppName() + ': Requesting ' + callSpec + ' from parent with data', data );
+		if (this.DEBUG) {
+            console.info(this.getAppName() + ': Requesting ' + callSpec + ' from parent with data', data);
+        }
 
-		if ( data == null ) {
+		if(data == null) {
 			data = {};
 		}
 
 		data['src_app'] = this.getAppName ();
 
-		if ( !this.authenticated ) {
-			if (this.DEBUG) console.warn ( "Call for " + callSpec + " delayed until app is authenticated" );
-			this.backlog.push ( { spec: callSpec, data: data, callback: callback } );
+		if(!this.authenticated) {
+			if (this.DEBUG) {
+                console.warn("Call for " + callSpec + " delayed until app is authenticated");
+            }
+			this.backlog.push({ spec: callSpec, data: data, callback: callback });
 			return;
 		}
+
+        var createEventFunction = function(func) {
+            return function() {
+                func.apply(null, arguments);
+                AppAPI.eventListeners.remove(eventKey, eventKey);
+            };
+        };
 
         for (var key in data) {
             var val = data[key];
             if (typeof val === 'function') {
                 var random = Math.floor(Math.random()*1000);
                 var eventKey = key+random+'functioncallback'+(new Date()).getTime();
-                var eventFunction = (function(func) {
-                    return function() {
-                        func.apply(null, arguments);
-                        AppAPI.eventListeners.remove(eventKey, eventKey);
-                    }
-                })(val);
+                var eventFunction = createEventFunction(val);
                 AppAPI.eventListeners.add(eventKey, eventFunction);
                 data[key] = {
                     type: 'function',
                     eventKey: eventKey
                 };
             }
-        };
+        }
 
 		var _this = this;
-		pm ( {
+		pm({
 			target: parent,
 			type: callSpec,
 			data: data,
 			success: callback,
-			error: function ( data ) {
-				_this.errorListeners.notify ( data.type, data );
+			error: function(data) {
+				_this.errorListeners.notify(data.type, data);
 			},
 			origin: "*", // TODO: Find a way of avoiding all-origins
 			hash: false
-		} );
+		});
 	},
 
 
@@ -152,9 +170,9 @@ var AppAPI = {
 	 * @param {Function} callback function(Boolean)
 	 */
 	openTagCreationDialog: function (tag, callback) {
-		this.request ( "create-tag", {
+		this.request("create-tag", {
 			tag: tag
-		}, callback );
+		}, callback);
 	},
 
 	/**
@@ -162,9 +180,9 @@ var AppAPI = {
 	 */
 	reloadIframe: function () {
 
-		this.request ( "app-reload", {
+		this.request("app-reload", {
 			app: this.getAppName ()
-		} );
+		});
 	},
 
 	/**
@@ -190,11 +208,11 @@ var AppAPI = {
 	 *
 	 * @param {String} Message to be displayed
 	 */
-	showInfoMsg: function ( msg ) {
+	showInfoMsg: function(msg) {
 
-		this.request ( "show-message-info", {
+		this.request("show-message-info", {
 			message: msg
-		} );
+		});
 	},
 
 	/**
@@ -202,11 +220,11 @@ var AppAPI = {
 	 *
 	 * @param {String} Message to be displayed
 	 */
-	showWarningMsg: function ( msg ) {
+	showWarningMsg: function(msg) {
 
-		this.request ( "show-message-warning", {
+		this.request("show-message-warning", {
 			message: msg
-		} );
+		});
 	},
 
 	/**
@@ -214,11 +232,11 @@ var AppAPI = {
 	 *
 	 * @param {String} Message to be displayed
 	 */
-	showErrorMsg: function ( msg ) {
+	showErrorMsg: function(msg) {
 
-		this.request ( "show-message-error", {
+		this.request("show-message-error", {
 			message: msg
-		} );
+		});
 	},
 
 	/**
@@ -226,17 +244,17 @@ var AppAPI = {
 	 *
 	 * @param {String} Message to display in progress loader
 	 */
-	showLoader: function ( msg ) {
-		this.request ( "show-loader", {
+	showLoader: function(msg) {
+		this.request("show-loader", {
 			message: msg
-		} );
+		});
 	},
 
 	/**
 	 * Hide the loader
 	 */
-	hideLoader: function ( ) {
-		this.request ( "hide-loader" );
+	hideLoader: function() {
+		this.request("hide-loader");
 	},
 
 	/**
@@ -254,10 +272,10 @@ var AppAPI = {
 	 * @param {Integer} id The id of the revision to load
 	 * @param {Function} callback The function to call when the new revision has been loaded
 	 */
-	__loadArticleRevision: function ( id, callback ) {
-		this.request ( "load-revision", {
+	__loadArticleRevision: function(id, callback) {
+		this.request("load-revision", {
 			revision: id
-		}, callback );
+		}, callback);
 	},
 
 	/**

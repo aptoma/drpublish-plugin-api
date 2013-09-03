@@ -1,3 +1,4 @@
+/* global AppAPI: true */
 /**
  * This class is used for communicating with the article, typically setting and getting values of metadata or in the article content itself.
  *
@@ -42,7 +43,7 @@ var ArticleCommunicator = {
 
 		AppAPI.request("app-stop", {
 			app: name
-		}, callback);
+		});
 	},
 
 	/**

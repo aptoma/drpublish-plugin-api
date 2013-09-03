@@ -1,3 +1,4 @@
+/* global AppAPI: true */
 /**
  * This will be used by editor apps to communicate with the editor
  *
@@ -8,7 +9,7 @@
  * @class
  * @classdesc Functions for talking with the AH5 editor. Accessed through AppAPI.Editor
  */
-AH5Communicator = {
+var AH5Communicator = {
 	/**
 	 * Registers/Modifies a context menu items for a app element
 	 * The object send should have the following structure
@@ -62,22 +63,27 @@ AH5Communicator = {
 	registerMenuActionGroup: function (group, callback) {
 		AppAPI.request('register-menu-action-group', group, function(typeNames) {
 			if (typeNames.length !== group.actions.length) {
-				if (this.DEBUG) console.warn('wrong amount of callback events recieved, not good');
+				if (this.DEBUG) {
+                    console.warn('wrong amount of callback events recieved, not good');
+                }
 				return;
 			}
+            var createMenuAction = function(func) {
+                if (typeof func === 'function') {
+                    return function(data) {
+                        func(data.id);
+                    };
+                } else {
+                    return function() {};
+                }
+            };
 			for (var i=0; i<typeNames.length; i++) {
-				var menuAction = (function(func) {
-					return function(data) {
-						if (typeof func === 'function') {
-							func(data.id);
-						}
-					}
-				})(group.actions[i].callback);
+				var menuAction = createMenuAction(group.actions[i].callback);
 
 				AppAPI.eventListeners.add(typeNames[i], menuAction);
 			}
 
-            callback(typesNames);
+            callback(typeNames);
 		});
 	},
 
