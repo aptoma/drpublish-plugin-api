@@ -127,24 +127,37 @@ var AppAPI = {
 			return;
 		}
 
-        var createEventFunction = function(func) {
+        var createEventFunction = function(func, eventKey) {
             return function() {
                 func.apply(null, arguments);
                 AppAPI.eventListeners.remove(eventKey, eventKey);
             };
         };
 
+
+        var createCallbackObject = function(key, callback) {
+            var random = Math.floor(Math.random()*1000);
+            var eventKey = key+random+'functioncallback'+(new Date()).getTime();
+            var eventFunction = createEventFunction(callback, eventKey);
+            AppAPI.eventListeners.add(eventKey, eventFunction);
+            return {
+                type: 'function',
+                eventkey: eventKey
+            };
+        }
+
         for (var key in data) {
             var val = data[key];
             if (typeof val === 'function') {
-                var random = Math.floor(Math.random()*1000);
-                var eventKey = key+random+'functioncallback'+(new Date()).getTime();
-                var eventFunction = createEventFunction(val);
-                AppAPI.eventListeners.add(eventKey, eventFunction);
-                data[key] = {
-                    type: 'function',
-                    eventKey: eventKey
-                };
+                data[key] = createCallbackObject(key, val)
+            } else if (typeof val === 'object' && val !== null && val.length > 0) {
+                for (var _key in val) {
+                    var _val = data[key][_key];
+                    if (typeof _val === 'object' && _val !== null && typeof _val.callback === 'function') {
+                        console.debug('foobar');
+                        data[key][_key].callback = createCallbackObject(_key, _val.callback);
+                    }
+                }
             }
         }
 

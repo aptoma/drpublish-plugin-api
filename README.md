@@ -14,6 +14,8 @@ So how do I get started?
 ================
 Take a look at the example app to see how to get started. There you will see an example of how to write the authentication code required to get the app started, and a few simple examples of sending data between the app and DrPublish.
 
+When you're bored of that you can look through the method listings avaiable on the right and that is hopefully enough to set you on the right track to create any app you want.
+
 Authentication explained
 ==============
 When an app is loaded DrPublish send an encrypted token to the app, this is done so the app can check that it is actually being loaded by a DrPublish instance with a valid user logged in. Apps should always verify this token, otherwise this security aspect dissappears.

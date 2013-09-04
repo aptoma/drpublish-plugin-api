@@ -2,19 +2,24 @@
  * Will hold a list of listeners that are created and should be notified on events
  *
  * @example
- * AppAPI.addListeners( {
+ * AppAPI.addListeners({
  *  afterCreated: function() {
  *      AppAPI.Article.setSource('Ny Times');
  *  },
  *  pluginElementSelected: function() {
  *      alert('You cliked me!');
+ *  },
+ *  beforeSave: function() {
+ *      if (!articleIsAwesome()) {
+ *          return false;
+ *      }
  *  }
  * });
  *
  * @description
  * Used for event handling in the App API. The only function an app developer needs to care about it the 'addListeners' event, and you can see an example of it down bellow.
  *
- * *Planned features:* The next feature planned for the events is the options to stop execution of all before* events.
+ * If an event function returns false (as in the beforeSave example) the event will be stopped. This works for all events, but only makes sense for the before* events.
  *
  * *Available events are:*
  *
