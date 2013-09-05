@@ -151,7 +151,7 @@ var AppAPI = {
                 var val = data[key];
                 if (typeof val === 'function') {
                     data[key] = createCallbackObject(key, val)
-                } else if (typeof val === 'object' && typeof val.map === 'function') {
+                } else if (typeof val === 'object' && val !== null && typeof val.map === 'function') {
                     data[key] = val.map(updateObject);
                 }
             }
