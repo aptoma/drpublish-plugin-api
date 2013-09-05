@@ -146,20 +146,18 @@ var AppAPI = {
             };
         }
 
-        for (var key in data) {
-            var val = data[key];
-            if (typeof val === 'function') {
-                data[key] = createCallbackObject(key, val)
-            } else if (typeof val === 'object' && val !== null && val.length > 0) {
-                for (var _key in val) {
-                    var _val = data[key][_key];
-                    if (typeof _val === 'object' && _val !== null && typeof _val.callback === 'function') {
-                        console.debug('foobar');
-                        data[key][_key].callback = createCallbackObject(_key, _val.callback);
-                    }
+        var updateObject = function(data) {
+            for (var key in data) {
+                var val = data[key];
+                if (typeof val === 'function') {
+                    data[key] = createCallbackObject(key, val)
+                } else if (typeof val === 'object' && typeof val.map === 'function') {
+                    data[key] = val.map(updateObject);
                 }
             }
+            return data;
         }
+        data = updateObject(data);
 
 		var _this = this;
 		pm({
