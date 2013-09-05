@@ -142,7 +142,7 @@ var AppAPI = {
             AppAPI.eventListeners.add(eventKey, eventFunction);
             return {
                 type: 'function',
-                eventkey: eventKey
+                eventKey: eventKey
             };
         }
 
