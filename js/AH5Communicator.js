@@ -15,7 +15,7 @@ var AH5Communicator = {
 	 * The object send should have the following structure
 	 *
 	 * @param {Object} action The action object
-	 * @param {function} callback function(String), event name that the menu item has been wired to listen after
+	 * @param {function} callback function()
      *
      * @example
 	 * AppAPI.Editor.registerMenuAction({
@@ -58,7 +58,7 @@ var AH5Communicator = {
 	 * })
 	 *
 	 * @param {Object} action The action object
-	 * @param {function} callback function([String]), event names that the menu actions has been wired to listen after
+	 * @param {function} callback function()
 	 */
 	registerMenuActionGroup: function (group, callback) {
 		AppAPI.request('register-menu-action-group', group, function(typeNames) {

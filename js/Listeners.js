@@ -153,8 +153,14 @@ Listeners.prototype.notify = function(event, data) {
 	if (this._listeners[event] !== undefined) {
 		jQuery.each(this._listeners[event], function(i, e) {
 			if (e && typeof e === "function") {
-                if (e(data) === false) {
-				    returnValue = false;
+				if (data && data.params && data.params === true) {
+					var r = e.apply(void 0, data.data);
+					if (r === false) {
+						returnValue = false;
+					}
+					
+				} else if (e(data) === false) {
+                    returnValue = false;
                 }
 			}
 		});
