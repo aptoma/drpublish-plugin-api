@@ -11,6 +11,14 @@
  */
 var AH5Communicator = {
 	/**
+	 * Get name of current active editor
+     * 
+	 * @param {function} callback function(String)
+	 */
+	getActiveEditor: function (callback) {
+		AppAPI.request('get-active-editor', null, callback);
+	},
+	/**
 	 * Registers/Modifies a context menu items for a app element
 	 * The object send should have the following structure
 	 *
