@@ -224,12 +224,21 @@ var AH5Communicator = {
 	 * The element will be given the class dp-app-element, and given a unique ID (if none is present)
 	 *
 	 * @param {Element} element The element that should be inserted
+	 * @param {Options} options (can be omitted) Options object, supports option 'select' - set to true to automatically select the inserted element
 	 * @param {Function} callback function(String), id of the newly inserted element
 	 */
-	insertElement: function(element, callback) {
+	insertElement: function(element, options, callback) {
 		var e = jQuery(element);
+        var select = false;
+        if (typeof options === 'object') {
+            options = options || {};
+            select = typeof options.select === 'boolean' ? options.select : false;
+        } else if (typeof callback === 'undefined' && typeof options === 'function') {
+            callback = options;
+        }
 		AppAPI.request('editor-insert-element', {
-			element: jQuery('<div>').append(element).html()
+			element: jQuery('<div>').append(element).html(),
+            select: select
 		}, callback);
 	},
 
