@@ -23,6 +23,8 @@
  *
  * *Available events are:*
  *
+ *  `appAuthenticated`
+ *
  *  `afterCreated`
  *
  *  `afterDeleted`

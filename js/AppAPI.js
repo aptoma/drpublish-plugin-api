@@ -301,6 +301,43 @@ var AppAPI = {
         }, callback);
     },
 
+	/**
+	 * Queries DrLib
+	 *
+	 * @param {Object} data Object with two properties, 'query' which is the query to send to DrLib and 'success' which is the callback to execute on success. This callback's parameter is an object which is the query result as an object. See the json output of DrLib to learn more about this object
+	 * @param {Function} callback function(Boolean)
+	 */
+    searchDrLib: function(data, callback) {
+        AppAPI.request('drlib-search', {
+            query: data.query,
+            success: data.success,
+        }, callback);
+    },
+
+	/**
+	 * Generates proper html code to represent the dom element. This is NOT an asynchronous function
+	 *
+	 * @param {Object} dom The dom node to convert
+	 * @return {String} The html code
+	 */
+    convertDomToHTML: function(dom) {
+        if (typeof dom === 'object' && typeof dom.wrap === 'function') {
+            return dom.wrap("<div>").parent().html();
+        }
+        return '';
+    },
+
+	/**
+	 * Generates an url to a published article
+	 *
+	 * @param {String} id The id of the article to generate url for
+	 * @param {Function} callback function(String), where the parameter is the generated url
+	 */
+    generateArticleUrl: function(id, callback) {
+        AppAPI.request('generate-article-url', {
+            id: id
+        }, callback);
+    }
 };
 
 AppAPI.initialize();

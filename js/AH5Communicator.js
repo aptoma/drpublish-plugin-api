@@ -27,12 +27,14 @@ var AH5Communicator = {
      *
      * @example
 	 * AppAPI.Editor.registerMenuAction({
-	 *      app: 'name of the app to register the new element on',
 	 *      label: 'label in the menu',
-	 *      icon: 'optional url to possible icon image',
-	 *      trigger: 'optional css selector, only show menu element when this matches the element',
-	 *      callback: function(id) {
-	 *          // callback function, paramter is the id of the element clicked
+	 *      icon: '[Optional] url to possible icon image',
+	 *      trigger: '[Optional] css selector, only show menu element when this matches the element',
+	 *      callback: function(id, clickedElementId) {
+	 *          // callback function
+     *          // first parameter is id of the app element
+     *          // second paramter is id of closest element to the trigger element that has an id
+     *          //      in code: $(event.triggerElement).closest('[id]').attr('id');						
 	 *      }
 	 * })
 	 */
@@ -46,20 +48,19 @@ var AH5Communicator = {
      *
      * @example
 	 * AppAPI.Editor.registerMenuActionGroup({
-	 *      app: 'name of the app to register the new element on',
 	 *      label: 'label for the group in the menu',
-	 *      icon: 'optional url to possible icon image',
+	 *      icon: '[Optional] url to possible icon image',
 	 *      actions: [
 	 *          {
 	 *              label: 'label for the action #1',
-	 *              callback: function(id) {
-	 *                  // callback function, paramter is the id of the element clicked
+	 *              callback: function(id, clickedElementId) {
+     *                  // same as for registerMenuAction
 	 *              }
 	 *          },
 	 *          {
 	 *              label: 'label for the action #2',
-	 *              callback: function(id) {
-	 *                  // callback function, paramter is the id of the element clicked
+	 *              callback: function(id, clickedElementId) {
+     *                  // same as for registerMenuAction
 	 *              }
 	 *          }
 	 *      ]
