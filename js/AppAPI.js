@@ -302,15 +302,26 @@ var AppAPI = {
     },
 
 	/**
-	 * Queries DrLib
+	 * Sends a query to DrLib
+     *
+     * @example
+	 * AppAPI.searchDrLib({
+	 *      query: 'articles.json?q=awesome',
+	 *      secure: true
+	 *      success: function(data) {
+     *          data.items.forEach(doStuffWithArticle);
+	 *      }
+	 * })
 	 *
-	 * @param {Object} data Object with two properties, 'query' which is the query to send to DrLib and 'success' which is the callback to execute on success. This callback's parameter is an object which is the query result as an object. See the json output of DrLib to learn more about this object
+	 * @param {Object} data Object with three properties; 'query' which is the query to send to DrLib, 'success' which is the callback to execute on success, and 'secure' a boolean to add the internal API key to the query and thus allow searching on unpublished article. This callback's parameter is an object which is the query result as an object. See the json output of DrLib to learn more about this object
 	 * @param {Function} callback function(Boolean)
+     *
 	 */
     searchDrLib: function(data, callback) {
         AppAPI.request('drlib-search', {
             query: data.query,
-            success: data.success,
+            secure: data.secure,
+            success: data.success
         }, callback);
     },
 
