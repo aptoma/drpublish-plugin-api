@@ -1,0 +1,14 @@
+{
+    "name": "aptoma/plugin-api",
+    "description": "DrFront Apps API",
+    "license": "proprietary",
+    "support": {
+        "source": "http://github.com/aptoma/no.aptoma.plugin-api"
+    },
+    "autoload": {
+        "classmap": ["php/"]
+    },
+    "require": {
+        "ext-mcrypt": "*"
+    }
+}
