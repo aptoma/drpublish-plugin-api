@@ -326,6 +326,7 @@ var AppAPI = {
     searchDrLib: function(data, callback) {
         AppAPI.request('drlib-search', {
             query: data.query,
+            access: data.access,
             secure: data.secure,
             success: data.success
         }, callback);
