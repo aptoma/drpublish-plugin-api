@@ -23,6 +23,10 @@
  *
  * *Available events are:*
  *
+ *  `appPaneMaximized`
+ *
+ *  `appPaneRestored`
+ *
  *  `appAuthenticated`
  *
  *  `afterCreated`
