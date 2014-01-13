@@ -62,6 +62,7 @@
  *  `pluginElementDeselected`
  */
 function Listeners () {
+    "use strict";
 	this._listeners = [];
 }
 
@@ -72,6 +73,7 @@ function Listeners () {
  * @returns {Object} A dictionary of events => listener ID for later removal
  */
 Listeners.prototype.addAll = function(events) {
+    "use strict";
 
 	var out = {};
 	for (var event in events) {
@@ -90,6 +92,7 @@ Listeners.prototype.addAll = function(events) {
  * @param {Function} callback Function to call when an even of the type is received
  */
 Listeners.prototype.add = function(event, callback) {
+    "use strict";
 
 	if (this._listeners[event] === undefined) {
 		this._listeners[event] = [];
@@ -107,6 +110,7 @@ Listeners.prototype.add = function(event, callback) {
  * @param {Function} index The index of the event handler to remove
  */
 Listeners.prototype.remove = function(event, index) {
+    "use strict";
 
 	if (this._listeners[event] === undefined || this._listeners[event][index] === undefined) {
         return;
@@ -124,6 +128,7 @@ Listeners.prototype.remove = function(event, index) {
  * @param {String} event Event type to remove handlers for (!event for all)
  */
 Listeners.prototype.removeAll = function(event) {
+    "use strict";
 	if (!event) {
 		this._listeners = [];
 	} else {
@@ -138,6 +143,7 @@ Listeners.prototype.removeAll = function(event) {
  * @param {Object} data The event data
  */
 Listeners.prototype.notify = function(event, data) {
+    "use strict";
     var returnValue = true;
 	if (this._listeners[event] !== undefined) {
 		jQuery.each(this._listeners[event], function(i, e) {
