@@ -133,8 +133,8 @@ var AppAPI = (function() {
 
         var createEventFunction = function(func, eventKey) {
             return function() {
-                func.apply(null, arguments);
                 AppAPI.eventListeners.remove(eventKey, eventKey);
+                return func.apply(null, arguments);
             };
         };
 
@@ -356,6 +356,40 @@ var AppAPI = (function() {
         AppAPI.request('generate-article-url', {
             id: id
         }, callback);
+    };
+
+    /**
+     * Extends the AppAPI with custom functionality that other apps can use
+     *
+     * @param {String} group Group name for functionality to add
+     * @param {String} name Name of the specific function to add
+     * @param {Function} action function() Function to call when the API is invoked, recieves no parameter and return value is passed back to the caller
+     */
+    Api.prototype.extendApi = function(group, name, action) {
+        AppAPI.request('extend-api', {
+            group: group,
+            name: name,
+            action: function(eventName) {
+                console.debug(arguments);
+                var a = action();
+                AppAPI.request(eventName, {'data': a});
+            }
+        });
+    };
+
+    /**
+     * Call the extended AppAPI
+     *
+     * @param {String} group Group name for functionality to call
+     * @param {String} name Name of the specific function to call
+     * @param {Function} action function(Object) Function to recieve the API response, parameter is the response from the API call
+     */
+    Api.prototype.callExtendedApi = function(group, name, callback) {
+        AppAPI.request('call-extended-api', {
+            group: group,
+            name: name,
+            callback: callback
+        });
     };
 
     return new Api();

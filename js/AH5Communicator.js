@@ -77,9 +77,10 @@ AppAPI.Editor = (function () {
      * @param {function} callback function()
      */
     AH5Communicator.prototype.registerMenuActionGroup = function (group, callback) {
+        var _this = this;
         AppAPI.request('register-menu-action-group', group, function(typeNames) {
             if (typeNames.length !== group.actions.length) {
-                if (this.DEBUG) {
+                if (_this.DEBUG) {
                     console.warn('wrong amount of callback events recieved, not good');
                 }
                 return;
