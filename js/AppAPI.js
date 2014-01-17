@@ -369,10 +369,10 @@ var AppAPI = (function() {
         AppAPI.request('extend-api', {
             group: group,
             name: name,
-            action: function(eventName) {
-                console.debug(arguments);
-                var a = action();
-                AppAPI.request(eventName, {'data': a});
+            action: function(data) {
+                console.debug('from app extendedApi called', data.eventKey, data.data);
+                var a = action(data.data);
+                AppAPI.request(data.eventKey, {'data': a});
             }
         });
     };
@@ -382,12 +382,14 @@ var AppAPI = (function() {
      *
      * @param {String} group Group name for functionality to call
      * @param {String} name Name of the specific function to call
+     * @param {Object} data Data object to pass as parameter to the api call
      * @param {Function} action function(Object) Function to recieve the API response, parameter is the response from the API call
      */
-    Api.prototype.callExtendedApi = function(group, name, callback) {
+    Api.prototype.callExtendedApi = function(group, name, data, callback) {
         AppAPI.request('call-extended-api', {
             group: group,
             name: name,
+            data: data,
             callback: callback
         });
     };
