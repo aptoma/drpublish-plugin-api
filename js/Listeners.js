@@ -23,6 +23,8 @@
  *
  * *Available events are:*
  *
+ *  `addCategory`
+ *
  *  `appPaneMaximized`
  *
  *  `appPaneRestored`
@@ -154,7 +156,7 @@ Listeners.prototype.notify = function(event, data) {
 					if (r === false) {
 						returnValue = false;
 					}
-					
+
 				} else if (e(data) === false) {
                     returnValue = false;
                 }
