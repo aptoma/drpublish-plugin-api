@@ -307,6 +307,16 @@ var AppAPI = {
         }, callback);
     },
 
+
+	/**
+	 * Gets logged in user
+	 *
+	 * @param {Function} callback function(Object)
+	 */
+    getCurrentUser: function(callback) {
+        AppAPI.request('get-current-user', null, callback);
+    },
+
 	/**
 	 * Sends a query to DrLib
      *
