@@ -202,6 +202,30 @@ var AppAPI = {
 		});
 	},
 
+    /**
+     * Get configuration information about the app
+     *
+     * @param {Function} callback function(Object)
+     */
+    getConfiguration: function (callback) {
+        this.request('get-configuration', null, callback);
+    },
+
+    /**
+     * Set configuration information about the app
+     *
+     * @param {Object} config The configuration object to save
+     * @param {Boolean} onlyPublication If true the configuration is set for the current publication only
+     * @param {Function} callback function()
+     */
+    setConfiguration: function (config, onlyPublication, callback) {
+        var data = {
+            config: config,
+            onlyPublication: typeof onlyPublication === 'boolean' ? onlyPublication : false
+        };
+        this.request('set-configuration', data, callback);
+    },
+
 	/**
 	 * Get the name of the loaded app
 	 *
