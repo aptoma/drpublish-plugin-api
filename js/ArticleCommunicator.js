@@ -314,6 +314,27 @@ AppAPI.Article = (function() {
     };
 
     /**
+     * Set the keyword-list on the article
+     *
+     * @param {Array} keywords List of keywords to add
+     * @param {Function} callback Function to call when keywords have been set
+     */
+    ArticleCommunicator.prototype.setKeywords = function(keywords, callback) {
+        AppAPI.request('article-keywords-set', {
+            keywords: keywords
+        }, callback);
+    };
+
+    /**
+     * Get the current set of keywords on the article
+     *
+     * @param {Function} callback Function to call with the result
+     */
+    ArticleCommunicator.prototype.getKeywords = function(callback) {
+        AppAPI.request('article-keywords-get', null, callback);
+    };
+
+    /**
      * Remove the given dossiers from the list of dossiers
      *
      * @param {Array} dossiers List of authors to remove
