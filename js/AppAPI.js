@@ -394,5 +394,38 @@ var AppAPI = (function() {
         });
     };
 
+    /**
+     * Gets logged in user
+     *
+     * @param {Function} callback function(Object)
+     */
+    Api.prototype.getCurrentUser = function(callback) {
+        this.request('get-current-user', null, callback);
+    };
+
+    /**
+     * Get configuration information about the app
+     *
+     * @param {Function} callback function(Object)
+     */
+    Api.prototype.getConfiguration = function (callback) {
+        this.request('get-configuration', null, callback);
+    };
+
+    /**
+     * Set configuration information about the app
+     *
+     * @param {Object} config The configuration object to save
+     * @param {Boolean} onlyPublication If true the configuration is set for the current publication only
+     * @param {Function} callback function()
+     */
+    Api.prototype.setConfiguration = function (config, onlyPublication, callback) {
+        var data = {
+            config: config,
+            onlyPublication: typeof onlyPublication === 'boolean' ? onlyPublication : false
+        };
+        this.request('set-configuration', data, callback);
+    };
+
     return new Api();
 })();
