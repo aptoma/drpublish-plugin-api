@@ -437,6 +437,16 @@ AppAPI.Article = (function() {
         }, callback);
     };
 
+    ArticleCommunicator.prototype.setGeolocations = function(geolocations, callback) {
+        AppAPI.request('article-geolocations-set', {
+            geolocations: geolocations
+        }, callback);
+    };
+
+    ArticleCommunicator.prototype.getGeolocations = function(callback) {
+        AppAPI.request("article-geolocations-get", null, callback);
+    }
+
     return new ArticleCommunicator();
 
 })();
