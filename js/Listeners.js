@@ -3,7 +3,7 @@
  *
  * @example
  * AppAPI.addListeners({
- *  afterCreated: function() {
+ *  afterCreate: function() {
  *      AppAPI.Article.setSource('Ny Times');
  *  },
  *  pluginElementSelected: function() {
@@ -31,25 +31,27 @@
  *
  *  `appAuthenticated`
  *
- *  `afterCreated`
+ *  `afterCreate`
  *
- *  `afterDeleted`
+ *  `beforeDelete`
  *
- *  `afterLoaded`
+ *  `afterDelete`
  *
- *  `afterPublished`
+ *  `afterLoad`
+ *
+ *  `afterPublish`
  *
  *  `afterSave`
  *
- *  `beforeCreated`
+ *  `beforeCreate`
  *
- *  `beforeLoaded`
+ *  `beforeLoad`
  *
  *  `beforePreview`
  *
  *  `beforeSave`
  *
- *  `beforePublished`
+ *  `beforePublish`
  *
  *  `editorFocus`
  *

@@ -437,6 +437,27 @@ AppAPI.Article = (function() {
         }, callback);
     };
 
+    /**
+     * Set geolocation
+     *
+     * @param {Object} geolocations The location to set
+     * @param {Function} callback function(Boolean), called when it has been set
+     */
+    ArticleCommunicator.prototype.setGeolocations = function(geolocations, callback) {
+        AppAPI.request('article-geolocations-set', {
+            geolocations: geolocations
+        }, callback);
+    };
+
+    /**
+     * Get geolocation
+     *
+     * @param {Function} callback function(Object), retrieves the currently set geo location
+     */
+    ArticleCommunicator.prototype.getGeolocations = function(callback) {
+        AppAPI.request("article-geolocations-get", null, callback);
+    };
+
     return new ArticleCommunicator();
 
 })();
