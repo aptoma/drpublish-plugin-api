@@ -325,7 +325,7 @@ AppAPI.Editor = (function () {
     /**
      * Initialize pre registered menus
      *
-     * Available options are: simplePluginMenu, editContext
+     * Available options are: simplePluginMenu, editContext, deleteButton, floatButtons
      *
      * @param {Array} menus Array of menu names
      * @param {Function} callback function(Boolean)
