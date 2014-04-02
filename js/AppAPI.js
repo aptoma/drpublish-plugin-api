@@ -363,14 +363,13 @@ var AppAPI = (function() {
      *
      * @param {String} group Group name for functionality to add
      * @param {String} name Name of the specific function to add
-     * @param {Function} action function() Function to call when the API is invoked, recieves no parameter and return value is passed back to the caller
+     * @param {Function} action function(Object) Function to call when the API is invoked, recieves one parameter as given in AppAPI.callExtendedApi and return value is passed back to the caller
      */
     Api.prototype.extendApi = function(group, name, action) {
         AppAPI.request('extend-api', {
             group: group,
             name: name,
             action: function(data) {
-                console.debug('from app extendedApi called', data.eventKey, data.data);
                 var a = action(data.data);
                 AppAPI.request(data.eventKey, {'data': a});
             }
