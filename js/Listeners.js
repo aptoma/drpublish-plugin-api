@@ -1,25 +1,20 @@
+/* global AppAPI: true */
 /**
- * Will hold a list of listeners that are created and should be notified on events
- *
  * @example
- * AppAPI.addListeners({
- *  afterCreate: function() {
- *      AppAPI.Article.setSource('Ny Times');
- *  },
- *  pluginElementSelected: function() {
- *      alert('You cliked me!');
- *  },
- *  beforeSave: function() {
- *      if (!articleIsAwesome()) {
+ * AppAPI.on('afterCreate', function() {
+ *     AppAPI.Article.setSource('Ny Times');
+ * });
+ * AppAPI.on('beforeSave', function() {
+ *     if (!articleIsAwesome()) {
  *          return false;
- *      }
- *  }
+ *     }
  * });
  *
  * @description
- * Used for event handling in the App API. The only function an app developer needs to care about it the 'addListeners' event, and you can see an example of it down bellow.
  *
- * If an event function returns false (as in the beforeSave example) the event will be stopped. This works for all events, but only makes sense for the before* events.
+ * DrPublish provides a large set of default events that an app can listen for. All events that start their name with 'before' can be stopped by an app. This is done by returning 'false' from the callback function, as in the 'beforSave' example given bellow. 
+ *
+ * Other apps can also supply their own events using the AppAPI.emit(...) function. Documention on these events are up to each app to create.
  *
  * *Available events are:*
  *
@@ -71,22 +66,22 @@ function Listeners () {
 }
 
 /**
- * Adds several listeners
- *
- * @param {Object} events A list of callbacks that should be called on events
- * @returns {Object} A dictionary of events => listener ID for later removal
+ * @deprecated Use AppAPI.on(...) instead
  */
-Listeners.prototype.addAll = function(events) {
+Listeners.prototype.addAll = function(listeners) {
     "use strict";
-
-	var out = {};
-	for (var event in events) {
-        if (events.hasOwnProperty(event)) {
-            out[event] = this.add(event, events[event]);
+    var createCallback = function(callback) {
+        return function(data) {
+            callback(data.data);
+        };
+    };
+    for (var eventName in listeners) {
+        if (listeners.hasOwnProperty(eventName)) {
+            var callback = listeners[eventName];
+            var callWrapper = createCallback(callback);
+            AppAPI.on(eventName, callWrapper);
         }
-	}
-
-	return out;
+    }
 };
 
 /**

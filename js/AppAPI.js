@@ -4,9 +4,8 @@ var AppAPI = (function() {
 
     /**
      *
-     * Namespace for all public Dr.Published methods available from apps.
+     * Namespace for all public DrPublish methods available from apps.
      *
-     * Listeners can be added through the Listeners objects AppAPI.errorListeners and AppAPI.eventListeners
      * @class
      * @classdesc The basic API object
      * @exports AppApi
@@ -64,17 +63,17 @@ var AppAPI = (function() {
         var _this = this;
         url = url || 'ajax.php?do=authenticate-app';
 
-        jQuery.getJSON(url, { app: this.getAppName() },
-                       function(reply) {
-                           if(reply) {
-                               AppAPI.doDirectAuthentication(reply.signature, reply.iv);
-                           } else {
-                               if (this.DEBUG) {
-                                   console.err(_this.getAppName() + ": No authentication token provided by backend", reply);
-                               }
-                           }
-                       }
-                      );
+        jQuery.getJSON(url, {app: this.getAppName()},
+            function(reply) {
+                if(reply) {
+                    AppAPI.doDirectAuthentication(reply.signature, reply.iv);
+                } else {
+                    if (this.DEBUG) {
+                        console.err(_this.getAppName() + ": No authentication token provided by backend", reply);
+                    }
+                }
+            }
+        );
     };
 
     /**
@@ -108,7 +107,6 @@ var AppAPI = (function() {
      * @param {Function} callback The function to call upon return
      */
     Api.prototype.request = function(callSpec, data, callback) {
-
         if (this.DEBUG) {
             console.info(this.getAppName() + ': Requesting ' + callSpec + ' from parent with data', data);
         }
@@ -275,12 +273,21 @@ var AppAPI = (function() {
     };
 
     /**
-     * Add listeners.
-     *
-     * @param {Object} listeners An object where Key is event name, and value is the callback function. See documentation for Listeners for more information
+     * @deprecated Use AppAPI.on(...) instead
      */
     Api.prototype.addListeners = function(listeners) {
-        AppAPI.eventListeners.addAll(listeners);
+        var createCallback = function(callback) {
+            return function(data) {
+                callback(data.data);
+            };
+        };
+        for (var eventName in listeners) {
+            if (listeners.hasOwnProperty(eventName)) {
+                var callback = listeners[eventName];
+                var callWrapper = createCallback(callback);
+                AppAPI.on(eventName, callWrapper);
+            }
+        }
     };
 
     /**
@@ -288,6 +295,7 @@ var AppAPI = (function() {
      *
      * @param {Number} id The id of the revision to load
      * @param {Function} callback The function to call when the new revision has been loaded
+     * @private
      */
     Api.prototype.__loadArticleRevision = function(id, callback) {
         this.request("load-revision", {
@@ -424,6 +432,33 @@ var AppAPI = (function() {
             onlyPublication: typeof onlyPublication === 'boolean' ? onlyPublication : false
         };
         this.request('set-configuration', data, callback);
+    };
+
+    /**
+     * Emits an event to DrPublish, and possibly other apps
+     *
+     * @param {String} name Name of the event
+     * @param {String} data Data object to send with the event
+     */
+    Api.prototype.emit = function(name, data) {
+        AppAPI.request('emit-api-event', {
+            name: name,
+            data: data
+        });
+    };
+
+    /**
+     * Listen for an event. If the callback returns false the event may cancel continued actions, e.g beforeSave can cancel article save. Look at documentation for Listeners to learn more.
+     *
+     * @param {String} name Name of the event
+     * @param {Function} callback function(Object) Function to call when the event is triggered. Recieves one data object parameter of the form {source: <source app name or DrPublish>, data: <data object>}
+     */
+    Api.prototype.on = function(name, callback) {
+        AppAPI.request('on-api-event', {
+            name: name,
+        }, function() {
+            AppAPI.eventListeners.add(name, callback);
+        });
     };
 
     return new Api();
