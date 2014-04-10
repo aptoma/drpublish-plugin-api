@@ -16,6 +16,52 @@ Take a look at the example app to see how to get started. There you will see an 
 
 When you're bored of that you can look through the method listings avaiable on the right and that is hopefully enough to set you on the right track to create any app you want.
 
+Costum configuration
+==============
+Apps can ask for and specify a customized configuration object. The API function to retrieve the configuration option is AppAPI.getConfiguration, and you can find documentation on that in the AppAPI module.
+
+To specify the format of the configuration object the App needs to provide an URL where other applications (in most cases DrPublish's App Admin tool) can recieve an [JSON schema](http://json-schema.org/) describing the desired configuration setup. In case of DrPublish this URL is then registered alongside the URL to the app in the Publication configuration.
+
+A simple example JSON schema for an image app could look like:
+'''JSON
+{
+    "search": {
+        "type": "string",
+        "title": "Default Search",
+        "required": true
+    },
+    "images": {
+        "type": "array",
+        "title": "Image Sizes",
+        "items": {
+            "type": "object",
+            "title": "Image Size",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "title": "name",
+                    "required": true
+                },
+                "filter": {
+                    "type": "string",
+                    "title": "Filter",
+                    "enum": [
+                        "grayscale",
+                        "sepia",
+                        "none"
+                    ]
+                },
+                "height": {
+                    "type": "integer",
+                    "title": "Height"
+                }
+            }
+        }
+    }
+}
+'''
+
+
 Authentication explained
 ==============
 When an app is loaded DrPublish send an encrypted token to the app, this is done so the app can check that it is actually being loaded by a DrPublish instance with a valid user logged in. Apps should always verify this token, otherwise this security aspect dissappears.
