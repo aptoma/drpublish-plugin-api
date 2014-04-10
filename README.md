@@ -23,7 +23,7 @@ Apps can ask for and specify a customized configuration object. The API function
 To specify the format of the configuration object the App needs to provide an URL where other applications (in most cases DrPublish's App Admin tool) can recieve an [JSON schema](http://json-schema.org/) describing the desired configuration setup. In case of DrPublish this URL is then registered alongside the URL to the app in the Publication configuration.
 
 A simple example JSON schema for an image app could look like:
-'''JSON
+```JSON
 {
     "search": {
         "type": "string",
@@ -59,7 +59,7 @@ A simple example JSON schema for an image app could look like:
         }
     }
 }
-'''
+```
 
 
 Authentication explained
