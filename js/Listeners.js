@@ -20,6 +20,8 @@
  *
  *  `addCategory`
  *
+ *  `addTag`
+ *
  *  `appPaneMaximized`
  *
  *  `appPaneRestored`
@@ -48,7 +50,11 @@
  *
  *  `beforePublish`
  *
- *  `editorFocus`
+ *  `editorFocus` (triggered when an editor gets focus)
+ *
+ *  `editorUnfocus` (triggered when an editor loses focus)
+ *
+ *  `editorsLostFocus` (triggered when all editors loses focus)
  *
  *  `editorReady`
  *
