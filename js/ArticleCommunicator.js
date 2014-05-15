@@ -75,6 +75,32 @@ AppAPI.Article = (function() {
     };
 
     /**
+     * Retrieve custom meta value for the article
+     *
+     * @param {String} name Name of the custom meta value
+     * @param {Function} callback function(Object), the parameter is an object containing the given custom meta value
+     */
+    ArticleCommunicator.prototype.getCustomMeta = function(name, callback) {
+        AppAPI.request('article-custom-meta-get', {
+            name: name
+        }, callback);
+    };
+
+    /**
+     * Set custom meta value for the article
+     *
+     * @param {String} name Name of the meta value
+     * @param {Object} value Value to set
+     * @param {Function} callback function()
+     */
+    ArticleCommunicator.prototype.setCustomMeta = function(name, value, callback) {
+        AppAPI.request('article-custom-meta-set', {
+            name: name,
+            value: value
+        }, callback);
+    };
+
+    /**
      * Set tags for the article
      *
      * @param {Array} tags List of tags that should be set
