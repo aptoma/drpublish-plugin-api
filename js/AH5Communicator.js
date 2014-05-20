@@ -128,6 +128,18 @@ AppAPI.Editor = (function () {
     };
 
     /**
+     * Delete an element in the article
+     *
+     * @param {String} id Id of the element
+     * @param {function} callback function(Boolean), called after deletion is done
+     */
+    AH5Communicator.prototype.deleteElementById = function(id, callback) {
+        AppAPI.request('editor-element-replace-byid', {
+            id: id
+        }, callback);
+    };
+
+    /**
      * Get HTML code of an element
      *
      * @param {String} id The element id

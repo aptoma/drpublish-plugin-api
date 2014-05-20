@@ -19,14 +19,19 @@
  * *Available events are:*
  *
  *  `addCategory`
+ *  > _triggered after a category has been added to the article_
  *
  *  `addTag`
+ *  > _triggered after a tag had been added to the article_
  *
  *  `appPaneMaximized`
+ *  > _triggered when the app pane is maximized_
  *
  *  `appPaneRestored`
+ *  > _triggered when the app pane is restored to its' original size_
  *
  *  `appAuthenticated`
+ *  > _triggered when an app has been authenticated_
  *
  *  `afterCreate`
  *
