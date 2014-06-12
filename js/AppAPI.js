@@ -321,9 +321,12 @@ var AppAPI = (function() {
      * @example
      * AppAPI.searchDrLib({
      *      query: 'articles.json?q=awesome',
-     *      secure: true
+     *      secure: true,
      *      success: function(data) {
      *          data.items.forEach(doStuffWithArticle);
+     *      },
+     *      error: function(data) {
+     *          console.warn('something went wrong');
      *      }
      * })
      *
@@ -336,7 +339,8 @@ var AppAPI = (function() {
             query: data.query,
             access: data.access,
             secure: data.secure,
-            success: data.success
+            success: data.success,
+            error: data.error
         }, callback);
     };
 
