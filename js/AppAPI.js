@@ -427,13 +427,24 @@ var AppAPI = (function() {
      * Set configuration information about the app
      *
      * @param {Object} config The configuration object to save
-     * @param {Boolean} onlyPublication If true the configuration is set for the current publication only
+     * @param {Object} options Object, can have three keys.
+     *      'onlyPublication' (boolean) If true the configuration is set for the current publication only
+     *      'success' (function) Called if the configuration was saved successfully
+     *      'error' (function) Called if there was an error, recieves and error object as first parameter
      * @param {Function} callback function()
      */
-    Api.prototype.setConfiguration = function (config, onlyPublication, callback) {
+    Api.prototype.setConfiguration = function (config, options, callback) {
+        // support old function signature
+        if (typeof options === 'boolean') {
+            options = {
+                onlyPublication: options
+            };
+        }
         var data = {
             config: config,
-            onlyPublication: typeof onlyPublication === 'boolean' ? onlyPublication : false
+            onlyPublication: typeof options.onlyPublication === 'boolean' ? options.onlyPublication : false,
+            success: typeof options.success === 'function' ? options.success : null,
+            error: typeof options.error === 'function' ? options.error : null
         };
         this.request('set-configuration', data, callback);
     };
