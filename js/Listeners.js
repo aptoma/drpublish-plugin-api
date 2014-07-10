@@ -33,6 +33,9 @@
  *  `appAuthenticated`
  *  > _triggered when an app has been authenticated_
  *
+ *  `changedCustomMeta`
+ *  > _triggered when a custom meta property is changed/set, parameter is an object with property name and value_
+ *
  *  `afterCreate`
  *
  *  `beforeDelete`
@@ -55,11 +58,14 @@
  *
  *  `beforePublish`
  *
- *  `editorFocus` (triggered when an editor gets focus)
+ *  `editorFocus` 
+ *  > _triggered when an editor gets focus_
  *
- *  `editorUnfocus` (triggered when an editor loses focus)
+ *  `editorUnfocus` 
+ *  > _triggered when an editor loses focus_
  *
- *  `editorsLostFocus` (triggered when all editors loses focus)
+ *  `editorsLostFocus` 
+ *  > _triggered when all editors loses focus_
  *
  *  `editorReady`
  *
