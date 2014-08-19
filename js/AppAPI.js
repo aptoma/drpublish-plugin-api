@@ -476,5 +476,42 @@ var AppAPI = (function() {
         });
     };
 
+    /**
+     * Increase the counter of actions required by the user, used to tell the user that the plugin requires input of some kind
+     *
+     * @param {Function} callback function(Object) function to call once the counter has been increased, returns the new counter value
+     */
+    Api.prototype.increaseRequiredActionCounter = function(callback) {
+        AppAPI.request('increase-required-action-counter', {}, callback);
+    };
+
+    /**
+     * Decrease the counter of actions required by the user, used to tell the user that the plugin requires input of some kind
+     *
+     * @param {Function} callback function(Object) function to call once the counter has been decrease, returns current counter value
+     */
+    Api.prototype.decreaseRequiredActionCounter = function(callback) {
+        AppAPI.request('decrease-required-action-counter', {}, callback);
+    };
+
+    /**
+     * Clear the counter of actions required by the user, used to tell the user that the plugin requires input of some kind
+     *
+     * @param {Function} callback function(Object) function to call once the counter has been cleared
+     */
+    Api.prototype.clearRequiredActionCounter = function(callback) {
+        AppAPI.request('clear-required-action-counter', {}, callback);
+    };
+
+    /**
+     * Set the counter of actions required by the user, used to tell the user that the plugin requires input of some kind
+     *
+     * @param {Number} count The value to set the counter to
+     * @param {Function} callback function(Object) function to call once the counter has been cleared
+     */
+    Api.prototype.setRequiredActionCounter = function(count, callback) {
+        AppAPI.request('set-required-action-counter', {count: count}, callback);
+    };
+
     return new Api();
 })();
