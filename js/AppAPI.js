@@ -1,4 +1,6 @@
 /* global Listeners: true, pm: true */
+
+/* jshint maxstatements:32 */
 var AppAPI = (function() {
     "use strict";
 
@@ -22,25 +24,25 @@ var AppAPI = (function() {
         this.authenticated = false;
         this.appName = '';
 
-        var _this = this;
+        var self = this;
 
         // Stores requests that couldn't be sent until we've been auth'd
         this.backlog = [];
         this.eventListeners.add('appAuthenticated', function() {
-            _this.authenticated = true;
-            if(_this.backlog.length > 0) {
-                if (_this.DEBUG) {
-                    console.warn(_this.getAppName() + ": Authenticated, now executing backlog (" + _this.backlog.length + " items)");
+            self.authenticated = true;
+            if(self.backlog.length > 0) {
+                if (self.DEBUG) {
+                    console.warn(self.getAppName() + ": Authenticated, now executing backlog (" + self.backlog.length + " items)");
                 }
-                for(var i = _this.backlog.length - 1; i >= 0; i--) {
-                    _this.request(_this.backlog[i]['spec'], _this.backlog[i]['data'], _this.backlog[i]['callback']);
-                    _this.backlog.splice(i, 1);
+                for(var i = self.backlog.length - 1; i >= 0; i--) {
+                    self.request(self.backlog[i]['spec'], self.backlog[i]['data'], self.backlog[i]['callback']);
+                    self.backlog.splice(i, 1);
                 }
             }
         });
 
         pm.bind("event", function(data) {
-            data = _this.eventListeners.notify(data.type, data.data);
+            data = self.eventListeners.notify(data.type, data.data);
             if (typeof data === 'undefined') {
                 return true;
             }
@@ -60,16 +62,16 @@ var AppAPI = (function() {
      * @param {String} url Url to call, default is 'ajax.php?do=authentication-app'
      */
     Api.prototype.doStandardAuthentication = function(url) {
-        var _this = this;
+        var self = this;
         url = url || 'ajax.php?do=authenticate-app';
 
         jQuery.getJSON(url, {app: this.getAppName()},
             function(reply) {
                 if(reply) {
-                    AppAPI.doDirectAuthentication(reply.signature, reply.iv);
+                    self.doDirectAuthentication(reply.signature, reply.iv);
                 } else {
                     if (this.DEBUG) {
-                        console.err(_this.getAppName() + ": No authentication token provided by backend", reply);
+                        console.err(self.getAppName() + ": No authentication token provided by backend", reply);
                     }
                 }
             }
@@ -107,6 +109,7 @@ var AppAPI = (function() {
      * @param {Function} callback The function to call upon return
      */
     Api.prototype.request = function(callSpec, data, callback) {
+        var self = this;
         if (this.DEBUG) {
             console.info(this.getAppName() + ': Requesting ' + callSpec + ' from parent with data', data);
         }
@@ -131,7 +134,7 @@ var AppAPI = (function() {
 
         var createEventFunction = function(func, eventKey) {
             return function() {
-                AppAPI.eventListeners.remove(eventKey, eventKey);
+                self.eventListeners.remove(eventKey, eventKey);
                 return func.apply(null, arguments);
             };
         };
@@ -141,7 +144,7 @@ var AppAPI = (function() {
             var random = Math.floor(Math.random()*1000);
             var eventKey = key+random+'functioncallback'+(new Date()).getTime();
             var eventFunction = createEventFunction(callback, eventKey);
-            AppAPI.eventListeners.add(eventKey, eventFunction);
+            self.eventListeners.add(eventKey, eventFunction);
             return {
                 type: 'function',
                 eventKey: eventKey
@@ -163,14 +166,13 @@ var AppAPI = (function() {
         };
         data = updateObject(data);
 
-        var _this = this;
         pm({
             target: parent,
             type: callSpec,
             data: data,
             success: callback,
             error: function(data) {
-                _this.errorListeners.notify(data.type, data);
+                self.errorListeners.notify(data.type, data);
             },
             origin: "*", // TODO: Find a way of avoiding all-origins
             hash: false
@@ -285,7 +287,7 @@ var AppAPI = (function() {
             if (listeners.hasOwnProperty(eventName)) {
                 var callback = listeners[eventName];
                 var callWrapper = createCallback(callback);
-                AppAPI.on(eventName, callWrapper);
+                this.on(eventName, callWrapper);
             }
         }
     };
@@ -310,7 +312,7 @@ var AppAPI = (function() {
      * @param {Function} callback function(Boolean)
      */
     Api.prototype.createTag = function(tag, callback) {
-        AppAPI.request('tag-create', {
+        this.request('tag-create', {
             tag: tag
         }, callback);
     };
@@ -335,7 +337,7 @@ var AppAPI = (function() {
      *
      */
     Api.prototype.searchDrLib = function(data, callback) {
-        AppAPI.request('drlib-search', {
+        this.request('drlib-search', {
             query: data.query,
             access: data.access,
             secure: data.secure,
@@ -365,7 +367,7 @@ var AppAPI = (function() {
      * @param {Function} callback function(String), where the parameter is the generated url
      */
     Api.prototype.generateArticleUrl = function(id, callback) {
-        AppAPI.request('generate-article-url', {
+        this.request('generate-article-url', {
             id: id
         }, callback);
     };
@@ -378,12 +380,13 @@ var AppAPI = (function() {
      * @param {Function} action function(Object) Function to call when the API is invoked, recieves one parameter as given in AppAPI.callExtendedApi and return value is passed back to the caller
      */
     Api.prototype.extendApi = function(group, name, action) {
-        AppAPI.request('extend-api', {
+        var self = this;
+        this.request('extend-api', {
             group: group,
             name: name,
             action: function(data) {
                 var a = action(data.data);
-                AppAPI.request(data.eventKey, {'data': a});
+                self.request(data.eventKey, {'data': a});
             }
         });
     };
@@ -397,7 +400,7 @@ var AppAPI = (function() {
      * @param {Function} action function(Object) Function to recieve the API response, parameter is the response from the API call
      */
     Api.prototype.callExtendedApi = function(group, name, data, callback) {
-        AppAPI.request('call-extended-api', {
+        this.request('call-extended-api', {
             group: group,
             name: name,
             data: data,
@@ -439,6 +442,8 @@ var AppAPI = (function() {
             options = {
                 onlyPublication: options
             };
+        } else if (typeof options !== 'object' || options === null) {
+            options = {};
         }
         var data = {
             config: config,
@@ -456,7 +461,7 @@ var AppAPI = (function() {
      * @param {String} data Data object to send with the event
      */
     Api.prototype.emit = function(name, data) {
-        AppAPI.request('emit-api-event', {
+        this.request('emit-api-event', {
             name: name,
             data: data
         });
@@ -469,10 +474,11 @@ var AppAPI = (function() {
      * @param {Function} callback function(Object) Function to call when the event is triggered. Recieves one data object parameter of the form {source: <source app name or DrPublish>, data: <data object>}
      */
     Api.prototype.on = function(name, callback) {
-        AppAPI.request('on-api-event', {
+        var self = this;
+        this.request('on-api-event', {
             name: name,
         }, function() {
-            AppAPI.eventListeners.add(name, callback);
+            self.eventListeners.add(name, callback);
         });
     };
 
@@ -482,7 +488,7 @@ var AppAPI = (function() {
      * @param {Function} callback function(Object) function to call once the counter has been increased, returns the new counter value
      */
     Api.prototype.increaseRequiredActionCounter = function(callback) {
-        AppAPI.request('increase-required-action-counter', {}, callback);
+        this.request('increase-required-action-counter', {}, callback);
     };
 
     /**
@@ -491,7 +497,7 @@ var AppAPI = (function() {
      * @param {Function} callback function(Object) function to call once the counter has been decrease, returns current counter value
      */
     Api.prototype.decreaseRequiredActionCounter = function(callback) {
-        AppAPI.request('decrease-required-action-counter', {}, callback);
+        this.request('decrease-required-action-counter', {}, callback);
     };
 
     /**
@@ -500,7 +506,7 @@ var AppAPI = (function() {
      * @param {Function} callback function(Object) function to call once the counter has been cleared
      */
     Api.prototype.clearRequiredActionCounter = function(callback) {
-        AppAPI.request('clear-required-action-counter', {}, callback);
+        this.request('clear-required-action-counter', {}, callback);
     };
 
     /**
@@ -510,7 +516,16 @@ var AppAPI = (function() {
      * @param {Function} callback function(Object) function to call once the counter has been cleared
      */
     Api.prototype.setRequiredActionCounter = function(count, callback) {
-        AppAPI.request('set-required-action-counter', {count: count}, callback);
+        this.request('set-required-action-counter', {count: count}, callback);
+    };
+
+    /**
+     * Create a new instance of the Api class
+     *
+     * @private
+     */
+    Api.prototype.create = function() {
+        return new Api();
     };
 
     return new Api();

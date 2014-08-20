@@ -1,5 +1,7 @@
 /* global AppAPI: true */
 
+/* jshint maxstatements:44 */
+
 AppAPI.Article = (function() {
     "use strict";
 

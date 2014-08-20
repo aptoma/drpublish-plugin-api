@@ -1,0 +1,10 @@
+{
+  "name": "plugin-api",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aptoma/no.aptoma.plugin-api.git"
+  },
+  "dependencies": {
+    "jquery": "2.1.1"
+  }
+}

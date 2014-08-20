@@ -99,4 +99,4 @@ Note especially warnings and errors since these indicate that something of speci
 
 Documentation Generation
 ========================
-Documentation has been generated using [jsdoc](https://github.com/jsdoc3/jsdoc) and the supplied conf.json file
+Documentation has been generated using [jsdoc](https://github.com/jsdoc3/jsdoc) and the supplied jsdoc.json file

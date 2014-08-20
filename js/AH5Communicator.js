@@ -77,31 +77,7 @@ AppAPI.Editor = (function () {
      * @param {function} callback function()
      */
     AH5Communicator.prototype.registerMenuActionGroup = function (group, callback) {
-        var _this = this;
-        AppAPI.request('register-menu-action-group', group, function(typeNames) {
-            if (typeNames.length !== group.actions.length) {
-                if (_this.DEBUG) {
-                    console.warn('wrong amount of callback events recieved, not good');
-                }
-                return;
-            }
-            var createMenuAction = function(func) {
-                if (typeof func === 'function') {
-                    return function(data) {
-                        func(data.id);
-                    };
-                } else {
-                    return function() {};
-                }
-            };
-            for (var i=0; i<typeNames.length; i++) {
-                var menuAction = createMenuAction(group.actions[i].callback);
-
-                AppAPI.eventListeners.add(typeNames[i], menuAction);
-            }
-
-            callback(typeNames);
-        });
+        AppAPI.request('register-menu-action-group', group, callback);
     };
 
     /**
