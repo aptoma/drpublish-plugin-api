@@ -1,6 +1,6 @@
 /* global Listeners: true, pm: true */
 
-/* jshint maxstatements:32 */
+/* jshint maxstatements:34 */
 var AppAPI = (function() {
     "use strict";
 
@@ -526,6 +526,25 @@ var AppAPI = (function() {
      */
     Api.prototype.create = function() {
         return new Api();
+    };
+
+    /**
+     * Create an embedded object of the given type
+     *
+     * @param {Number} typeId Type Id of the embedded object to create
+     * @param {Function} callback function(embeddedObjectId) called once the object has been created, first parameter is the new embedded object id
+     */
+    Api.prototype.createEmbeddedObject = function(typeId, callback) {
+        this.request('create-embedded-object', {typeId: typeId, callback: callback});
+    };
+
+    /**
+     * Get information about the available embedded object types
+     *
+     * @param {Function} callback function([Object]) recieves an array with objects describing the available embedded object types in the form of `{typeId: 'embedded object type id', cssClass: 'css class used to style the objects'}`
+     */
+    Api.prototype.getEmbeddedObjectTypes = function(callback) {
+        this.request('get-embedded-object-types', null, callback);
     };
 
     return new Api();

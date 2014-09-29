@@ -30,12 +30,17 @@ module.exports = function(grunt) {
                 configFile: 'karma.conf.js',
                 background: true,
                 browsers: ['PhantomJS']
+            },
+            autowatch: {
+                configFile: 'karma.conf.js',
+                autoWatch: true,
+                browsers: ['PhantomJS']
             }
         },
         watch: {
             scripts: {
                 files: ['js/**/*.js', 'test/**/*.js'],
-                tasks: ['jshint', 'karma:unit:run'],
+                tasks: ['jshint', 'karma:autowatch'],
                 options: {
                     spawn: false,
                 },
