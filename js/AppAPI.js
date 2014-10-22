@@ -475,10 +475,9 @@ var AppAPI = (function() {
      */
     Api.prototype.on = function(name, callback) {
         var self = this;
+        self.eventListeners.add(name, callback);
         this.request('on-api-event', {
             name: name,
-        }, function() {
-            self.eventListeners.add(name, callback);
         });
     };
 
@@ -546,6 +545,27 @@ var AppAPI = (function() {
     Api.prototype.getEmbeddedObjectTypes = function(callback) {
         this.request('get-embedded-object-types', null, callback);
     };
+
+    /**
+     * Gives focus to another plugin
+     *
+     * @param {String} pluginName The name of the plugin to recieve focus
+     * @param {Object} argument Optional option argument to pass along to the plugin recieving focus
+     * @param {Boolean} start Flag to decide if the plugin should be started if it has not been loaded previously, default true
+     */
+    Api.prototype.giveFocus = function(pluginName, argument, start) {
+        if (typeof pluginName !== 'string' || pluginName === '') {
+            return false;
+        }
+        if (typeof start !== 'boolean') {
+            start = true;
+        }
+        this.request('give-focus', {pluginName: pluginName, start: start, argument: argument});
+        return true;
+    };
+
+
+
 
     return new Api();
 })();

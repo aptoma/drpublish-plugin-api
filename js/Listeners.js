@@ -36,6 +36,9 @@
  *  `changedCustomMeta`
  *  > _triggered when a custom meta property is changed/set, parameter is an object with property name and value_
  *
+ *  `receivedFocus`
+ *  > _triggered when a plugin receives focus. Receives a parameter object that has two predefined values: `previousPluginName` - name of previous plugin, `givenFocus` - true when focus was sent from another plugin. The parameter object can also contain other keys supplied by the plugin losing focus._
+ *
  *  `afterCreate`
  *
  *  `beforeDelete`
