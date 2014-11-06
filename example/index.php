@@ -12,10 +12,12 @@
     <script>
     $(document).ready(function() {
         var name = "<?=$_GET['appName']?>";
+        var auth = "<?=$_GET['auth']?>";
+        var iv = "<?=$_GET['iv']?>";
         // register name of the app, sent as a paramter in the iframe url
         AppAPI.setAppName(name);
         // authenticate the app, again using variables sent in the iframe url
-        AppAPI.doStandardAuthentication("./authenticate.php?auth=<?=($_GET['auth'])?>&iv=<?=$_GET['iv']?>");
+        AppAPI.doStandardAuthentication("./authenticate.php?auth="+auth+"&iv="+iv);
 
         function getValue() {
             var value = $('#textInput').val();
@@ -40,24 +42,26 @@
             if (value === null) {
                 return false;
             }
-            // insert an element at the current cursor position, adding required parameters to make it draggable and non-editable
-            var element = $('<div>').append($('<div>').attr('data-source', 'foobar').text(value));
+            // insert an element at the current cursor position
+            // required parameters to make it draggable and non-editable are automatically added by the AppAPI
+            var element = $('<div>').append($('<p>').attr('data-source', 'foobar').text(value));
             AppAPI.Editor.insertElement(element);
         });
 
-        AppAPI.addListeners({
-            // triggers each time an element from this app is selected
-            pluginElementSelected: function(data) {
-                AppAPI.Editor.getHTMLById(data.id, function(element) {
-                    $('#title').html('Last selected element: ' + $(element).text());
-                });
-            }
+        // triggers each time an element from this app is selected
+        AppAPI.on('pluginElementSelected', function(object) {
+            AppAPI.Editor.getHTMLById(object.data.id, function(element) {
+                $('#title').html('Last selected element: ' + $(element).text());
+            });
         });
+
+        // register a delete button for elements inserted by this plugin
+        AppAPI.Editor.initMenu(['deleteButton']);
     });
     </script>
 </head>
 <body>
-<h2 id='title'>foobar</h2>
+<h2 id='title'>Last selected element: </h2>
 <p>Type stuff here: <input type="text" id="textInput" /></p>
 <input type="button" value="Insert As Text" id="textButton" />
 <input type="button" value="Insert As Draggable Object" id="objectButton" />
