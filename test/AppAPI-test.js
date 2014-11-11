@@ -50,9 +50,7 @@ describe("AppAPI Core", function() {
     });
 
     it("should add new listeners", function() {
-        var requestSpy = jasmine.createSpy('request').and.callFake(function(callspec, data, callback) {
-            callback(data.name);
-        });
+        var requestSpy = jasmine.createSpy('request');
         api.request = requestSpy;
 
         var addSpy = jasmine.createSpy('add');

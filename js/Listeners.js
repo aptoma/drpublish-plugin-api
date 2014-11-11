@@ -74,6 +74,9 @@
  *
  *  `modifiedContent`
  *
+ *  `elementRemoved`
+ *  > _triggered when a plugin element from the current plugin is removed, receives an object with element id as a parameter_
+ *
  *  `pluginElementClicked`
  *
  *  `pluginElementSelected`
