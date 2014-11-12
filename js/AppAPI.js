@@ -565,7 +565,13 @@ var AppAPI = (function() {
     };
 
 
-
+    /**
+     * Hide the plugin, so it is no longer visible on the list of open plugins
+     */
+    Api.prototype.hide = function() {
+        this.request('hide');
+        return true;
+    };
 
     return new Api();
 })();

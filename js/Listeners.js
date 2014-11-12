@@ -85,7 +85,7 @@
  */
 function Listeners () {
     "use strict";
-	this._listeners = [];
+	this._listeners = {};
 }
 
 /**
@@ -120,9 +120,8 @@ Listeners.prototype.add = function(event, callback) {
 		this._listeners[event] = [];
 	}
 
-	var index = this._listeners[event].length;
-	this._listeners[event][index] = callback;
-	return index;
+	this._listeners[event].push(callback);
+	return this._listeners[event].length - 1;
 };
 
 /**
