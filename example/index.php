@@ -6,7 +6,7 @@
     <script src="http://code.jquery.com/jquery.min.js"></script>
     <script src="../js/vendors/jquery.postmessage.js"></script>
     <script src="../js/Listeners.js"></script>
-    <script src="../js/AppAPI.js"></script>
+    <script src="../js/PluginAPI.js"></script>
     <script src="../js/AH5Communicator.js"></script>
     <script src="../js/ArticleCommunicator.js"></script>
     <script>
@@ -15,14 +15,14 @@
         var auth = "<?=$_GET['auth']?>";
         var iv = "<?=$_GET['iv']?>";
         // register name of the app, sent as a paramter in the iframe url
-        AppAPI.setAppName(name);
+        PluginAPI.setAppName(name);
         // authenticate the app, again using variables sent in the iframe url
-        AppAPI.doStandardAuthentication("./authenticate.php?auth="+auth+"&iv="+iv);
+        PluginAPI.doStandardAuthentication("./authenticate.php?auth="+auth+"&iv="+iv);
 
         function getValue() {
             var value = $('#textInput').val();
             if (value.trim() === '') {
-                AppAPI.showInfoMsg('I shall not insert an empty thing, that would just be silly');
+                PluginAPI.showInfoMsg('I shall not insert an empty thing, that would just be silly');
                 return null;
             }
             return value;
@@ -34,7 +34,7 @@
                 return false;
             }
             // insert a string at the current cursor position
-            AppAPI.Editor.insertString(value);
+            PluginAPI.Editor.insertString(value);
         });
 
         $('#objectButton').click(function() {
@@ -43,20 +43,20 @@
                 return false;
             }
             // insert an element at the current cursor position
-            // required parameters to make it draggable and non-editable are automatically added by the AppAPI
+            // required parameters to make it draggable and non-editable are automatically added by the PluginAPI
             var element = $('<div>').append($('<p>').attr('data-source', 'foobar').text(value));
-            AppAPI.Editor.insertElement(element);
+            PluginAPI.Editor.insertElement(element);
         });
 
         // triggers each time an element from this app is selected
-        AppAPI.on('pluginElementSelected', function(object) {
-            AppAPI.Editor.getHTMLById(object.data.id, function(element) {
+        PluginAPI.on('pluginElementSelected', function(object) {
+            PluginAPI.Editor.getHTMLById(object.data.id, function(element) {
                 $('#title').html('Last selected element: ' + $(element).text());
             });
         });
 
         // register a delete button for elements inserted by this plugin
-        AppAPI.Editor.initMenu(['deleteButton']);
+        PluginAPI.Editor.initMenu(['deleteButton']);
     });
     </script>
 </head>

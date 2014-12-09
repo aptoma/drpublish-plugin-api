@@ -1,6 +1,6 @@
-/* global AppAPI: true */
+/* global PluginAPI: true */
 
-AppAPI.Editor = (function () {
+PluginAPI.Editor = (function () {
     "use strict";
 
     /**
@@ -8,11 +8,11 @@ AppAPI.Editor = (function () {
      *
      * Should be used like this:
      *
-     * AppAPI.Editor.insert('string');
+     * PluginAPI.Editor.insert('string');
      *
      * @class
-     * @classdesc Functions for talking with the AH5 editor. Accessed through AppAPI.Editor
-     * @exports AppAPI/Editor
+     * @classdesc Functions for talking with the AH5 editor. Accessed through PluginAPI.Editor
+     * @exports PluginAPI/Editor
      */
     var AH5Communicator = function() {
         this.DEBUG = false;
@@ -23,7 +23,7 @@ AppAPI.Editor = (function () {
      * @param {function} callback function(String)
      */
     AH5Communicator.prototype.getActiveEditor = function (callback) {
-        AppAPI.request('get-active-editor', null, callback);
+        PluginAPI.request('get-active-editor', null, callback);
     };
     /**
      * Registers/Modifies a context menu items for a app element
@@ -33,7 +33,7 @@ AppAPI.Editor = (function () {
      * @param {function} callback function()
      *
      * @example
-     * AppAPI.Editor.registerMenuAction({
+     * PluginAPI.Editor.registerMenuAction({
      *      label: 'label in the menu',
      *      icon: '[Optional] url to possible icon image',
      *      trigger: '[Optional] css selector, only show menu element when this matches the element',
@@ -46,7 +46,7 @@ AppAPI.Editor = (function () {
      * })
      */
     AH5Communicator.prototype.registerMenuAction = function (action, callback) {
-        AppAPI.request('register-menu-action', action, callback);
+        PluginAPI.request('register-menu-action', action, callback);
     };
 
     /**
@@ -54,7 +54,7 @@ AppAPI.Editor = (function () {
      * The object send should have the following structure
      *
      * @example
-     * AppAPI.Editor.registerMenuActionGroup({
+     * PluginAPI.Editor.registerMenuActionGroup({
      *      label: 'label for the group in the menu',
      *      icon: '[Optional] url to possible icon image',
      *      actions: [
@@ -77,7 +77,7 @@ AppAPI.Editor = (function () {
      * @param {function} callback function()
      */
     AH5Communicator.prototype.registerMenuActionGroup = function (group, callback) {
-        AppAPI.request('register-menu-action-group', group, callback);
+        PluginAPI.request('register-menu-action-group', group, callback);
     };
 
     /**
@@ -86,7 +86,7 @@ AppAPI.Editor = (function () {
      * @param {function} callback function(String)
      */
     AH5Communicator.prototype.getEditorType = function(callback) {
-        AppAPI.request('editor-get-type', null, callback);
+        PluginAPI.request('editor-get-type', null, callback);
     };
 
     /**
@@ -97,7 +97,7 @@ AppAPI.Editor = (function () {
      * @param {function} callback function(Boolean), called after replacement is done
      */
     AH5Communicator.prototype.replaceElementById = function(id, element, callback) {
-        AppAPI.request('editor-element-replace-byid', {
+        PluginAPI.request('editor-element-replace-byid', {
             id: id,
             element: element
         }, callback);
@@ -110,7 +110,7 @@ AppAPI.Editor = (function () {
      * @param {function} callback function(Boolean), called after deletion is done
      */
     AH5Communicator.prototype.deleteElementById = function(id, callback) {
-        AppAPI.request('editor-element-replace-byid', {
+        PluginAPI.request('editor-element-replace-byid', {
             id: id
         }, callback);
     };
@@ -122,7 +122,7 @@ AppAPI.Editor = (function () {
      * @param {function} callback function(String), html content of the element
      */
     AH5Communicator.prototype.getHTMLById = function(id, callback) {
-        AppAPI.request('editor-element-get-byid', {
+        PluginAPI.request('editor-element-get-byid', {
             id: id
         }, callback);
     };
@@ -134,7 +134,7 @@ AppAPI.Editor = (function () {
      * @param {function} callback function([String]), html content of matching elements
      */
     AH5Communicator.prototype.getHTMLBySelector = function(selector, callback) {
-        AppAPI.request('editor-elements-get-byselector', {
+        PluginAPI.request('editor-elements-get-byselector', {
             selector: selector
         }, callback);
     };
@@ -145,7 +145,7 @@ AppAPI.Editor = (function () {
      * @param {Function} callback function([Object Category]), list of Category objects with id, name and pid
      */
     AH5Communicator.prototype.getCategories = function(callback) {
-        AppAPI.request('get-categories', null, callback);
+        PluginAPI.request('get-categories', null, callback);
     };
 
     /**
@@ -155,7 +155,7 @@ AppAPI.Editor = (function () {
      * @param {Function} callback function([Object Category]), array of parent Category objects
      */
     AH5Communicator.prototype.getParentCategories = function(category, callback) {
-        AppAPI.request('get-parent-categories', category, callback);
+        PluginAPI.request('get-parent-categories', category, callback);
     };
 
     /**
@@ -166,7 +166,7 @@ AppAPI.Editor = (function () {
      * @param {Function} callback function([String]), array of ids
      */
     AH5Communicator.prototype.getParentIds = function(id, selector, callback) {
-        AppAPI.request('get-parent-ids', {
+        PluginAPI.request('get-parent-ids', {
             id: id,
             selector: selector
         }, callback);
@@ -178,7 +178,7 @@ AppAPI.Editor = (function () {
      * @param {Function} callback function([Object Tagtype]), array of tagtypes with id, name and config object
      */
     AH5Communicator.prototype.getTagTypes = function(callback) {
-        AppAPI.request('get-tag-types', null, callback);
+        PluginAPI.request('get-tag-types', null, callback);
     };
 
     /**
@@ -188,7 +188,7 @@ AppAPI.Editor = (function () {
      * @param {Function} callback function(Object Tagtype), tagtype object with id, name and config object
      */
     AH5Communicator.prototype.getTagType = function(id, callback) {
-        AppAPI.request('get-tag-type', {
+        PluginAPI.request('get-tag-type', {
             id: id
         }, callback);
     };
@@ -199,7 +199,7 @@ AppAPI.Editor = (function () {
      * @param {Function} callback function(Boolean)
      */
     AH5Communicator.prototype.clear = function(callback) {
-        AppAPI.request('editor-clear', null, callback);
+        PluginAPI.request('editor-clear', null, callback);
     };
 
     /**
@@ -209,7 +209,7 @@ AppAPI.Editor = (function () {
      * @param {Function} callback function(String), id of the newly inserted element if it has one
      */
     AH5Communicator.prototype.insertString = function(string, callback) {
-        AppAPI.request('editor-insert-string', {
+        PluginAPI.request('editor-insert-string', {
             string: string
         }, callback);
     };
@@ -232,7 +232,7 @@ AppAPI.Editor = (function () {
         } else if (typeof callback === 'undefined' && typeof options === 'function') {
             callback = options;
         }
-        AppAPI.request('editor-insert-element', {
+        PluginAPI.request('editor-insert-element', {
             element: jQuery('<div>').append(element).html(),
             select: select
         }, callback);
@@ -246,7 +246,7 @@ AppAPI.Editor = (function () {
      * @param {function} callback function(Boolean)
      */
     AH5Communicator.prototype.removeClasses = function(id, classes, callback) {
-        AppAPI.request('editor-classes-remove', {
+        PluginAPI.request('editor-classes-remove', {
             id: id,
             classes: classes
         }, callback);
@@ -260,7 +260,7 @@ AppAPI.Editor = (function () {
      * @param {function} callback function(Boolean)
      */
     AH5Communicator.prototype.addClasses = function(id, classes, callback) {
-        AppAPI.request('editor-classes-add', {
+        PluginAPI.request('editor-classes-add', {
             id: id,
             classes: classes
         }, callback);
@@ -273,7 +273,7 @@ AppAPI.Editor = (function () {
      * @param {function} callback function(Boolean)
      */
     AH5Communicator.prototype.markAsActive = function(id, callback) {
-        AppAPI.request('editor-mark-as-active', {
+        PluginAPI.request('editor-mark-as-active', {
             id: id
         }, callback);
     };
@@ -287,7 +287,7 @@ AppAPI.Editor = (function () {
      * @param {Function} callback function(Boolean)
      */
     AH5Communicator.prototype.setAttributeById = function(id, attribute, value, callback) {
-        AppAPI.request('editor-element-attribute-set-byid', {
+        PluginAPI.request('editor-element-attribute-set-byid', {
             id: id,
             attribute: attribute,
             value: value
@@ -303,7 +303,7 @@ AppAPI.Editor = (function () {
      * @param {Function} callback function(Boolean)
      */
     AH5Communicator.prototype.setStyleById = function(id, attribute, value, callback) {
-        AppAPI.request('editor-element-style-set-byid', {
+        PluginAPI.request('editor-element-style-set-byid', {
             id: id,
             attribute: attribute,
             value: value
@@ -319,7 +319,7 @@ AppAPI.Editor = (function () {
      * @param {Function} callback function(Boolean)
      */
     AH5Communicator.prototype.initMenu = function(menus, callback) {
-        AppAPI.request('editor-initialize-menu', {
+        PluginAPI.request('editor-initialize-menu', {
             menus: menus
         }, callback);
     };

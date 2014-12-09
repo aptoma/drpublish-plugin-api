@@ -1,7 +1,7 @@
 /* global Listeners: true, pm: true */
 
-/* jshint maxstatements:34 */
-var AppAPI = (function() {
+/* jshint maxstatements:36 */
+var PluginAPI = (function() {
     "use strict";
 
     /**
@@ -10,7 +10,7 @@ var AppAPI = (function() {
      *
      * @class
      * @classdesc The basic API object
-     * @exports AppApi
+     * @exports PluginAPI
      *
      */
     var Api = function () {
@@ -275,7 +275,7 @@ var AppAPI = (function() {
     };
 
     /**
-     * @deprecated Use AppAPI.on(...) instead
+     * @deprecated Use PluginAPI.on(...) instead
      */
     Api.prototype.addListeners = function(listeners) {
         var createCallback = function(callback) {
@@ -321,7 +321,7 @@ var AppAPI = (function() {
      * Sends a query to DrLib
      *
      * @example
-     * AppAPI.searchDrLib({
+     * PluginAPI.searchDrLib({
      *      query: 'articles.json?q=awesome',
      *      secure: true,
      *      success: function(data) {
@@ -373,11 +373,11 @@ var AppAPI = (function() {
     };
 
     /**
-     * Extends the AppAPI with custom functionality that other apps can use
+     * Extends the PluginAPI with custom functionality that other apps can use
      *
      * @param {String} group Group name for functionality to add
      * @param {String} name Name of the specific function to add
-     * @param {Function} action function(Object) Function to call when the API is invoked, recieves one parameter as given in AppAPI.callExtendedApi and return value is passed back to the caller
+     * @param {Function} action function(Object) Function to call when the API is invoked, recieves one parameter as given in PluginAPI.callExtendedApi and return value is passed back to the caller
      */
     Api.prototype.extendApi = function(group, name, action) {
         var self = this;
@@ -392,7 +392,7 @@ var AppAPI = (function() {
     };
 
     /**
-     * Call the extended AppAPI
+     * Call the extended PluginAPI
      *
      * @param {String} group Group name for functionality to call
      * @param {String} name Name of the specific function to call

@@ -1,12 +1,12 @@
-/* global describe, expect, jasmine, beforeEach, afterEach, it, AppAPI, pm: true */
-describe("AppAPI Core", function() {
+/* global describe, expect, jasmine, beforeEach, afterEach, it, PluginAPI, pm: true */
+describe("PluginAPI Core", function() {
     "use strict";
 
     var api;
     var oldPm;
 
     beforeEach(function() {
-        api = AppAPI.create();
+        api = PluginAPI.create();
         api.eventListeners.notify('appAuthenticated');
         api.setAppName('test-app');
         oldPm = pm;
@@ -20,7 +20,7 @@ describe("AppAPI Core", function() {
     it("should store calls in backlog before it has been authenticated, and call them later on", function() {
         var callback = jasmine.createSpy();
 
-        api = AppAPI.create();
+        api = PluginAPI.create();
         pm = jasmine.createSpy('pm');
         api.setAppName('test-app');
         api.request('test-request', null, callback);

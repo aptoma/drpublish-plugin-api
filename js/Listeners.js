@@ -1,10 +1,10 @@
-/* global AppAPI: true */
+/* global PluginAPI: true */
 /**
  * @example
- * AppAPI.on('afterCreate', function() {
- *     AppAPI.Article.setSource('Ny Times');
+ * PluginAPI.on('afterCreate', function() {
+ *     PluginAPI.Article.setSource('Ny Times');
  * });
- * AppAPI.on('beforeSave', function() {
+ * PluginAPI.on('beforeSave', function() {
  *     if (!articleIsAwesome()) {
  *          return false;
  *     }
@@ -14,7 +14,7 @@
  *
  * DrPublish provides a large set of default events that an app can listen for. All events that start their name with 'before' can be stopped by an app. This is done by returning 'false' from the callback function, as in the 'beforSave' example given bellow. 
  *
- * Other apps can also supply their own events using the AppAPI.emit(...) function. Documention on these events are up to each app to create.
+ * Other apps can also supply their own events using the PluginAPI.emit(...) function. Documention on these events are up to each app to create.
  *
  * *Available events are:*
  *
@@ -89,7 +89,7 @@ function Listeners () {
 }
 
 /**
- * @deprecated Use AppAPI.on(...) instead
+ * @deprecated Use PluginAPI.on(...) instead
  */
 Listeners.prototype.addAll = function(listeners) {
     "use strict";
@@ -102,7 +102,7 @@ Listeners.prototype.addAll = function(listeners) {
         if (listeners.hasOwnProperty(eventName)) {
             var callback = listeners[eventName];
             var callWrapper = createCallback(callback);
-            AppAPI.on(eventName, callWrapper);
+            PluginAPI.on(eventName, callWrapper);
         }
     }
 };
