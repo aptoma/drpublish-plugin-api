@@ -8,6 +8,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-jsdoc');
 
     grunt.registerTask('ci', ['jshint', 'karma:ci']);
 
@@ -37,14 +38,25 @@ module.exports = function(grunt) {
                 browsers: ['PhantomJS']
             }
         },
+
         watch: {
             scripts: {
                 files: ['js/**/*.js', 'test/**/*.js'],
                 tasks: ['jshint', 'karma:autowatch'],
                 options: {
-                    spawn: false,
-                },
-            },
+                    spawn: false
+                }
+            }
+        },
+
+        jsdoc: {
+            dist: {
+                src: ['README.md', 'js/*.js'],
+                options: {
+                    destination: 'doc',
+                    template : "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template"
+                }
+            }
         }
     });
 };
