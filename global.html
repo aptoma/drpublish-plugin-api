@@ -3,22 +3,22 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>DocStrap Global</title>
+	<title>Documentation Global</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
 
-	<link type="text/css" rel="stylesheet" href="styles/site.cosmo.css">
+	<link type="text/css" rel="stylesheet" href="styles/site.simplex.css">
 
 </head>
 
 <body>
 <div class="container-fluid">
-	<div class="navbar navbar-fixed-top navbar-inverse">
+	<div class="navbar navbar-fixed-top ">
 		<div class="navbar-inner">
-			<a class="brand" href="index.html">DocStrap</a>
+			<a class="brand" href="index.html">Documentation</a>
 			<ul class="nav">
 				
 				<li class="dropdown">
@@ -149,69 +149,76 @@
     
     
     <div class="description">
-        <p>DrPublish provides a large set of default events that an app can listen for. All events that start their name with 'before' can be stopped by an app. This is done by returning 'false' from the callback function, as in the 'beforSave' example given bellow. </p>
-<p>Other apps can also supply their own events using the AppAPI.emit(...) function. Documention on these events are up to each app to create.</p>
-<p><em>Available events are:</em></p>
-<p> <code>addCategory</code></p>
-<blockquote>
-<p><em>triggered after a category has been added to the article</em></p>
-</blockquote>
-<p> <code>addTag</code></p>
-<blockquote>
-<p><em>triggered after a tag had been added to the article</em></p>
-</blockquote>
-<p> <code>appPaneMaximized</code></p>
-<blockquote>
-<p><em>triggered when the app pane is maximized</em></p>
-</blockquote>
-<p> <code>appPaneRestored</code></p>
-<blockquote>
-<p><em>triggered when the app pane is restored to its' original size</em></p>
-</blockquote>
-<p> <code>appAuthenticated</code></p>
-<blockquote>
-<p><em>triggered when an app has been authenticated</em></p>
-</blockquote>
-<p> <code>changedCustomMeta</code></p>
-<blockquote>
-<p><em>triggered when a custom meta property is changed/set, parameter is an object with property name and value</em></p>
-</blockquote>
-<p> <code>receivedFocus</code></p>
-<blockquote>
-<p><em>triggered when a plugin receives focus. Receives a parameter object that has two predefined values: <code>previousPluginName</code> - name of previous plugin, <code>givenFocus</code> - true when focus was sent from another plugin. The parameter object can also contain other keys supplied by the plugin losing focus.</em></p>
-</blockquote>
-<p> <code>afterCreate</code></p>
-<p> <code>beforeDelete</code></p>
-<p> <code>afterDelete</code></p>
-<p> <code>afterLoad</code></p>
-<p> <code>afterPublish</code></p>
-<p> <code>afterSave</code></p>
-<p> <code>beforeCreate</code></p>
-<p> <code>beforeLoad</code></p>
-<p> <code>beforePreview</code></p>
-<p> <code>beforeSave</code></p>
-<p> <code>beforePublish</code></p>
-<p> <code>editorFocus</code> </p>
-<blockquote>
-<p><em>triggered when an editor gets focus</em></p>
-</blockquote>
-<p> <code>editorUnfocus</code> </p>
-<blockquote>
-<p><em>triggered when an editor loses focus</em></p>
-</blockquote>
-<p> <code>editorsLostFocus</code> </p>
-<blockquote>
-<p><em>triggered when all editors loses focus</em></p>
-</blockquote>
-<p> <code>editorReady</code></p>
-<p> <code>modifiedContent</code></p>
-<p> <code>elementRemoved</code></p>
-<blockquote>
-<p><em>triggered when a plugin element from the current plugin is removed, receives an object with element id as a parameter</em></p>
-</blockquote>
-<p> <code>pluginElementClicked</code></p>
-<p> <code>pluginElementSelected</code></p>
-<p> <code>pluginElementDeselected</code></p>
+        DrPublish provides a large set of default events that an app can listen for. All events that start their name with 'before' can be stopped by an app. This is done by returning 'false' from the callback function, as in the 'beforSave' example given bellow. 
+
+Other apps can also supply their own events using the AppAPI.emit(...) function. Documention on these events are up to each app to create.
+
+*Available events are:*
+
+ `addCategory`
+ > _triggered after a category has been added to the article_
+
+ `addTag`
+ > _triggered after a tag had been added to the article_
+
+ `appPaneMaximized`
+ > _triggered when the app pane is maximized_
+
+ `appPaneRestored`
+ > _triggered when the app pane is restored to its' original size_
+
+ `appAuthenticated`
+ > _triggered when an app has been authenticated_
+
+ `changedCustomMeta`
+ > _triggered when a custom meta property is changed/set, parameter is an object with property name and value_
+
+ `receivedFocus`
+ > _triggered when a plugin receives focus. Receives a parameter object that has two predefined values: `previousPluginName` - name of previous plugin, `givenFocus` - true when focus was sent from another plugin. The parameter object can also contain other keys supplied by the plugin losing focus._
+
+ `afterCreate`
+
+ `beforeDelete`
+
+ `afterDelete`
+
+ `afterLoad`
+
+ `afterPublish`
+
+ `afterSave`
+
+ `beforeCreate`
+
+ `beforeLoad`
+
+ `beforePreview`
+
+ `beforeSave`
+
+ `beforePublish`
+
+ `editorFocus` 
+ > _triggered when an editor gets focus_
+
+ `editorUnfocus` 
+ > _triggered when an editor loses focus_
+
+ `editorsLostFocus` 
+ > _triggered when all editors loses focus_
+
+ `editorReady`
+
+ `modifiedContent`
+
+ `elementRemoved`
+ > _triggered when a plugin element from the current plugin is removed, receives an object with element id as a parameter_
+
+ `pluginElementClicked`
+
+ `pluginElementSelected`
+
+ `pluginElementDeselected`
     </div>
     
 
@@ -243,16 +250,6 @@
 
 
 
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="Listeners.js.html">Listeners.js</a>,
-				 <a href="Listeners.js.html#sunlight-1-line-86">line 86</a>
-			</li>
-		</ul>
-	</dd>
 	
 
 	
@@ -308,14 +305,9 @@ AppAPI.on(&#x27;beforeSave&#x27;, function() {
 				<footer>
 					
 					
-		<span class="copyright">
-		DocStrap Copyright © 2012-2014 The contributors to the JSDoc3 and DocStrap projects.
-		</span>
-					<br />
-					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-		on Tue Dec 9th 2014 using the <a
+		on 2014-12-09T09:41:19+01:00 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
@@ -382,7 +374,7 @@ AppAPI.on(&#x27;beforeSave&#x27;, function() {
 			} );
 
 			Sunlight.highlightAll( {
-				lineNumbers : true,
+				lineNumbers : false,
 				showMenu : true,
 				enableDoclinks : true
 			} );
