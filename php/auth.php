@@ -2,28 +2,28 @@
 
 /**
  * This file provides a class for making authentication
- * with the AptomaApp API a breeze:
+ * with the AptomaPlugin API a breeze:
  *
- * To use it, create a new object representing your app:
- * <code>$app = new AptomaApp('my-app', 'superfish', 'http://myhost.com:80');</code>
+ * To use it, create a new object representing your plugin:
+ * <code>$plugin = new AptomaPlugin('my-plugin', 'superfish', 'http://myhost.com:80');</code>
  *
  * Now, to check that incoming token from DrPublish is valid
  * (which you should check!), do:
- * <code>$dpdata = $app->validate($_GET['auth'], $_GET['iv']);</code>
+ * <code>$dpdata = $plugin->validate($_GET['auth'], $_GET['iv']);</code>
  *
  * If $dpdata === false, then the validation failed
  * Otherwise, $dpdata is an object containing information
- * about the DrPublish session (@see AptomaApp.validate)
+ * about the DrPublish session (@see AptomaPlugin.validate)
  *
  * Now, to get the token to return to DrPublish to authenticate, do:
- * <code>$token = $app->getAuthenticationToken();</code>
+ * <code>$token = $plugin->getAuthenticationToken();</code>
  *
  * $token will now contain two indices, 'signature' and 'iv'.
  * Both have to be sent to DrPublish for successful authentication!
  *
  * If you think you have found a bug, please report it on
  * the issue tracker here:
- * https://github.com/aptoma/no.aptoma.app-api
+ * https://github.com/aptoma/no.aptoma.plugin-api
  */
 
 /**
@@ -32,7 +32,7 @@
  * ======================================================
  */
 
-class AptomaApp {
+class AptomaPlugin {
 
 	protected $_name;
 	protected $_key;
@@ -51,9 +51,16 @@ class AptomaApp {
 
 		$urlParts = parse_url($host);
 
-		if(!$urlParts || empty($urlParts['scheme']) || empty($urlParts['host'])) {
+        $isSecure = false;
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+            $isSecure = true;
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+            $isSecure = true;
+        }
+
+		if (!$urlParts || empty($urlParts['scheme']) || empty($urlParts['host'])) {
 			$urlParts = array (
-				'scheme' => 'http' .(empty($_SERVER['HTTPS']) ? '' : 's'),
+				'scheme' => $isSecure ? 'https' : 'http',
 				'host' => $_SERVER["SERVER_NAME"],
 				'port' => $_SERVER["SERVER_PORT"]
 			);

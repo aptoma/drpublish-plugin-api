@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Example App</title>
+    <title>Example Plugin</title>
     <script src="http://code.jquery.com/jquery.min.js"></script>
     <script src="../js/vendors/jquery.postmessage.js"></script>
     <script src="../js/Listeners.js"></script>

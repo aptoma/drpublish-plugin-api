@@ -8,7 +8,7 @@ PluginAPI.Editor = (function () {
      *
      * Should be used like this:
      *
-     * PluginAPI.Editor.insert('string');
+     * PluginAPI.Editor.insertString('string');
      *
      * @class
      * @classdesc Functions for talking with the AH5 editor. Accessed through PluginAPI.Editor
