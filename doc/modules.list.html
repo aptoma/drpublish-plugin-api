@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Documentation Global</title>
+	<title>Documentation Modules</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -70,7 +70,7 @@
 					
 
 
-	<h1 class="page-title">Global</h1>
+	<h1 class="page-title">Modules</h1>
 <section>
 
 <header>
@@ -135,158 +135,6 @@
 
     
 
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        <dl>
-            
-<dt>
-    <h4 class="name" id="Listeners"><span class="type-signature"></span>Listeners<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        DrPublish provides a large set of default events that an app can listen for. All events that start their name with 'before' can be stopped by an app. This is done by returning 'false' from the callback function, as in the 'beforSave' example given bellow. 
-
-Other apps can also supply their own events using the AppAPI.emit(...) function. Documention on these events are up to each app to create.
-
-*Available events are:*
-
- `addCategory`
- > _triggered after a category has been added to the article_
-
- `addTag`
- > _triggered after a tag had been added to the article_
-
- `appPaneMaximized`
- > _triggered when the app pane is maximized_
-
- `appPaneRestored`
- > _triggered when the app pane is restored to its' original size_
-
- `appAuthenticated`
- > _triggered when an app has been authenticated_
-
- `changedCustomMeta`
- > _triggered when a custom meta property is changed/set, parameter is an object with property name and value_
-
- `receivedFocus`
- > _triggered when a plugin receives focus. Receives a parameter object that has two predefined values: `previousPluginName` - name of previous plugin, `givenFocus` - true when focus was sent from another plugin. The parameter object can also contain other keys supplied by the plugin losing focus._
-
- `afterCreate`
-
- `beforeDelete`
-
- `afterDelete`
-
- `afterLoad`
-
- `afterPublish`
-
- `afterSave`
-
- `beforeCreate`
-
- `beforeLoad`
-
- `beforePreview`
-
- `beforeSave`
-
- `beforePublish`
-
- `editorFocus` 
- > _triggered when an editor gets focus_
-
- `editorUnfocus` 
- > _triggered when an editor loses focus_
-
- `editorsLostFocus` 
- > _triggered when all editors loses focus_
-
- `editorReady`
-
- `modifiedContent`
-
- `elementRemoved`
- > _triggered when a plugin element from the current plugin is removed, receives an object with element id as a parameter_
-
- `pluginElementClicked`
-
- `pluginElementSelected`
-
- `pluginElementDeselected`
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-        <h5>Example</h5>
-        
-    <pre class="sunlight-highlight-javascript">AppAPI.on(&#x27;afterCreate&#x27;, function() {
-    AppAPI.Article.setSource(&#x27;Ny Times&#x27;);
-});
-AppAPI.on(&#x27;beforeSave&#x27;, function() {
-    if (!articleIsAwesome()) {
-         return false;
-    }
-});</pre>
-
-
-    
-</dd>
-
-        </dl>
     
 
     

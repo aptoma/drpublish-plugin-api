@@ -1,59 +1,81 @@
+/* global AppAPI: true */
 /**
- * Will hold a list of listeners that are created and should be notified on events
- *
  * @example
- * AppAPI.addListeners({
- *  afterCreated: function() {
- *      AppAPI.Article.setSource('Ny Times');
- *  },
- *  pluginElementSelected: function() {
- *      alert('You cliked me!');
- *  },
- *  beforeSave: function() {
- *      if (!articleIsAwesome()) {
+ * AppAPI.on('afterCreate', function() {
+ *     AppAPI.Article.setSource('Ny Times');
+ * });
+ * AppAPI.on('beforeSave', function() {
+ *     if (!articleIsAwesome()) {
  *          return false;
- *      }
- *  }
+ *     }
  * });
  *
  * @description
- * Used for event handling in the App API. The only function an app developer needs to care about it the 'addListeners' event, and you can see an example of it down bellow.
  *
- * If an event function returns false (as in the beforeSave example) the event will be stopped. This works for all events, but only makes sense for the before* events.
+ * DrPublish provides a large set of default events that an app can listen for. All events that start their name with 'before' can be stopped by an app. This is done by returning 'false' from the callback function, as in the 'beforSave' example given bellow. 
+ *
+ * Other apps can also supply their own events using the AppAPI.emit(...) function. Documention on these events are up to each app to create.
  *
  * *Available events are:*
  *
+ *  `addCategory`
+ *  > _triggered after a category has been added to the article_
+ *
+ *  `addTag`
+ *  > _triggered after a tag had been added to the article_
+ *
  *  `appPaneMaximized`
+ *  > _triggered when the app pane is maximized_
  *
  *  `appPaneRestored`
+ *  > _triggered when the app pane is restored to its' original size_
  *
  *  `appAuthenticated`
+ *  > _triggered when an app has been authenticated_
  *
- *  `afterCreated`
+ *  `changedCustomMeta`
+ *  > _triggered when a custom meta property is changed/set, parameter is an object with property name and value_
  *
- *  `afterDeleted`
+ *  `receivedFocus`
+ *  > _triggered when a plugin receives focus. Receives a parameter object that has two predefined values: `previousPluginName` - name of previous plugin, `givenFocus` - true when focus was sent from another plugin. The parameter object can also contain other keys supplied by the plugin losing focus._
  *
- *  `afterLoaded`
+ *  `afterCreate`
  *
- *  `afterPublished`
+ *  `beforeDelete`
+ *
+ *  `afterDelete`
+ *
+ *  `afterLoad`
+ *
+ *  `afterPublish`
  *
  *  `afterSave`
  *
- *  `beforeCreated`
+ *  `beforeCreate`
  *
- *  `beforeLoaded`
+ *  `beforeLoad`
  *
  *  `beforePreview`
  *
  *  `beforeSave`
  *
- *  `beforePublished`
+ *  `beforePublish`
  *
- *  `editorFocus`
+ *  `editorFocus` 
+ *  > _triggered when an editor gets focus_
+ *
+ *  `editorUnfocus` 
+ *  > _triggered when an editor loses focus_
+ *
+ *  `editorsLostFocus` 
+ *  > _triggered when all editors loses focus_
  *
  *  `editorReady`
  *
  *  `modifiedContent`
+ *
+ *  `elementRemoved`
+ *  > _triggered when a plugin element from the current plugin is removed, receives an object with element id as a parameter_
  *
  *  `pluginElementClicked`
  *
@@ -62,25 +84,27 @@
  *  `pluginElementDeselected`
  */
 function Listeners () {
-	this._listeners = [];
+    "use strict";
+	this._listeners = {};
 }
 
 /**
- * Adds several listeners
- *
- * @param {Object} events A list of callbacks that should be called on events
- * @returns {Object} A dictionary of events => listener ID for later removal
+ * @deprecated Use AppAPI.on(...) instead
  */
-Listeners.prototype.addAll = function(events) {
-
-	var out = {};
-	for (var event in events) {
-        if (events.hasOwnProperty(event)) {
-            out[event] = this.add(event, events[event]);
+Listeners.prototype.addAll = function(listeners) {
+    "use strict";
+    var createCallback = function(callback) {
+        return function(data) {
+            callback(data.data);
+        };
+    };
+    for (var eventName in listeners) {
+        if (listeners.hasOwnProperty(eventName)) {
+            var callback = listeners[eventName];
+            var callWrapper = createCallback(callback);
+            AppAPI.on(eventName, callWrapper);
         }
-	}
-
-	return out;
+    }
 };
 
 /**
@@ -90,14 +114,14 @@ Listeners.prototype.addAll = function(events) {
  * @param {Function} callback Function to call when an even of the type is received
  */
 Listeners.prototype.add = function(event, callback) {
+    "use strict";
 
 	if (this._listeners[event] === undefined) {
 		this._listeners[event] = [];
 	}
 
-	var index = this._listeners[event].length;
-	this._listeners[event][index] = callback;
-	return index;
+	this._listeners[event].push(callback);
+	return this._listeners[event].length - 1;
 };
 
 /**
@@ -107,6 +131,7 @@ Listeners.prototype.add = function(event, callback) {
  * @param {Function} index The index of the event handler to remove
  */
 Listeners.prototype.remove = function(event, index) {
+    "use strict";
 
 	if (this._listeners[event] === undefined || this._listeners[event][index] === undefined) {
         return;
@@ -124,6 +149,7 @@ Listeners.prototype.remove = function(event, index) {
  * @param {String} event Event type to remove handlers for (!event for all)
  */
 Listeners.prototype.removeAll = function(event) {
+    "use strict";
 	if (!event) {
 		this._listeners = [];
 	} else {
@@ -138,6 +164,7 @@ Listeners.prototype.removeAll = function(event) {
  * @param {Object} data The event data
  */
 Listeners.prototype.notify = function(event, data) {
+    "use strict";
     var returnValue = true;
 	if (this._listeners[event] !== undefined) {
 		jQuery.each(this._listeners[event], function(i, e) {
@@ -148,7 +175,7 @@ Listeners.prototype.notify = function(event, data) {
 					if (r === false) {
 						returnValue = false;
 					}
-					
+
 				} else if (e(data) === false) {
                     returnValue = false;
                 }
