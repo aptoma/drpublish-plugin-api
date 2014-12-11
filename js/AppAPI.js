@@ -309,12 +309,15 @@ var AppAPI = (function() {
      * Creates a new tag
      *
      * @param {String} tag JSON object with the tag to create, must contain tagTypeId and name properties
-     * @param {Function} callback function(Boolean)
+     * @param {Function} succcess function({Tag}) Callback called when the tag is created, argument is the new tag
+     * @param {Function} error function({Tag}) Callback called if something goes wrong, argument is an error message
      */
-    Api.prototype.createTag = function(tag, callback) {
+    Api.prototype.createTag = function(tag, success, error) {
         this.request('tag-create', {
-            tag: tag
-        }, callback);
+            tag: tag,
+            success: success,
+            error: error
+        });
     };
 
     /**
