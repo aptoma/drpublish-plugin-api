@@ -42,6 +42,27 @@ var PluginAPI = (function() {
         });
 
         pm.bind("event", function(data) {
+            var createEventFunction = function(eventName) {
+                return function(data) {
+                    PluginAPI.request(eventName, data);
+                };
+            };
+            var updateObject = function(data) {
+                for (var key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        if (typeof data[key] === 'object' && data[key] !== null && data[key].type === 'function') {
+                            data[key] = createEventFunction(data[key].eventKey);
+                        } else if (typeof data[key] === 'object' && data[key] !== null && typeof data[key].map === 'function') {
+                            data[key] = data[key].map(updateObject);
+                        } else if (typeof data[key] === 'object' && data[key] !== null) {
+                            data[key] = updateObject(data[key]);
+                        }
+                    }
+                }
+                return data;
+            };
+            data.data = updateObject(data.data);
+
             data = self.eventListeners.notify(data.type, data.data);
             if (typeof data === 'undefined') {
                 return true;
@@ -159,6 +180,8 @@ var PluginAPI = (function() {
                         data[key] = createCallbackObject(key, val);
                     } else if (typeof val === 'object' && val !== null && typeof val.map === 'function') {
                         data[key] = val.map(updateObject);
+                    } else if (typeof val === 'object' && val !== null) {
+                        data[key] = updateObject(val);
                     }
                 }
             }
