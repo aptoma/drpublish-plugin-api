@@ -135,7 +135,7 @@ var PluginAPI = (function() {
             console.info(this.getAppName() + ': Requesting ' + callSpec + ' from parent with data', data);
         }
 
-        if(data == null) {
+        if (data == null) {
             data = {};
         }
 
@@ -143,7 +143,11 @@ var PluginAPI = (function() {
             callback = null;
         }
 
-        data['src_app'] = this.getAppName ();
+        if (typeof data.length === "number") {
+            data = {data: data};
+        }
+
+        data['src_app'] = this.getAppName();
 
         if(!this.authenticated) {
             if (this.DEBUG) {
