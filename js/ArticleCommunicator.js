@@ -486,6 +486,51 @@ PluginAPI.Article = (function() {
         PluginAPI.request("article-geolocations-get", null, callback);
     };
 
+    /**
+     * Fetches a list of all properties available to an article.
+     *
+     * @param {Function} callback Callback called with an array of property objects.
+     */
+    ArticleCommunicator.prototype.getProperties = function(callback) {
+        PluginAPI.request("article-properties-get", null, callback);
+    };
+
+    /**
+     * Updates and saves one or more property values. The input is a simple object with property names and their
+     * new value. The supplied callback is called with an updated list of properties.
+     *
+     * @example
+     * PluginAPI.Article.setProperties({
+     *     fooProperty: "bar",
+     *     barProperty: "foo"
+     * }, function(properties) {
+     *     // Returns a complete and updated list of properties.
+     * })
+     *
+     * @param {Object} properties An object of property names and corresponding values.
+     * @param {Function} callback Callback called with an updated list of properties.
+     */
+    ArticleCommunicator.prototype.setProperties = function(properties, callback) {
+        PluginAPI.request("article-properties-set", {
+            properties: properties
+        }, callback);
+    };
+
+    /**
+     * Updates and saves a single property.
+     *
+     * @param {String} name The property to update.
+     * @param value The updated value.
+     * @param {Function} callback Callback called with an updated list of properties.
+     */
+    ArticleCommunicator.prototype.setProperty = function(name, value, callback) {
+        var data = {};
+        data[name] = value;
+        PluginAPI.request("article-properties-set", {
+            properties: data
+        }, callback);
+    };
+
     return new ArticleCommunicator();
 
 })();

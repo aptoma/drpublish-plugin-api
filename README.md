@@ -16,7 +16,7 @@ Take a look at the example app to see how to get started. There you will see an 
 
 When you're bored of that you can look through the method listings avaiable on the right and that is hopefully enough to set you on the right track to create any app you want.
 
-Costum configuration
+Custom configuration
 ==============
 Apps can ask for and specify a customized configuration object. The API function to retrieve the configuration option is AppAPI.getConfiguration, and you can find documentation on that in the AppAPI module.
 
