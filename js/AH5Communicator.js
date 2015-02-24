@@ -324,6 +324,10 @@ PluginAPI.Editor = (function () {
         }, callback);
     };
 
+    AH5Communicator.prototype.updateAssetMedia = function(data, callback) {
+        PluginAPI.request('update-asset-media', data, callback);
+    };
+
     return new AH5Communicator();
 
 })();
