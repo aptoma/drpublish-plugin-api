@@ -321,27 +321,6 @@ PluginAPI.Article = (function() {
     };
 
     /**
-     * Get the dossiers set in the article
-     *
-     * @param {Function} callback function([Object Dossiers]), current dossiers
-     */
-    ArticleCommunicator.prototype.getDossiers = function(callback) {
-        PluginAPI.request('article-dossiers-get', null, callback);
-    };
-
-    /**
-     * Add the given dossiers to the list of dossiers
-     *
-     * @param {Array} dossiers List of dossiers to add
-     * @param {Function} callback function(Boolean), called when it has been set
-     */
-    ArticleCommunicator.prototype.addDossiers = function(dossiers, callback) {
-        PluginAPI.request('article-dossiers-add', {
-            dossiers: dossiers
-        }, callback);
-    };
-
-    /**
      * Set the keyword-list on the article
      *
      * @param {Array} keywords List of keywords to add
@@ -360,18 +339,6 @@ PluginAPI.Article = (function() {
      */
     ArticleCommunicator.prototype.getKeywords = function(callback) {
         PluginAPI.request('article-keywords-get', null, callback);
-    };
-
-    /**
-     * Remove the given dossiers from the list of dossiers
-     *
-     * @param {Array} dossiers List of authors to remove
-     * @param {Function} callback function([Object Dossiers]), current dossiers
-     */
-    ArticleCommunicator.prototype.removeDossiers = function(dossiers, callback) {
-        PluginAPI.request('article-dossiers-remove', {
-            dossiers: dossiers
-        }, callback);
     };
 
     /**
