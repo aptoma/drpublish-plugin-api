@@ -600,5 +600,101 @@ var PluginAPI = (function() {
         return true;
     };
 
+    /**
+     * <p>Creates a jQuery UI modal in the main editor window, detached from the plugin itself. Modals are unique on a
+     * per-plugin basis, meaning that a plugin can only have a single modal at a time. Creating a new modal will
+     * overwrite the previous.</p>
+     *
+     * <a href="http://api.jqueryui.com/dialog">See the official documentation for a list of available options.</a></p>
+     *
+     * <p>Note that you do not have direct access to the DOM of the modal. Use the provided helper methods to
+     * manipulate or read from the modal:
+     *   <ul>
+     *     <li><a href="#closeModal">closeModal</a></li>
+     *     <li><a href="#updateModal">updateModal</a></li>
+     *     <li><a href="#getModalInputs">getModalInputs</a></li>
+     *   </ul>
+     * </p>
+     *
+     * @example
+     *
+     * PluginAPI.createModal('<h1>This is a modal</h1>', {
+     *   buttons: {
+     *     Ok: function () {
+     *       alert('Ok!');
+     *     }
+     *   }
+     * });
+     *
+     * PluginAPI.updateModal('<h1>This is the same modal</h1>');
+     *
+     * PluginAPI.createModal('<h1>This is a brand new modal</h1>', {
+     *   buttons: {
+     *     cancel: function() {
+     *       PluginAPI.closeModal(true);
+     *     }
+     *   }
+     * });
+     *
+     * @param {String} content An HTML string
+     * @param {Object} options A standard jQuery UI options object.
+     */
+    Api.prototype.createModal = function(content, options) {
+        this.request('create-custom-modal', {content: content, options: options});
+        return true;
+    };
+
+    /**
+     * Updates the HTML content of a live modal. Has no effect if the modal does not exist.
+     *
+     * @param {String} content An HTML string
+     */
+    Api.prototype.updateModal = function(content) {
+        this.request('update-custom-modal', {content: content});
+        return true;
+    };
+
+    /**
+     * Closes and optionally deletes the modal. Has no effect if the modal does not exists.
+     *
+     * @param {Boolean} destroy Whether or not to delete the modal
+     */
+    Api.prototype.closeModal = function(destroy) {
+        this.request('close-custom-modal', {destroy: destroy});
+        return true;
+    };
+
+    /**
+     * Returns the values of all input or select elements within a modal.
+     *
+     * The values are keyed by one of the following properties in order of priority: element ID, element name
+     * or input type + index.
+     *
+     * @example
+     * Given a modal with the following HTML content:
+     *
+     *  <form>
+     *      <input type="number">
+     *      <input name="name" type="text">
+     *      <select id="languages">
+     *          <option selected>en</option>
+     *          <option>no</option>
+     *      </select>
+     *  </form>
+     *
+     *  getModalInputs would return:
+     *
+     *  {
+     *      "number-0": {VALUE}
+     *      "name": {VALUE},
+     *      "languages": "en"
+     *  }
+     *
+     * @param {Function} callback
+     */
+    Api.prototype.getModalInputs = function (callback) {
+        this.request('get-custom-modal-inputs', null, callback);
+    };
+
     return new Api();
 })();
