@@ -653,6 +653,121 @@
         
             
 <dt>
+    <h4 class="name" id="closeModal"><span class="type-signature"></span>closeModal<span class="signature">(destroy)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Closes and optionally deletes the modal. Has no effect if the modal does not exists.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>destroy</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether or not to delete the modal</td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="convertDomToHTML"><span class="type-signature"></span>convertDomToHTML<span class="signature">(dom)</span><span class="type-signature"> &rarr; {String}</span></h4>
     
     
@@ -989,6 +1104,179 @@
     
     
     
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="createModal"><span class="type-signature"></span>createModal<span class="signature">(content, options)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Creates a jQuery UI modal in the main editor window, detached from the plugin itself. Modals are unique on a
+per-plugin basis, meaning that a plugin can only have a single modal at a time. Creating a new modal will
+overwrite the previous.</p>
+
+<a href="http://api.jqueryui.com/dialog">See the official documentation for a list of available options.</a></p>
+
+<p>Note that you do not have direct access to the DOM of the modal. Use the provided helper methods to
+manipulate or read from the modal:
+  <ul>
+    <li><a href="#closeModal">closeModal</a></li>
+    <li><a href="#updateModal">updateModal</a></li>
+    <li><a href="#getModalInputs">getModalInputs</a></li>
+  </ul>
+</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>content</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">An HTML string</td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A standard jQuery UI options object.</td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">PluginAPI.createModal(&#x27;&lt;h1&gt;This is a modal&lt;&#x2F;h1&gt;&#x27;, {
+  buttons: {
+    Ok: function () {
+      alert(&#x27;Ok!&#x27;);
+    }
+  }
+});
+
+PluginAPI.updateModal(&#x27;&lt;h1&gt;This is the same modal&lt;&#x2F;h1&gt;&#x27;);
+
+PluginAPI.createModal(&#x27;&lt;h1&gt;This is a brand new modal&lt;&#x2F;h1&gt;&#x27;, {
+  buttons: {
+    cancel: function() {
+      PluginAPI.closeModal(true);
+    }
+  }
+});</pre>
+
+
     
 </dd>
 
@@ -2370,6 +2658,147 @@ object as the authentication reply to the DrPublish API
     
     
     
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getModalInputs"><span class="type-signature"></span>getModalInputs<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Returns the values of all input or select elements within a modal.
+
+The values are keyed by one of the following properties in order of priority: element ID, element name
+or input type + index.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">Given a modal with the following HTML content:
+
+ &lt;form&gt;
+     &lt;input type=&quot;number&quot;&gt;
+     &lt;input name=&quot;name&quot; type=&quot;text&quot;&gt;
+     &lt;select id=&quot;languages&quot;&gt;
+         &lt;option selected&gt;en&lt;&#x2F;option&gt;
+         &lt;option&gt;no&lt;&#x2F;option&gt;
+     &lt;&#x2F;select&gt;
+ &lt;&#x2F;form&gt;
+
+ getModalInputs would return:
+
+ {
+     &quot;number-0&quot;: {VALUE}
+     &quot;name&quot;: {VALUE},
+     &quot;languages&quot;: &quot;en&quot;
+ }</pre>
+
+
     
 </dd>
 
@@ -4314,6 +4743,121 @@ object as the authentication reply to the DrPublish API
     
 </dd>
 
+        
+            
+<dt>
+    <h4 class="name" id="updateModal"><span class="type-signature"></span>updateModal<span class="signature">(content)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Updates the HTML content of a live modal. Has no effect if the modal does not exist.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>content</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">An HTML string</td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
         </dl>
     
 
@@ -4335,7 +4879,7 @@ object as the authentication reply to the DrPublish API
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-		on 2015-04-21T14:50:21+02:00 using the <a
+		on 2015-04-28T09:57:22+02:00 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
