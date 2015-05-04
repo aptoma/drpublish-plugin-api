@@ -1,4 +1,10 @@
-How does the API work?
+The Plugin API
+==========================
+The DrPublish plugin API allows you to plug your own web-apps into DrPublish to extend the feature set of the DrPublish writer. Your web-apps will, after authenticating them, be allowed to create, read, update and delete content in the DrPublish writer in real-time. 
+
+These web-apps can be deployed and run on any location of your choice, be it your in-house servers or some cloud location. It follows from this that you can write these web-apps in the backend programming language of your choice, as long as you plug them in using the JavaScript authentication mechanisms as described below.
+
+How the API works
 ==========================
 The apps are loaded directly in iframes (i.e. the src= of the iframe points directly to the URL as given in the DrPublish config) and all communication between the app and DrPublish is sent using [postMessage](https://developer.mozilla.org/en/DOM/window.postMessage) (a standardized method for cross-domain frame communication).
 
@@ -10,7 +16,7 @@ Behind the scenes, the API files wrap the incoming parameters in a JSON object, 
 
 DrPublish then determines which function should be called, executes it, wraps its response in a JSON object, and returns it to the sending app. The app then receives this reply, and sends the received data to a callback (if any is specified).
 
-So how do I get started?
+How to get started
 ================
 Take a look at the example app to see how to get started. There you will see an example of how to write the authentication code required to get the app started, and a few simple examples of sending data between the app and DrPublish.
 
@@ -93,9 +99,7 @@ The authentication process in detail
 
 What about debugging?
 =====================
-It just so happens that we did a lot of debugging while setting this up, and to be nice, we've left the debugging code in there. All you need to do to enable it is to set the AppAPI.DEBUG flag to TRUE;
-If you then open up your browser JS console, you will see output detailing everything interesting that is happening under the bonnet.
-Note especially warnings and errors since these indicate that something of special interest has happened.
+It just so happens that we did a lot of debugging while setting this up, and we've left the debugging code in there for your convenience. All you need to do to enable it is to set the AppAPI.DEBUG flag to TRUE; If you then open up your browser JS console, you will see output detailing everything interesting that is happening under the bonnet. Note especially warnings and errors since these indicate that something of special interest has happened.
 
 Documentation Generation
 ========================
