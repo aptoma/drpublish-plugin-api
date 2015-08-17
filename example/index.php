@@ -16,8 +16,6 @@
         var iv = "<?=$_GET['iv']?>";
         // register name of the app, sent as a paramter in the iframe url
         PluginAPI.setAppName(name);
-        // authenticate the app, again using variables sent in the iframe url
-        PluginAPI.doStandardAuthentication("./authenticate.php?auth="+auth+"&iv="+iv);
 
         function getValue() {
             var value = $('#textInput').val();
