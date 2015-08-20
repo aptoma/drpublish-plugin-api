@@ -1,6 +1,6 @@
 /* global Listeners: true, pm: true */
 
-/* jshint maxstatements:36 */
+/* jshint maxstatements:38 */
 var PluginAPI = (function() {
     "use strict";
 
@@ -21,25 +21,9 @@ var PluginAPI = (function() {
         this.Article = null;
         this.errorListeners = new Listeners();
         this.eventListeners = new Listeners();
-        this.authenticated = false;
         this.appName = '';
 
         var self = this;
-
-        // Stores requests that couldn't be sent until we've been auth'd
-        this.backlog = [];
-        this.eventListeners.add('appAuthenticated', function() {
-            self.authenticated = true;
-            if(self.backlog.length > 0) {
-                if (self.DEBUG) {
-                    console.warn(self.getAppName() + ": Authenticated, now executing backlog (" + self.backlog.length + " items)");
-                }
-                for(var i = self.backlog.length - 1; i >= 0; i--) {
-                    self.request(self.backlog[i]['spec'], self.backlog[i]['data'], self.backlog[i]['callback']);
-                    self.backlog.splice(i, 1);
-                }
-            }
-        });
 
         pm.bind("event", function(data) {
             var createEventFunction = function(eventName) {
@@ -75,54 +59,6 @@ var PluginAPI = (function() {
     };
 
     /**
-     * Performs authentication to DrPublish by sending a GET request
-     * to the given URL (or ajax.php?do=authenticate-app if nothing
-     * else is specified), and using .signature and .iv from the response
-     * object as the authentication reply to the DrPublish API
-     *
-     * @param {String} url Url to call, default is 'ajax.php?do=authentication-app'
-     */
-    Api.prototype.doStandardAuthentication = function(url) {
-        var self = this;
-        url = url || 'ajax.php?do=authenticate-app';
-
-        jQuery.getJSON(url, {app: this.getAppName()},
-            function(reply) {
-                if(reply) {
-                    self.doDirectAuthentication(reply.signature, reply.iv);
-                } else {
-                    if (this.DEBUG) {
-                        console.err(self.getAppName() + ": No authentication token provided by backend", reply);
-                    }
-                }
-            }
-        );
-    };
-
-    /**
-     * Directly authenticates with the DrPublish API with the given
-     * signature and iv
-     *
-     * @param {String} signature Signature to send
-     * @param {String} iv Iv to send
-     */
-    Api.prototype.doDirectAuthentication = function(signature, iv) {
-        pm({
-            target: parent,
-            type: "app-loaded",
-            origin: "*",
-            data: {
-                app: this.getAppName (),
-                signature: signature,
-                iv: iv
-            }
-        });
-        if (this.DEBUG) {
-            console.log(this.getAppName() + ": Sent app-loaded signal with auth token to DrPublish");
-        }
-    };
-
-    /**
      * Dispatches a request to DrPublish, and returns the reply to callback On error, notifies all error listeners based on the index .type of the thrown object
      *
      * @param {String} callSpec What do you want to call?
@@ -135,7 +71,7 @@ var PluginAPI = (function() {
             console.info(this.getAppName() + ': Requesting ' + callSpec + ' from parent with data', data);
         }
 
-        if (data == null) {
+        if (data === null) {
             data = {};
         }
 
@@ -148,14 +84,6 @@ var PluginAPI = (function() {
         }
 
         data['src_app'] = this.getAppName();
-
-        if(!this.authenticated) {
-            if (this.DEBUG) {
-                console.warn("Call for " + callSpec + " delayed until app is authenticated");
-            }
-            this.backlog.push({ spec: callSpec, data: data, callback: callback });
-            return;
-        }
 
         var createEventFunction = function(func, eventKey) {
             return function() {
@@ -598,6 +526,102 @@ var PluginAPI = (function() {
     Api.prototype.hide = function() {
         this.request('hide');
         return true;
+    };
+
+    /**
+     * <p>Creates a jQuery UI modal in the main editor window, detached from the plugin itself. Modals are unique on a
+     * per-plugin basis, meaning that a plugin can only have a single modal at a time. Creating a new modal will
+     * overwrite the previous.</p>
+     *
+     * <a href="http://api.jqueryui.com/dialog">See the official documentation for a list of available options.</a></p>
+     *
+     * <p>Note that you do not have direct access to the DOM of the modal. Use the provided helper methods to
+     * manipulate or read from the modal:
+     *   <ul>
+     *     <li><a href="#closeModal">closeModal</a></li>
+     *     <li><a href="#updateModal">updateModal</a></li>
+     *     <li><a href="#getModalInputs">getModalInputs</a></li>
+     *   </ul>
+     * </p>
+     *
+     * @example
+     *
+     * PluginAPI.createModal('<h1>This is a modal</h1>', {
+     *   buttons: {
+     *     Ok: function () {
+     *       alert('Ok!');
+     *     }
+     *   }
+     * });
+     *
+     * PluginAPI.updateModal('<h1>This is the same modal</h1>');
+     *
+     * PluginAPI.createModal('<h1>This is a brand new modal</h1>', {
+     *   buttons: {
+     *     cancel: function() {
+     *       PluginAPI.closeModal(true);
+     *     }
+     *   }
+     * });
+     *
+     * @param {String} content An HTML string
+     * @param {Object} options A standard jQuery UI options object.
+     */
+    Api.prototype.createModal = function(content, options) {
+        this.request('create-custom-modal', {content: content, options: options});
+        return true;
+    };
+
+    /**
+     * Updates the HTML content of a live modal. Has no effect if the modal does not exist.
+     *
+     * @param {String} content An HTML string
+     */
+    Api.prototype.updateModal = function(content) {
+        this.request('update-custom-modal', {content: content});
+        return true;
+    };
+
+    /**
+     * Closes and optionally deletes the modal. Has no effect if the modal does not exists.
+     *
+     * @param {Boolean} destroy Whether or not to delete the modal
+     */
+    Api.prototype.closeModal = function(destroy) {
+        this.request('close-custom-modal', {destroy: destroy});
+        return true;
+    };
+
+    /**
+     * Returns the values of all input or select elements within a modal.
+     *
+     * The values are keyed by one of the following properties in order of priority: element ID, element name
+     * or input type + index.
+     *
+     * @example
+     * Given a modal with the following HTML content:
+     *
+     *  <form>
+     *      <input type="number">
+     *      <input name="name" type="text">
+     *      <select id="languages">
+     *          <option selected>en</option>
+     *          <option>no</option>
+     *      </select>
+     *  </form>
+     *
+     *  getModalInputs would return:
+     *
+     *  {
+     *      "number-0": {VALUE}
+     *      "name": {VALUE},
+     *      "languages": "en"
+     *  }
+     *
+     * @param {Function} callback
+     */
+    Api.prototype.getModalInputs = function (callback) {
+        this.request('get-custom-modal-inputs', null, callback);
     };
 
     return new Api();

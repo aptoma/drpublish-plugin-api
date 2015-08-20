@@ -7,7 +7,6 @@ describe("PluginAPI Core", function() {
 
     beforeEach(function() {
         api = PluginAPI.create();
-        api.eventListeners.notify('appAuthenticated');
         api.setAppName('test-app');
         oldPm = pm;
     });
@@ -15,38 +14,6 @@ describe("PluginAPI Core", function() {
     afterEach(function() {
         api = null;
         pm = oldPm;
-    });
-
-    it("should store calls in backlog before it has been authenticated, and call them later on", function() {
-        var callback = jasmine.createSpy();
-
-        api = PluginAPI.create();
-        pm = jasmine.createSpy('pm');
-        api.setAppName('test-app');
-        api.request('test-request', null, callback);
-
-        expect(pm.calls.count()).toBe(0);
-        expect(api.backlog.length).toBe(1);
-        expect(api.backlog[0]).toEqual({
-            spec: 'test-request',
-            data: {
-                src_app: 'test-app'
-            },
-            callback: callback
-        });
-
-        api.eventListeners.notify('appAuthenticated');
-
-        // check that the backlog item was called after authentication
-        expect(pm.calls.count()).toBe(1);
-        var args = pm.calls.argsFor(0);
-        expect(args[0]).toEqual(jasmine.objectContaining({
-            type: 'test-request',
-            success: callback,
-            data: {
-                src_app: 'test-app'
-            }
-        }));
     });
 
     it("should add new listeners", function() {
