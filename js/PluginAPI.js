@@ -71,7 +71,7 @@ var PluginAPI = (function() {
             console.info(this.getAppName() + ': Requesting ' + callSpec + ' from parent with data', data);
         }
 
-        if (data === null) {
+        if (!data) {
             data = {};
         }
 
