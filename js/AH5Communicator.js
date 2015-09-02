@@ -3,6 +3,9 @@
 PluginAPI.Editor = (function () {
     "use strict";
 
+
+
+
     /**
      * This will be used by editor apps to communicate with the editor
      *
@@ -15,11 +18,34 @@ PluginAPI.Editor = (function () {
      * @exports PluginAPI/Editor
      */
     var AH5Communicator = function() {
+
+        var selectedPluginElement = null;
+
+
+        var pluginElementSelected = function(element) {
+            PluginAPI.selectedPluginElement = element
+        }
+
+        var pluginElementDeselected = function() {
+            PluginAPI.selectedPluginElement = null;
+        }
+
         this.DEBUG = false;
+
+        PluginAPI.addListeners({
+            pluginElementClicked: pluginElementSelected,
+            pluginElementDeselected: pluginElementDeselected
+        });
+
     };
+
+
+    AH5Communicator.prototype.selectedPluginElement = null;
+
+
     /**
      * Get name of current active editor
-     * 
+     *
      * @param {function} callback function(String)
      */
     AH5Communicator.prototype.getActiveEditor = function (callback) {
@@ -41,7 +67,7 @@ PluginAPI.Editor = (function () {
      *          // callback function
      *          // first parameter is id of the app element
      *          // second paramter is id of closest element to the trigger element that has an id
-     *          //      in code: $(event.triggerElement).closest('[id]').attr('id');						
+     *          //      in code: $(event.triggerElement).closest('[id]').attr('id');
      *      }
      * })
      */
@@ -225,6 +251,7 @@ PluginAPI.Editor = (function () {
      * @param {Function} callback function(String), id of the newly inserted element
      */
     AH5Communicator.prototype.insertElement = function(element, options, callback) {
+        console.debug('stef: insertElement', arguments);
         var select = false;
         if (typeof options === 'object') {
             options = options || {};
@@ -322,6 +349,43 @@ PluginAPI.Editor = (function () {
         PluginAPI.request('editor-initialize-menu', {
             menus: menus
         }, callback);
+    };
+
+    AH5Communicator.prototype.updateAssetMedia = function(data, callback) {
+        PluginAPI.request('update-asset-media', data, callback);
+    };
+
+    AH5Communicator.prototype.insertEmbeddedMedia = function(markup, data, callback) {
+        var insert = function(dpArticleId, callback) {
+            data.internalId = dpArticleId;
+            var element = $('<div/>');
+            element.attr('id', 'asset-' + dpArticleId);
+            element.attr('data-internal-id', dpArticleId);
+            element.attr('data-external-id', data.externalId);
+            element.addClass(data.assetClass);
+            var customMarkup = $(markup);
+            element.append(customMarkup);
+            this.insertElement(element, { select: true} , callback)
+        }.bind(this);
+        
+        var cb = function(callback) {
+            PluginAPI.request('update-embedded-asset', data, callback);
+        };
+        
+        if (PluginAPI.selectedPluginElement) {
+            var dpArticleId = PluginAPI.selectedPluginElement.dpArticleId;
+            if (!dpArticleId) {
+                throw "Selected plugin element: expected dpArticleId not found (tried reading from attribute 'data-internal-id')";
+            }
+            insert(dpArticleId, cb);
+        } else {
+            PluginAPI.createEmbeddedObject(
+                data.embeddedTypeId,
+                function(dpArticleId) {
+                    insert(dpArticleId, cb);
+                }
+            );
+        }
     };
 
     return new AH5Communicator();
