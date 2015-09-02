@@ -1,4 +1,10 @@
-How does the API work?
+The Plugin API
+==========================
+The DrPublish plugin API allows you to plug your own web-apps into DrPublish to extend the feature set of the DrPublish writer. Your web-apps will be allowed to create, read, update and delete content in the DrPublish writer in real-time.
+
+These web-apps can be deployed and run on any location of your choice, be it your in-house servers or some cloud location. It follows from this that you can write these web-apps in the backend programming language of your choice.
+
+How the API works
 ==========================
 The apps are loaded directly in iframes (i.e. the src= of the iframe points directly to the URL as given in the DrPublish config) and all communication between the app and DrPublish is sent using [postMessage](https://developer.mozilla.org/en/DOM/window.postMessage) (a standardized method for cross-domain frame communication).
 
@@ -10,13 +16,13 @@ Behind the scenes, the API files wrap the incoming parameters in a JSON object, 
 
 DrPublish then determines which function should be called, executes it, wraps its response in a JSON object, and returns it to the sending app. The app then receives this reply, and sends the received data to a callback (if any is specified).
 
-So how do I get started?
+How to get started
 ================
-Take a look at the example app to see how to get started. There you will see an example of how to write the authentication code required to get the app started, and a few simple examples of sending data between the app and DrPublish.
+Take a look at the example app to see how to get started. There you will see a few simple examples of sending data between the app and DrPublish.
 
 When you're bored of that you can look through the method listings avaiable on the right and that is hopefully enough to set you on the right track to create any app you want.
 
-Costum configuration
+Custom configuration
 ==============
 Apps can ask for and specify a customized configuration object. The API function to retrieve the configuration option is AppAPI.getConfiguration, and you can find documentation on that in the AppAPI module.
 
@@ -61,41 +67,9 @@ A simple example JSON schema for an image app could look like:
 }
 ```
 
-
-Authentication explained
-==============
-When an app is loaded DrPublish send an encrypted token to the app, this is done so the app can check that it is actually being loaded by a DrPublish instance with a valid user logged in. Apps should always verify this token, otherwise this security aspect dissappears.
-Conversely, apps also have to authenticate themselves to DrPublish before they are allowed to access the API. The iframe that contains them are hidden until this has been done.
-If a app does not authenticate itself within 60 seconds of being loaded, it is killed.
-
-This two-way authentication provides enhanced security both for DrPublish (it won't load unauthorized apps) and for the user (apps may only be accessed through DrPublish).
-
-The authentication works by defining a shared secret between DrPublish and the app on a per-install basis.
-
-So, to take the authentication process step by step:
-
-The authentication process in detail
-----------------
-1. The DrPublish frontend sends a request to the DrPublish backend for a URL for the app with an encrypted authentication token
-2. The backend creates a JSON object with various data (DrPublish host, logged in user, active publication, timestamp, app name) + a large salt
-3. The backend encrypts this with both the app's scheme + host + port and the shared secret, and returns the encrypted string and the initialization vector to the DrPublish frontend
-4. The DrPublish frontend creates a new iframe with the src received from the backend (this includes two extra parameters, auth and iv, which represent the encrypted authentication token and the initialization vector)
-5. The DrPublish frontend blocks all postMessage calls from that iframe until it has sent a postMessage with type "app-loaded" that contains the app name, the app's authentication token and the app's IV
-6. The app's frontend recieves the incoming DrPublish token and sends it to its' backend to ensure that it can be decrypted and that it has not expired
-7. If the token is invalid, the app kills itself.
-8. If the token is valid, the app's frontend gets an encrypted token from the app's backend to prove its identity to DrPublish
-10. The app frontend then sends a "app-loaded" postMessage call to DrPublish containing app name, token (called a signature) and IV
-11. The DrPublish frontend sends this signature + IV to its' backend for verification
-12. The DrPublish backend decrypts the token, checks the time and returns true or false
-13. The DrPublish frontend either allows the app access to the API, or kills it depending on the response from the backend
-
-*OBS: Only the initial load of the app is authenticated! This means that the app should somehow store the fact that the user was authenticated, and only allow access to other parts of the app (think AJAX requests and such) if the app was first accessed with a valid DrPublish token.*
-
 What about debugging?
 =====================
-It just so happens that we did a lot of debugging while setting this up, and to be nice, we've left the debugging code in there. All you need to do to enable it is to set the AppAPI.DEBUG flag to TRUE;
-If you then open up your browser JS console, you will see output detailing everything interesting that is happening under the bonnet.
-Note especially warnings and errors since these indicate that something of special interest has happened.
+It just so happens that we did a lot of debugging while setting this up, and we've left the debugging code in there for your convenience. All you need to do to enable it is to set the AppAPI.DEBUG flag to TRUE; If you then open up your browser JS console, you will see output detailing everything interesting that is happening under the bonnet. Note especially warnings and errors since these indicate that something of special interest has happened.
 
 Documentation Generation
 ========================

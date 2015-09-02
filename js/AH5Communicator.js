@@ -354,7 +354,7 @@ PluginAPI.Editor = (function () {
     AH5Communicator.prototype.updateAssetMedia = function(data, callback) {
         PluginAPI.request('update-asset-media', data, callback);
     };
-
+    
     AH5Communicator.prototype.insertEmbeddedMedia = function(markup, data, callback) {
         var insert = function(dpArticleId, callback) {
             data.internalId = dpArticleId;
