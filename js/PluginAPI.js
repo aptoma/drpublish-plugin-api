@@ -14,7 +14,7 @@ var PluginAPI = (function() {
      *
      */
     var Api = function () {
-        this.DEBUG = false;
+        this.DEBUG = true;
 
         this.Version = '1.0';
         this.Editor = null;
@@ -23,6 +23,7 @@ var PluginAPI = (function() {
         this.eventListeners = new Listeners();
         this.authenticated = false;
         this.appName = '';
+        this.selectedPluginElement = null;
 
         var self = this;
 
@@ -149,13 +150,13 @@ var PluginAPI = (function() {
 
         data['src_app'] = this.getAppName();
 
-        if(!this.authenticated) {
-            if (this.DEBUG) {
-                console.warn("Call for " + callSpec + " delayed until app is authenticated");
-            }
-            this.backlog.push({ spec: callSpec, data: data, callback: callback });
-            return;
-        }
+        //if(!this.authenticated) {
+        //    if (this.DEBUG) {
+        //        console.warn("Call for " + callSpec + " delayed until app is authenticated");
+        //    }
+        //    this.backlog.push({ spec: callSpec, data: data, callback: callback });
+        //    return;
+        //}
 
         var createEventFunction = function(func, eventKey) {
             return function() {
