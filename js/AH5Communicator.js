@@ -251,6 +251,7 @@ PluginAPI.Editor = (function () {
      * @param {Function} callback function(String), id of the newly inserted element
      */
     AH5Communicator.prototype.insertElement = function(element, options, callback) {
+        console.debug('stef: insertElement', arguments);
         var select = false;
         if (typeof options === 'object') {
             options = options || {};
@@ -352,6 +353,39 @@ PluginAPI.Editor = (function () {
 
     AH5Communicator.prototype.updateAssetMedia = function(data, callback) {
         PluginAPI.request('update-asset-media', data, callback);
+    };
+    
+    AH5Communicator.prototype.insertEmbeddedMedia = function(markup, data, callback) {
+        var insert = function(dpArticleId, callback) {
+            data.internalId = dpArticleId;
+            var element = $('<div/>');
+            element.attr('id', 'asset-' + dpArticleId);
+            element.attr('data-internal-id', dpArticleId);
+            element.attr('data-external-id', data.externalId);
+            element.addClass(data.assetClass);
+            var customMarkup = $(markup);
+            element.append(customMarkup);
+            this.insertElement(element, { select: true} , callback)
+        }.bind(this);
+        
+        var cb = function(callback) {
+            PluginAPI.request('update-embedded-asset', data, callback);
+        };
+        
+        if (PluginAPI.selectedPluginElement) {
+            var dpArticleId = PluginAPI.selectedPluginElement.dpArticleId;
+            if (!dpArticleId) {
+                throw "Selected plugin element: expected dpArticleId not found (tried reading from attribute 'data-internal-id')";
+            }
+            insert(dpArticleId, cb);
+        } else {
+            PluginAPI.createEmbeddedObject(
+                data.embeddedTypeId,
+                function(dpArticleId) {
+                    insert(dpArticleId, cb);
+                }
+            );
+        }
     };
 
     AH5Communicator.prototype.insertEmbeddedMedia = function(markup, data, callback) {
