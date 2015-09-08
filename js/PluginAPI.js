@@ -14,7 +14,7 @@ var PluginAPI = (function() {
      *
      */
     var Api = function () {
-        this.DEBUG = true;
+        this.DEBUG = false;
 
         this.Version = '1.0';
         this.Editor = null;
