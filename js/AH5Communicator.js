@@ -251,7 +251,6 @@ PluginAPI.Editor = (function () {
      * @param {Function} callback function(String), id of the newly inserted element
      */
     AH5Communicator.prototype.insertElement = function(element, options, callback) {
-        console.debug('stef: insertElement', arguments);
         var select = false;
         if (typeof options === 'object') {
             options = options || {};
