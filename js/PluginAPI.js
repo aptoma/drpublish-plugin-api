@@ -22,6 +22,7 @@ var PluginAPI = (function() {
         this.errorListeners = new Listeners();
         this.eventListeners = new Listeners();
         this.appName = '';
+        this.selectedPluginElement = null;
 
         var self = this;
 
@@ -71,7 +72,7 @@ var PluginAPI = (function() {
             console.info(this.getAppName() + ': Requesting ' + callSpec + ' from parent with data', data);
         }
 
-        if (data === null) {
+        if (!data) {
             data = {};
         }
 
@@ -432,7 +433,7 @@ var PluginAPI = (function() {
         var self = this;
         self.eventListeners.add(name, callback);
         this.request('on-api-event', {
-            name: name,
+            name: name
         });
     };
 

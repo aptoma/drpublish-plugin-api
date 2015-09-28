@@ -58,6 +58,26 @@ PluginAPI.Article = (function() {
         PluginAPI.request('article-id-get', null, callback);
     };
 
+
+    /**
+     * Get the guid of the article package currently edited
+     *
+     * @param {Function} callback function(Int), id of the current article
+     */
+    ArticleCommunicator.prototype.getPackageId = function(callback) {
+        PluginAPI.request('package-id-get', null, callback);
+    };
+
+
+    /**
+     * Get the guid of the article package currently edited
+     *
+     * @param {Function} callback function(Int), id of the current article
+     */
+    ArticleCommunicator.prototype.getPackageGuid = function(callback) {
+        PluginAPI.request('package-guid-get', null, callback);
+    };
+
     /**
      * Clear the meta information summary
      *
