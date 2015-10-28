@@ -344,6 +344,17 @@ PluginAPI.Editor = (function () {
         }, callback);
     };
 
+    /**
+     * Opens the plugin editor for a given element.
+     *
+     * @param {String} id Plugin element ID
+     */
+    AH5Communicator.prototype.openPluginElementEditor = function (id) {
+        PluginAPI.request('open-element-editor', {
+            id: id
+        });
+    };
+
     AH5Communicator.prototype.updateAssetData = function(data, callback) {
         PluginAPI.request('update-asset-media', data, callback);
     };
