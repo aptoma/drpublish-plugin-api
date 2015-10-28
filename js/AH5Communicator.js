@@ -1,10 +1,8 @@
 /* global PluginAPI: true */
 
+/* jshint maxstatements:30 */
 PluginAPI.Editor = (function () {
     "use strict";
-
-
-
 
     /**
      * This will be used by editor apps to communicate with the editor
@@ -19,16 +17,13 @@ PluginAPI.Editor = (function () {
      */
     var AH5Communicator = function() {
 
-        var selectedPluginElement = null;
-
-
         var pluginElementSelected = function(element) {
-            PluginAPI.selectedPluginElement = element
-        }
+            PluginAPI.selectedPluginElement = element;
+        };
 
         var pluginElementDeselected = function() {
             PluginAPI.selectedPluginElement = null;
-        }
+        };
 
         this.DEBUG = false;
 
@@ -39,9 +34,7 @@ PluginAPI.Editor = (function () {
 
     };
 
-
     AH5Communicator.prototype.selectedPluginElement = null;
-
 
     /**
      * Get name of current active editor
@@ -389,18 +382,22 @@ PluginAPI.Editor = (function () {
         var updateEmbeddedAssetRequest = function(callback) {
             PluginAPI.request('update-embedded-asset', data, callback);
         };
-        
+
         if (PluginAPI.selectedPluginElement) {
             var dpArticleId = PluginAPI.selectedPluginElement.dpArticleId;
             if (!dpArticleId) {
                 throw "Selected plugin element: expected dpArticleId not found (tried reading from attribute 'data-internal-id')";
             }
-            insert(dpArticleId, function() {updateEmbeddedAssetRequest(callback)});
+            insert(dpArticleId, function() {
+                updateEmbeddedAssetRequest(callback);
+            });
         } else {
             PluginAPI.createEmbeddedObject(
                 data.embeddedTypeId,
                 function(dpArticleId) {
-                    insert(dpArticleId,  function() {updateEmbeddedAssetRequest(callback)});
+                    insert(dpArticleId, function() {
+                        updateEmbeddedAssetRequest(callback);
+                    });
                 }
             );
         }

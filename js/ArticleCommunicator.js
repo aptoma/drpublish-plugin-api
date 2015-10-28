@@ -1,7 +1,6 @@
 /* global PluginAPI: true */
 
-/* jshint maxstatements:44 */
-
+/* jshint maxstatements:50 */
 PluginAPI.Article = (function() {
     "use strict";
 
