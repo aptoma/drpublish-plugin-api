@@ -355,6 +355,24 @@ PluginAPI.Editor = (function () {
         });
     };
 
+    /**
+     * Returns the total number of words in the currently open article.
+     *
+     * @param {Function} callback Receives the total word count as its single parameter
+     */
+    AH5Communicator.prototype.getTotalWordCount = function (callback) {
+        PluginAPI.request('total-word-count', null, callback);
+    };
+
+    /**
+     * Returns the total number of characters in the currently open article.
+     *
+     * @param {Function} callback Receives the total character count as its single parameter
+     */
+    AH5Communicator.prototype.getTotalCharCount = function (callback) {
+        PluginAPI.request('total-char-count', null, callback);
+    };
+
     AH5Communicator.prototype.updateAssetData = function(data, callback) {
         PluginAPI.request('update-asset-media', data, callback);
     };
