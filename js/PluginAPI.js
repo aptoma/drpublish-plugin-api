@@ -383,6 +383,15 @@ var PluginAPI = (function() {
     };
 
     /**
+     * Get DrPublish configuratin
+     *
+     * @param {Function} callback function(Object)
+     */
+    Api.prototype.getDrPublishConfiguration = function (callback) {
+        this.request('get-drpublish-configuration', null, callback);
+    };
+
+    /**
      * Set configuration information about the app
      *
      * @param {Object} config The configuration object to save
