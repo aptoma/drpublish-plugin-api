@@ -1,0 +1,10 @@
+{
+	"extends": "@aptoma/eslint-config/lib/es5.js",
+	"env": {
+		"browser": true,
+		"jquery": true
+	},
+	"rules": {
+		"max-statements": 1
+	}
+}

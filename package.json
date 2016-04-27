@@ -1,18 +1,31 @@
 {
-  "name": "plugin-api",
+  "name": "@aptoma/drpublish-plugin-api",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aptoma/no.aptoma.plugin-api.git"
+    "url": "https://github.com/aptoma/drpublish-plugin-api.git"
   },
+  "scripts": {
+    "test": "grunt karma:unit",
+    "lint": "grunt eslint",
+    "ci": "grunt ci"
+  },
+  "license": "MIT",
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-karma": "~0.8.3",
-    "karma-phantomjs-launcher": "~0.1.4",
-    "karma-jasmine": "~0.2.0",
-    "grunt-contrib-watch": "~0.6.1",
-    "time-grunt": "~0.4.0",
-    "grunt-jsdoc": "~0.5.7",
-    "jquery": "~2.1.4"
+    "@aptoma/eslint-config": "^4.0.0",
+    "eslint": "^2.8.0",
+    "grunt": "^1.0.1",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-eslint": "^18.1.0",
+    "grunt-jsdoc": "^2.0.0",
+    "grunt-karma": "^0.12.2",
+    "ink-docstrap": "^1.1.4",
+    "jasmine-core": "^2.4.1",
+    "jquery": "^2.2.3",
+    "karma": "^0.13.22",
+    "karma-jasmine": "^0.3.8",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "load-grunt-tasks": "^3.5.0",
+    "phantomjs-prebuilt": "^2.1.7",
+    "time-grunt": "^1.3.0"
   }
 }
