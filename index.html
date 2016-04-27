@@ -1,120 +1,145 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>JSDoc: Index</title>
-    
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Documentation Index</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.simplex.css">
+
 </head>
 
 <body>
 
-<div id="main">
-    
-    <h1 class="page-title">Index</h1>
-    
-    
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Documentation</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-PluginAPI.html">PluginAPI</a></li><li><a href="module-PluginAPI_Article.html">PluginAPI/Article</a></li><li><a href="module-PluginAPI_Editor.html">PluginAPI/Editor</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#Listeners">Listeners</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+		<div class="col-sm-3 col-md-3">
+            <form class="navbar-form" role="search">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+	</div>
+
+</div>
+</div>
 
 
-    
+<div class="container" id="toc-content">
+<div class="row">
 
+	
+	<div class="col-md-8">
+	
+		<div id="main">
+			
 
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-    
+	
+	
 
 
 
 
-    <section>
-        <article><h1>The Plugin API</h1>
 
-<p>The DrPublish plugin API allows you to plug your own web-apps into DrPublish to extend the feature set of the DrPublish writer. Your web-apps will be allowed to create, read, update and delete content in the DrPublish writer in real-time.</p>
 
+
+
+
+
+
+	
+	
+
+
+
+
+
+    <section class="readme-section">
+        <article><h1>DrPublish Plugin API</h1><p>The DrPublish plugin API allows you to plug your own web-apps into DrPublish to extend the feature set of the DrPublish writer. Your web-apps will be allowed to create, read, update and delete content in the DrPublish writer in real-time.</p>
 <p>These web-apps can be deployed and run on any location of your choice, be it your in-house servers or some cloud location. It follows from this that you can write these web-apps in the backend programming language of your choice.</p>
-
-<h1>How the API works</h1>
-
-<p>The apps are loaded directly in iframes (i.e. the src= of the iframe points directly to the URL as given in the DrPublish config) and all communication between the app and DrPublish is sent using <a href="https://developer.mozilla.org/en/DOM/window.postMessage">postMessage</a> (a standardized method for cross-domain frame communication).</p>
-
-<p>PostMessage works by one side listening for incoming messages, and determining whether to act upon that message or not depending on its origin host, its origin frame and its contents.<br />In DrPublish, these binding are written in js/classes/binds/*.js, and are mapped through js/classes/controller/AppEvents.js, which also handles delegation of events from DrPublish to apps.<br />On the app side, the files AppAPI.js, AH5Communicator.js and ArticleCommunicator.js provide functions for sending and recieving all the supported postMessage calls without the caller having to know what is being done.</p>
-
-<p>Behind the scenes, the API files wrap the incoming parameters in a JSON object, adds on the name of sending app and what method on the remote side it wants to call, and send this over postMessage using a <a href="http://postmessage.freebaseapps.com/">thin jQuery PM wrapper</a>.</p>
-
-<p>DrPublish then determines which function should be called, executes it, wraps its response in a JSON object, and returns it to the sending app. The app then receives this reply, and sends the received data to a callback (if any is specified).</p>
-
-<h1>How to get started</h1>
-
-<p>Take a look at the example app to see how to get started. There you will see a few simple examples of sending data between the app and DrPublish.</p>
-
-<p>When you're bored of that you can look through the method listings avaiable on the right and that is hopefully enough to set you on the right track to create any app you want.</p>
-
-<h1>Custom configuration</h1>
-
-<p>Apps can ask for and specify a customized configuration object. The API function to retrieve the configuration option is AppAPI.getConfiguration, and you can find documentation on that in the AppAPI module.</p>
-
+<h2>How to get started</h2><p>Install the plugin through NPM:</p>
+<pre class="prettyprint source"><code>npm install --save @aptoma/drpublish-plugin-api</code></pre><p>Take a look at the <a href="example/index.hhtml">example plugin</a> to see how to get started. There you will see a few simple examples of sending data between the plugin and DrPublish.</p>
+<h2>How the API works</h2><p>The apps are loaded directly in iframes (i.e. the src= of the iframe points directly to the URL as given in the DrPublish config) and all communication between the app and DrPublish is sent using <a href="https://developer.mozilla.org/en/DOM/window.postMessage">postMessage</a> (a standardized method for cross-domain frame communication).</p>
+<p>PostMessage works by one side listening for incoming messages, and determining whether to act upon that message or not depending on its origin host, its origin frame and its contents.</p>
+<p>In DrPublish, these binding are written in <code>js/classes/binds/\*.js</code>, and are mapped through <code>js/classes/controller/AppEvents.js</code>, which also handles delegation of events from DrPublish to apps.</p>
+<p>On the plugin side, the files PluginAPI.js, AH5Communicator.js and articleCommunicator.js provide functions for sending and receiving all the supported postMessage calls without the caller having to know what is being done.</p>
+<p>Behind the scenes, the API files wrap the incoming parameters in a JSON object, adds on the name of sending plugin and what method on the remote side it wants to call, and send this over postMessage using a <a href="https://github.com/daepark/postmessage/">thin jQuery PM wrapper</a>.</p>
+<p>DrPublish then determines which function should be called, executes it, wraps its response in a JSON object, and returns it to the sending plugin. The plugin then receives this reply, and sends the received data to a callback (if any is specified).</p>
+<h2>Custom configuration</h2><p>Plugins can ask for and specify a customized configuration object. The API function to retrieve the configuration option is pluginAPI.getConfiguration, and you can find documentation on that in the pluginAPI module.</p>
 <p>To specify the format of the configuration object the App needs to provide an URL where other applications (in most cases DrPublish's App Admin tool) can recieve an <a href="http://json-schema.org/">JSON schema</a> describing the desired configuration setup. In case of DrPublish this URL is then registered alongside the URL to the app in the Publication configuration.</p>
-
 <p>A simple example JSON schema for an image app could look like:</p>
-
-<div class="highlight"><pre lang="JSON">{
-    "search": {
-        "type": "string",
-        "title": "Default Search",
-        "required": true
+<pre class="prettyprint source lang-JSON"><code>{
+    &quot;search&quot;: {
+        &quot;type&quot;: &quot;string&quot;,
+        &quot;title&quot;: &quot;Default Search&quot;,
+        &quot;required&quot;: true
     },
-    "images": {
-        "type": "array",
-        "title": "Image Sizes",
-        "items": {
-            "type": "object",
-            "title": "Image Size",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "title": "name",
-                    "required": true
+    &quot;images&quot;: {
+        &quot;type&quot;: &quot;array&quot;,
+        &quot;title&quot;: &quot;Image Sizes&quot;,
+        &quot;items&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;title&quot;: &quot;Image Size&quot;,
+            &quot;properties&quot;: {
+                &quot;name&quot;: {
+                    &quot;type&quot;: &quot;string&quot;,
+                    &quot;title&quot;: &quot;name&quot;,
+                    &quot;required&quot;: true
                 },
-                "filter": {
-                    "type": "string",
-                    "title": "Filter",
-                    "enum": [
-                        "grayscale",
-                        "sepia",
-                        "none"
+                &quot;filter&quot;: {
+                    &quot;type&quot;: &quot;string&quot;,
+                    &quot;title&quot;: &quot;Filter&quot;,
+                    &quot;enum&quot;: [
+                        &quot;grayscale&quot;,
+                        &quot;sepia&quot;,
+                        &quot;none&quot;
                     ]
                 },
-                "height": {
-                    "type": "integer",
-                    "title": "Height"
+                &quot;height&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;title&quot;: &quot;Height&quot;
                 }
             }
         }
     }
-}
-</pre></div>
-
-<h1>What about debugging?</h1>
-
-<p>It just so happens that we did a lot of debugging while setting this up, and we've left the debugging code in there for your convenience. All you need to do to enable it is to set the AppAPI.DEBUG flag to TRUE; If you then open up your browser JS console, you will see output detailing everything interesting that is happening under the bonnet. Note especially warnings and errors since these indicate that something of special interest has happened.</p>
-
-<h1>Documentation Generation</h1>
-
-<p>Documentation has been generated using <a href="https://github.com/jsdoc3/jsdoc">jsdoc</a> and the supplied jsdoc.json file</p></article>
+}</code></pre><h2>What about debugging?</h2><p>It just so happens that we did a lot of debugging while setting this up, and we've left the debugging code in there for your convenience. All you need to do to enable it is to set the AppAPI.DEBUG flag to TRUE; If you then open up your browser JS console, you will see output detailing everything interesting that is happening under the bonnet. Note especially warnings and errors since these indicate that something of special interest has happened.</p>
+<h2>Documentation Generation</h2><p>Documentation has been generated using <a href="https://github.com/jsdoc3/jsdoc">jsdoc</a> and the supplied jsdoc.json file</p></article>
     </section>
 
 
@@ -122,18 +147,128 @@
 
 
 
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+		</div>
+	
+
+</div>
 </div>
 
-<nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-PluginAPI.html">PluginAPI</a></li><li><a href="Article.html">PluginAPI/Article</a></li><li><a href="Editor.html">PluginAPI/Editor</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Listeners">Listeners</a></li></ul>
-</nav>
-
-<br clear="both">
+<div class="modal fade" id="searchResults">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Search results</h4>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Mon Oct 19 2015 15:40:17 GMT+0200 (CEST)
+
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a>
+	
+		on 2016-04-27T15:34:40+02:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
 </footer>
 
-<script> prettyPrint(); </script>
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+<script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : false,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			var id = $( heading ).attr( "id" );
+			return id && id.replace(/\~/g, '-inner-').replace(/\./g, '-static-') || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		SearcherDisplay.init();
+	});
+</script>
+
 </body>
 </html>
