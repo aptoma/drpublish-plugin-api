@@ -66,7 +66,7 @@ var PluginAPI = (function() {
      * @param {Object} data The data attached to the request
      * @param {Function} callback The function to call upon return
      */
-    Api.prototype.request = function(callSpec, data, callback) {
+    Api.prototype.request = function(callSpec, data, callback) {;
         var self = this;
         if (this.DEBUG) {
             console.info(this.getAppName() + ': Requesting ' + callSpec + ' from parent with data', data);
@@ -632,6 +632,17 @@ var PluginAPI = (function() {
      */
     Api.prototype.getModalInputs = function (callback) {
         this.request('get-custom-modal-inputs', null, callback);
+    };
+
+    /**
+     * unlocks the plugin after authentication. In order to use the plugin, calling this method is required
+     * for all plugins having a "authMethod" defined within the publication config.
+     *
+     */
+    Api.prototype.isAuthenticated = function() {
+        this.request("is-authenticated", {
+            pluginName:  this.appName
+        });
     };
 
     return new Api();
