@@ -2,3 +2,12 @@
 test
 doc
 example
+.editorconfig
+.eslintignore
+.eslintrc
+.travis.yml
+.npmignore
+composer.json
+Gruntfile.js
+jsdoc.conf
+karma.conf.js
