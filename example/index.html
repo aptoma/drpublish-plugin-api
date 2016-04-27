@@ -4,30 +4,20 @@
     <meta charset="utf-8">
     <title>Example Plugin</title>
     <script src="http://code.jquery.com/jquery.min.js"></script>
-    <script src="../js/vendors/jquery.postmessage.js"></script>
-    <script src="../js/Listeners.js"></script>
-    <script src="../js/PluginAPI.js"></script>
-    <script src="../js/AH5Communicator.js"></script>
-    <script src="../js/ArticleCommunicator.js"></script>
+    <script src="../dist/jquery.postmessage.js"></script>
+    <script src="../dist/bundle.js"></script>
     <script>
     $(document).ready(function() {
-        var name = "<?=$_GET['appName']?>";
-        var auth = "<?=$_GET['auth']?>";
-        var iv = "<?=$_GET['iv']?>";
-        // register name of the app, sent as a paramter in the iframe url
-        PluginAPI.setAppName(name);
-
-        function getValue() {
-            var value = $('#textInput').val();
-            if (value.trim() === '') {
-                PluginAPI.showInfoMsg('I shall not insert an empty thing, that would just be silly');
-                return null;
-            }
-            return value;
-        }
+        var queryParameters = {};
+        window.location.search.substr(1).split('&').forEach(function (queryPair) {
+            queryParameters[queryPair.split('=')[0]] = queryPair.split('=')[1];
+        });
+        // Register name of the app, sent as a parameter in the iframe url
+        // This is needed so that DrPublish knows which plugin to communicate with
+        PluginAPI.setAppName(queryParameters.name);
 
         $('#textButton').click(function() {
-            value = getValue();
+            var value = getValue();
             if (value === null) {
                 return false;
             }
@@ -36,7 +26,7 @@
         });
 
         $('#objectButton').click(function() {
-            value = getValue();
+            var value = getValue();
             if (value === null) {
                 return false;
             }
@@ -55,12 +45,21 @@
 
         // register a delete button for elements inserted by this plugin
         PluginAPI.Editor.initMenu(['deleteButton']);
+
+        function getValue() {
+            var value = $('#textInput').val();
+            if (value.trim() === '') {
+                PluginAPI.showInfoMsg('I shall not insert an empty thing, that would just be silly');
+                return null;
+            }
+            return value;
+        }
     });
     </script>
 </head>
 <body>
-<h2 id='title'>Last selected element: </h2>
-<p>Type stuff here: <input type="text" id="textInput" /></p>
+<h2 id="title">Last selected element: </h2>
+<p><label>Type stuff here: <input type="text" id="textInput" /></label></p>
 <input type="button" value="Insert As Text" id="textButton" />
 <input type="button" value="Insert As Draggable Object" id="objectButton" />
 </body>

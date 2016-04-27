@@ -1,4 +1,7 @@
-/* global PluginAPI: true */
+'use strict';
+
+module.exports = Listeners;
+
 /**
  * @example
  * PluginAPI.on('afterCreate', function() {
@@ -124,38 +127,18 @@
  *     <p><em>triggered when someone deselects a plugin element in the editor</p></em>
  * </blockquote>
  */
-function Listeners () {
-    "use strict";
+function Listeners() {
 	this._listeners = {};
 }
-
-/**
- * @deprecated Use PluginAPI.on(...) instead
- */
-Listeners.prototype.addAll = function(listeners) {
-    "use strict";
-    var createCallback = function(callback) {
-        return function(data) {
-            callback(data.data);
-        };
-    };
-    for (var eventName in listeners) {
-        if (listeners.hasOwnProperty(eventName)) {
-            var callback = listeners[eventName];
-            var callWrapper = createCallback(callback);
-            PluginAPI.on(eventName, callWrapper);
-        }
-    }
-};
 
 /**
  * Adds a new listener
  *
  * @param {String} event Event name
  * @param {Function} callback Function to call when an even of the type is received
+ * @return {int} The index of the new listener
  */
-Listeners.prototype.add = function(event, callback) {
-    "use strict";
+Listeners.prototype.add = function (event, callback) {
 
 	if (this._listeners[event] === undefined) {
 		this._listeners[event] = [];
@@ -171,12 +154,11 @@ Listeners.prototype.add = function(event, callback) {
  * @param {String} event Event type
  * @param {Function} index The index of the event handler to remove
  */
-Listeners.prototype.remove = function(event, index) {
-    "use strict";
+Listeners.prototype.remove = function (event, index) {
 
 	if (this._listeners[event] === undefined || this._listeners[event][index] === undefined) {
-        return;
-    }
+		return;
+	}
 
 	/*
 	 * Set to null instead of remove to retain callback indexes
@@ -189,8 +171,7 @@ Listeners.prototype.remove = function(event, index) {
  *
  * @param {String} event Event type to remove handlers for (!event for all)
  */
-Listeners.prototype.removeAll = function(event) {
-    "use strict";
+Listeners.prototype.removeAll = function (event) {
 	if (!event) {
 		this._listeners = [];
 	} else {
@@ -203,13 +184,13 @@ Listeners.prototype.removeAll = function(event) {
  *
  * @param {String} event Event type
  * @param {Object} data The event data
+ * @return {Boolean}
  */
-Listeners.prototype.notify = function(event, data) {
-    "use strict";
-    var returnValue = true;
+Listeners.prototype.notify = function (event, data) {
+	var returnValue = true;
 	if (this._listeners[event] !== undefined) {
-		jQuery.each(this._listeners[event], function(i, e) {
-			if (e && typeof e === "function") {
+		jQuery.each(this._listeners[event], function (i, e) {
+			if (e && typeof e === 'function') {
 				if (data && data.params && data.params === true) {
 					var r = e.apply(null, data.data);
 
@@ -218,8 +199,8 @@ Listeners.prototype.notify = function(event, data) {
 					}
 
 				} else if (e(data) === false) {
-                    returnValue = false;
-                }
+					returnValue = false;
+				}
 			}
 		});
 	}
