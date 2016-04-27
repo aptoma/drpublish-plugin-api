@@ -15,11 +15,6 @@ module.exports = function (config) {
 		files: [
 			'node_modules/jquery/dist/jquery.js',
 			'js/vendors/*.js',
-			'js/Listeners.js',
-			'js/PluginAPI.js',
-			'js/*.js',
-			'test/*.js',
-			'test/*.js',
 			'test/*.js'
 		],
 
@@ -28,7 +23,16 @@ module.exports = function (config) {
 
 		// preprocess matching files before serving them to the browser
 		// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-		preprocessors: {},
+		preprocessors: {
+			'test/**/*.js': ['webpack']
+		},
+
+		webpack: {
+		},
+
+		webpackMiddleware: {
+			noInfo: true
+		},
 
 		// test results reporter to use
 		// possible values: 'dots', 'progress'

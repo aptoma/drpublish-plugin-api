@@ -1,5 +1,7 @@
-/* global PluginAPI: true */
 'use strict';
+
+module.exports = Listeners;
+
 /**
  * @example
  * PluginAPI.on('afterCreate', function() {
@@ -128,25 +130,6 @@
 function Listeners() {
 	this._listeners = {};
 }
-
-/**
- * @deprecated Use PluginAPI.on(...) instead
- * @param {Object} listeners
- */
-Listeners.prototype.addAll = function (listeners) {
-	var createCallback = function (callback) {
-		return function (data) {
-			callback(data.data);
-		};
-	};
-	for (var eventName in listeners) {
-		if (listeners.hasOwnProperty(eventName)) {
-			var callback = listeners[eventName];
-			var callWrapper = createCallback(callback);
-			PluginAPI.on(eventName, callWrapper);
-		}
-	}
-};
 
 /**
  * Adds a new listener

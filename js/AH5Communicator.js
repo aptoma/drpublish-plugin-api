@@ -1,7 +1,10 @@
-/* global PluginAPI: true */
 'use strict';
 
-PluginAPI.Editor = (function () {
+/**
+ * @param {Api} PluginAPI
+ * @return {AH5Communicator}
+ */
+module.exports = function (PluginAPI) {
 
 	/**
 	 * This will be used by editor apps to communicate with the editor
@@ -15,22 +18,17 @@ PluginAPI.Editor = (function () {
 	 * @exports PluginAPI/Editor
 	 */
 	var AH5Communicator = function () {
-
-		var pluginElementSelected = function (element) {
-			PluginAPI.selectedPluginElement = element;
-		};
-
-		var pluginElementDeselected = function () {
-			PluginAPI.selectedPluginElement = null;
-		};
-
 		this.DEBUG = false;
+		PluginAPI.on('pluginElementClicked', pluginElementSelected);
+		PluginAPI.on('pluginElementDeselected', pluginElementDeselected);
 
-		PluginAPI.addListeners({
-			pluginElementClicked: pluginElementSelected,
-			pluginElementDeselected: pluginElementDeselected
-		});
+		function pluginElementSelected(element) {
+			PluginAPI.selectedPluginElement = element;
+		}
 
+		function pluginElementDeselected() {
+			PluginAPI.selectedPluginElement = null;
+		}
 	};
 
 	AH5Communicator.prototype.selectedPluginElement = null;
@@ -432,5 +430,4 @@ PluginAPI.Editor = (function () {
 	};
 
 	return new AH5Communicator();
-
-})();
+};

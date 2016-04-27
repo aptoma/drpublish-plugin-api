@@ -5,7 +5,6 @@
 		"jasmine": true
 	},
 	"globals": {
-		"PluginAPI": false,
 		"pm": true
 	}
 }

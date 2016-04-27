@@ -1,5 +1,8 @@
 /* eslint-env node */
 'use strict';
+var webpack = require('webpack');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
+var path = require('path');
 
 module.exports = function (grunt) {
 	require('load-grunt-tasks')(grunt);
@@ -48,6 +51,35 @@ module.exports = function (grunt) {
 					destination: 'doc',
 					template: 'node_modules/ink-docstrap/template'
 				}
+			}
+		},
+
+		webpack: {
+			var: {
+				context: __dirname,
+				entry: './js/PluginAPI.js',
+				output: {
+					filename: 'bundle.js',
+					path: path.resolve(__dirname, 'dist'),
+					libraryTarget: 'var',
+					library: 'PluginAPI'
+				},
+				externals: {
+					jquery: 'jQuery',
+					pm: 'pm'
+				},
+				devtool: 'source-map',
+				plugins: [
+					new webpack.optimize.UglifyJsPlugin({
+						mangle: {
+							except: ['$', 'exports']
+						}
+					}),
+					new CopyWebpackPlugin([{
+						from: './js/vendors/jquery.postmessage.js',
+						to: 'jquery.postmessage.js'
+					}])
+				]
 			}
 		}
 	});

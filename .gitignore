@@ -1,3 +1,4 @@
 node_modules
-js/vendor
+js/vendors
+dist
 doc

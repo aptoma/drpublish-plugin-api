@@ -2,6 +2,7 @@
 	"extends": "@aptoma/eslint-config/lib/es5.js",
 	"env": {
 		"browser": true,
+		"commonjs": true,
 		"jquery": true
 	},
 	"rules": {

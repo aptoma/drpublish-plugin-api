@@ -1,5 +1,9 @@
-/* global Listeners:false, pm:false*/
+/* global pm:false*/
 'use strict';
+
+var articleCommunicator = require('./articleCommunicator');
+var ah5Communicator = require('./AH5Communicator');
+var Listeners = require('./Listeners');
 
 var PluginAPI = (function () {
 
@@ -227,25 +231,6 @@ var PluginAPI = (function () {
 	 */
 	Api.prototype.hideLoader = function () {
 		this.request('hide-loader');
-	};
-
-	/**
-	 * @deprecated Use PluginAPI.on(...) instead
-	 * @param {Object} listeners
-	 */
-	Api.prototype.addListeners = function (listeners) {
-		var createCallback = function (callback) {
-			return function (data) {
-				callback(data.data);
-			};
-		};
-		for (var eventName in listeners) {
-			if (listeners.hasOwnProperty(eventName)) {
-				var callback = listeners[eventName];
-				var callWrapper = createCallback(callback);
-				this.on(eventName, callWrapper);
-			}
-		}
 	};
 
 	/**
@@ -641,3 +626,8 @@ var PluginAPI = (function () {
 
 	return new Api();
 })();
+
+PluginAPI.Article = articleCommunicator(PluginAPI);
+PluginAPI.Editor = ah5Communicator(PluginAPI);
+
+module.exports = PluginAPI;

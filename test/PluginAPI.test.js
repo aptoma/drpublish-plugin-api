@@ -1,4 +1,7 @@
 'use strict';
+
+var PluginAPI = require('../js/PluginAPI');
+
 describe('PluginAPI Core', function () {
 
 	var api;

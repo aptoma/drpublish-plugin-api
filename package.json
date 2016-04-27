@@ -12,20 +12,25 @@
   "license": "MIT",
   "devDependencies": {
     "@aptoma/eslint-config": "^4.0.0",
+    "copy-webpack-plugin": "^2.1.3",
     "eslint": "^2.8.0",
     "grunt": "^1.0.1",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-eslint": "^18.1.0",
     "grunt-jsdoc": "^2.0.0",
     "grunt-karma": "^0.12.2",
+    "grunt-webpack": "^1.0.11",
     "ink-docstrap": "^1.1.4",
     "jasmine-core": "^2.4.1",
     "jquery": "^2.2.3",
     "karma": "^0.13.22",
     "karma-jasmine": "^0.3.8",
     "karma-phantomjs-launcher": "^1.0.0",
+    "karma-webpack": "^1.7.0",
     "load-grunt-tasks": "^3.5.0",
     "phantomjs-prebuilt": "^2.1.7",
-    "time-grunt": "^1.3.0"
+    "time-grunt": "^1.3.0",
+    "webpack": "^1.13.0",
+    "webpack-dev-server": "^1.14.1"
   }
 }

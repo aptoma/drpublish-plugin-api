@@ -1,8 +1,10 @@
-/* global PluginAPI: true */
 'use strict';
 
-PluginAPI.Article = (function () {
-
+/**
+ * @param {Api} PluginAPI
+ * @return {ArticleCommunicator}
+ */
+module.exports = function (PluginAPI) {
 	/**
 	 * This class is used for communicating with the article, typically setting and getting values of metadata or in the article content itself.
 	 *
@@ -517,5 +519,4 @@ PluginAPI.Article = (function () {
 	};
 
 	return new ArticleCommunicator();
-
-})();
+};
