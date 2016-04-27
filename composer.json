@@ -1,14 +1,9 @@
 {
-    "name": "aptoma/plugin-api",
-    "description": "DrFront Apps API",
-    "license": "proprietary",
-    "support": {
-        "source": "http://github.com/aptoma/no.aptoma.plugin-api"
-    },
+    "name": "aptoma/drpublish-plugin-api",
+    "description": "DrPublish Plugin API",
+    "license": "MIT",
+    "homepage": "http://github.com/aptoma/drpublish-plugin-api",
     "autoload": {
         "classmap": ["php/"]
-    },
-    "require": {
-        "ext-mcrypt": "*"
     }
 }

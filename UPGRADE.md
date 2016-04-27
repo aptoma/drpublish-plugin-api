@@ -1,5 +1,35 @@
-Upgrading from v1.* to v2.0
-==========================
+Upgrading
+=========
+
+v3.0
+----
+
+### Bundling with CommonJS.
+
+The module is now also distributed as a bundle, so that you only need to include `bundle.js` in your own code. The external dependencies on jQuery and jquery.postmessage must also be included.
+
+The bundle is using UMD, so you can use your module loader of choice, or just include it in a script tag.
+
+### Remove deprecated features
+
+Version three removes the previously deprecated `addListeners()` method in PluginAPI and Listeners.
+
+Before:
+
+    PluginAPI.addListeners({
+         pluginElementClicked: pluginElementSelected,
+         pluginElementDeselected: pluginElementDeselected
+    });
+
+After:
+
+    PluginAPI.on('pluginElementClicked', pluginElementSelected);
+    PluginAPI.on('pluginElementDeselected', pluginElementDeselected);
+
+
+v2.0
+----
+
 When upgrading from v1.* to v2.0 there are two important points to keep in mind:
  * The parent object has been renamed to ```PluginAPI```, so all occurences of ```AppAPI``` should be changed.
  * There is no longer an authentication step, so the ```AppAPI.doStandardAuthentication``` and ```AppAPI.doDirectAuthentication``` functions have been removed.

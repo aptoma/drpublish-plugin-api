@@ -55,13 +55,13 @@ module.exports = function (grunt) {
 		},
 
 		webpack: {
-			var: {
+			bundle: {
 				context: __dirname,
 				entry: './js/PluginAPI.js',
 				output: {
 					filename: 'bundle.js',
 					path: path.resolve(__dirname, 'dist'),
-					libraryTarget: 'var',
+					libraryTarget: 'umd',
 					library: 'PluginAPI'
 				},
 				externals: {

@@ -19,7 +19,7 @@ var PluginAPI = (function () {
 	var Api = function () {
 		this.DEBUG = false;
 
-		this.Version = '1.0';
+		this.Version = '3.0';
 		this.Editor = null;
 		this.Article = null;
 		this.errorListeners = new Listeners();
