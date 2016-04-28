@@ -22,8 +22,12 @@ module.exports = function (PluginAPI) {
 		PluginAPI.on('pluginElementClicked', pluginElementSelected);
 		PluginAPI.on('pluginElementDeselected', pluginElementDeselected);
 
-		function pluginElementSelected(element) {
-			PluginAPI.selectedPluginElement = element;
+		/**
+		 * @param {Object} event
+		 * @param {Object} event.data
+		 */
+		function pluginElementSelected(event) {
+			PluginAPI.selectedPluginElement = event;
 		}
 
 		function pluginElementDeselected() {
@@ -237,8 +241,8 @@ module.exports = function (PluginAPI) {
 	 * The element will be given the class dp-app-element, and given a unique ID (if none is present)
 	 *
 	 * @param {Element} element The element that should be inserted
-	 * @param {Options/Function} options (can be omitted) Options object, supports option 'select' - set to true to automatically select the inserted element
-	 * @param {Function} callback function(String), id of the newly inserted element
+	 * @param {Object/Function} options (can be omitted) Options object, supports option 'select' - set to true to automatically select the inserted element
+	 * @param {Function} [callback] function(String), id of the newly inserted element
 	 */
 	AH5Communicator.prototype.insertElement = function (element, options, callback) {
 		var select = false;
@@ -375,6 +379,7 @@ module.exports = function (PluginAPI) {
 	};
 
 	AH5Communicator.prototype.insertEmbeddedAsset = function (markup, data, callback) {
+		var self = this;
 		var replaceElement = false;
 		if (PluginAPI.selectedPluginElement) {
 			if (data.assetSource !== PluginAPI.getAppName()) {
@@ -384,30 +389,6 @@ module.exports = function (PluginAPI) {
 				replaceElement = true;
 			}
 		}
-
-		var insert = function (dpArticleId, callback) {
-			data.internalId = dpArticleId;
-			var elementId = 'asset-' + dpArticleId;
-			var element = $('<div/>');
-			element.attr('id', elementId);
-			element.attr('data-internal-id', dpArticleId);
-			element.attr('data-external-id', data.externalId);
-			element.addClass(data.assetClass);
-			var customMarkup = $(markup);
-			element.append(customMarkup);
-			if (!replaceElement) {
-				this.insertElement(element, {select: true});
-			} else {
-				this.replaceElementById(elementId, element.get(0).outerHTML, {select: true});
-			}
-			if (typeof callback === 'function') {
-				return callback();
-			}
-		}.bind(this);
-
-		var updateEmbeddedAssetRequest = function (callback) {
-			PluginAPI.request('update-embedded-asset', data, callback);
-		};
 
 		if (PluginAPI.selectedPluginElement) {
 			var dpArticleId = PluginAPI.selectedPluginElement.dpArticleId;
@@ -426,6 +407,33 @@ module.exports = function (PluginAPI) {
 					});
 				}
 			);
+		}
+
+		function insert(dpArticleId, callback) {
+			data.internalId = dpArticleId;
+			var elementId = 'asset-' + dpArticleId;
+			var element = document.createElement('div');
+			element.id = elementId;
+			element.dataset.internalId = dpArticleId;
+			if (data.externalId) {
+				element.dataset.externalId = data.externalId;
+			}
+			if (data.assetClass) {
+				element.classList.add(data.assetClass);
+			}
+			element.innerHTML = markup;
+			if (!replaceElement) {
+				self.insertElement(element, {select: true});
+			} else {
+				self.replaceElementById(elementId, element.outerHTML, {select: true});
+			}
+			if (typeof callback === 'function') {
+				return callback();
+			}
+		}
+
+		function updateEmbeddedAssetRequest(callback) {
+			PluginAPI.request('update-embedded-asset', data, callback);
 		}
 	};
 

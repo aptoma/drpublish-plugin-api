@@ -15,7 +15,7 @@ module.exports = Listeners;
  *
  * @description
  *
- * <p>DrPublish provides a large set of default events that an app can listen for. All events that start their name with &#39;before&#39; can be stopped by an app. This is done by returning &#39;false&#39; from the callback function, as in the &#39;beforSave&#39; example given bellow. </p>
+ * <p>DrPublish provides a large set of default events that an app can listen for. All events that start their name with &#39;before&#39; can be stopped by an app. This is done by returning &#39;false&#39; from the callback function, as in the &#39;beforeSave&#39; example given below. </p>
  * <p>Other apps can also supply their own events using the PluginAPI.emit(...) function. Documention on these events are up to each app to create.</p>
  * <h3 id="available-events">Available Events</h3>
  * <p><code>addCategory</code></p>
@@ -136,9 +136,12 @@ function Listeners() {
  *
  * @param {String} event Event name
  * @param {Function} callback Function to call when an even of the type is received
- * @return {int} The index of the new listener
+ * @return {int|undefined} The index of the new listener
  */
 Listeners.prototype.add = function (event, callback) {
+	if (typeof callback !== 'function') {
+		return;
+	}
 
 	if (this._listeners[event] === undefined) {
 		this._listeners[event] = [];
@@ -155,7 +158,6 @@ Listeners.prototype.add = function (event, callback) {
  * @param {Function} index The index of the event handler to remove
  */
 Listeners.prototype.remove = function (event, index) {
-
 	if (this._listeners[event] === undefined || this._listeners[event][index] === undefined) {
 		return;
 	}
@@ -183,26 +185,28 @@ Listeners.prototype.removeAll = function (event) {
  * Notifies all registered listeners that an event has occurred
  *
  * @param {String} event Event type
- * @param {Object} data The event data
- * @return {Boolean}
+ * @param {Object} payload The event data
+ * @return {Boolean} Whether to continue with the action (for events named `before*`)
  */
-Listeners.prototype.notify = function (event, data) {
+Listeners.prototype.notify = function (event, payload) {
 	var returnValue = true;
-	if (this._listeners[event] !== undefined) {
-		jQuery.each(this._listeners[event], function (i, e) {
-			if (e && typeof e === 'function') {
-				if (data && data.params && data.params === true) {
-					var r = e.apply(null, data.data);
-
-					if (r === false) {
-						returnValue = false;
-					}
-
-				} else if (e(data) === false) {
-					returnValue = false;
-				}
-			}
-		});
+	if (this._listeners[event] === undefined) {
+		return returnValue;
 	}
+
+	if (!payload) {
+		payload = {
+			data: null
+		};
+	}
+
+	this._listeners[event].forEach(function (listenerFn) {
+		if (typeof listenerFn !== 'function') {
+			return;
+		}
+		if (listenerFn(payload.data) === false) {
+			returnValue = false;
+		}
+	});
 	return returnValue;
 };
