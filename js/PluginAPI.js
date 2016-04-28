@@ -471,8 +471,8 @@ var PluginAPI = (function () {
 	/**
 	 * Create a new instance of the Api class
 	 * @private
- 	 * @return {Api}
-     */
+	 * @return {Api}
+	 */
 	Api.prototype.create = function () {
 		return new Api();
 	};
@@ -624,16 +624,16 @@ var PluginAPI = (function () {
 		this.request('get-custom-modal-inputs', null, callback);
 	};
 
-    /**
-     * unlocks the plugin after authentication. In order to use the plugin, calling this method is required
-     * for all plugins having a secret defined within the publication config.
-     *
-     */
-    Api.prototype.isAuthenticated = function() {
-        this.request("is-authenticated", {
-            pluginName:  this.appName
-        });
-    };
+	/**
+	 * unlocks the plugin after authentication. In order to use the plugin, calling this method is required
+	 * for all plugins having a secret defined within the publication config.
+	 *
+	 */
+	Api.prototype.isAuthenticated = function () {
+		this.request('is-authenticated', {
+			pluginName: this.appName
+		});
+	};
 
 	return new Api();
 })();
