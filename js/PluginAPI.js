@@ -634,5 +634,11 @@ var PluginAPI = (function() {
         this.request('get-custom-modal-inputs', null, callback);
     };
 
+    Api.prototype.confirmAuthenticated = function() {
+        this.request("confirm-authenticated", {
+            pluginName:  this.appName
+        });
+    };
+
     return new Api();
 })();
