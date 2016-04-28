@@ -1,10 +1,8 @@
 /* global PluginAPI: true */
 
+/* jshint maxstatements:30 */
 PluginAPI.Editor = (function () {
     "use strict";
-
-
-
 
     /**
      * This will be used by editor apps to communicate with the editor
@@ -19,16 +17,13 @@ PluginAPI.Editor = (function () {
      */
     var AH5Communicator = function() {
 
-        var selectedPluginElement = null;
-
-
         var pluginElementSelected = function(element) {
-            PluginAPI.selectedPluginElement = element
-        }
+            PluginAPI.selectedPluginElement = element;
+        };
 
         var pluginElementDeselected = function() {
             PluginAPI.selectedPluginElement = null;
-        }
+        };
 
         this.DEBUG = false;
 
@@ -39,9 +34,7 @@ PluginAPI.Editor = (function () {
 
     };
 
-
     AH5Communicator.prototype.selectedPluginElement = null;
-
 
     /**
      * Get name of current active editor
@@ -336,6 +329,7 @@ PluginAPI.Editor = (function () {
         }, callback);
     };
 
+
     /**
      * Initialize pre registered menus
      *
@@ -350,45 +344,40 @@ PluginAPI.Editor = (function () {
         }, callback);
     };
 
-    AH5Communicator.prototype.updateAssetMedia = function(data, callback) {
+    /**
+     * Opens the plugin editor for a given element.
+     *
+     * @param {String} id Plugin element ID
+     */
+    AH5Communicator.prototype.openPluginElementEditor = function (id) {
+        PluginAPI.request('open-element-editor', {
+            id: id
+        });
+    };
+
+    /**
+     * Returns the total number of words in the currently open article.
+     *
+     * @param {Function} callback Receives the total word count as its single parameter
+     */
+    AH5Communicator.prototype.getTotalWordCount = function (callback) {
+        PluginAPI.request('total-word-count', null, callback);
+    };
+
+    /**
+     * Returns the total number of characters in the currently open article.
+     *
+     * @param {Function} callback Receives the total character count as its single parameter
+     */
+    AH5Communicator.prototype.getTotalCharCount = function (callback) {
+        PluginAPI.request('total-char-count', null, callback);
+    };
+
+    AH5Communicator.prototype.updateAssetData = function(data, callback) {
         PluginAPI.request('update-asset-media', data, callback);
     };
-    
-    AH5Communicator.prototype.insertEmbeddedMedia = function(markup, data, callback) {
-        var insert = function(dpArticleId, callback) {
-            data.internalId = dpArticleId;
-            var element = $('<div/>');
-            element.attr('id', 'asset-' + dpArticleId);
-            element.attr('data-internal-id', dpArticleId);
-            element.attr('data-external-id', data.externalId);
-            element.addClass(data.assetClass);
-            var customMarkup = $(markup);
-            element.append(customMarkup);
-            this.insertElement(element, { select: true} , callback)
-        }.bind(this);
-        
-        var cb = function(callback) {
-            PluginAPI.request('update-embedded-asset', data, callback);
-        };
-        
-        if (PluginAPI.selectedPluginElement) {
-            var dpArticleId = PluginAPI.selectedPluginElement.dpArticleId;
-            if (!dpArticleId) {
-                throw "Selected plugin element: expected dpArticleId not found (tried reading from attribute 'data-internal-id')";
-            }
-            insert(dpArticleId, cb);
-        } else {
-            PluginAPI.createEmbeddedObject(
-                data.embeddedTypeId,
-                function(dpArticleId) {
-                    insert(dpArticleId, cb);
-                }
-            );
-        }
-    };
 
-    AH5Communicator.prototype.insertEmbeddedMedia = function(markup, data, callback) {
-
+    AH5Communicator.prototype.insertEmbeddedAsset = function(markup, data, callback) {
         var replaceElement = false;
         if (PluginAPI.selectedPluginElement) {
             if (data.assetSource !== PluginAPI.getAppName()) {
@@ -422,18 +411,22 @@ PluginAPI.Editor = (function () {
         var updateEmbeddedAssetRequest = function(callback) {
             PluginAPI.request('update-embedded-asset', data, callback);
         };
-        
+
         if (PluginAPI.selectedPluginElement) {
             var dpArticleId = PluginAPI.selectedPluginElement.dpArticleId;
             if (!dpArticleId) {
                 throw "Selected plugin element: expected dpArticleId not found (tried reading from attribute 'data-internal-id')";
             }
-            insert(dpArticleId, function() {updateEmbeddedAssetRequest(callback)});
+            insert(dpArticleId, function() {
+                updateEmbeddedAssetRequest(callback);
+            });
         } else {
             PluginAPI.createEmbeddedObject(
                 data.embeddedTypeId,
                 function(dpArticleId) {
-                    insert(dpArticleId,  function() {updateEmbeddedAssetRequest(callback)});
+                    insert(dpArticleId, function() {
+                        updateEmbeddedAssetRequest(callback);
+                    });
                 }
             );
         }
