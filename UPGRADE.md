@@ -4,11 +4,13 @@ Upgrading
 v3.0
 ----
 
-### Bundling with CommonJS.
+### Bundling
 
-The module is now also distributed as a bundle, so that you only need to include `bundle.js` in your own code. The external dependencies on jQuery and jquery.postmessage must also be included.
+The module is now also distributed as a bundle, so that you only need to include `bundle.js` in your own code. The external dependency on jquery.postmessage must also be included.
 
 The bundle is using UMD, so you can use your module loader of choice, or just include it in a script tag.
+
+Starting from v3, we no longer depend on jQuery, so feel free to remove it if you don't use it in your own code.
 
 ### Remove deprecated features
 

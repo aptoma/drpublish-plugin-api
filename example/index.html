@@ -3,11 +3,10 @@
 <head>
     <meta charset="utf-8">
     <title>Example Plugin</title>
-    <script src="http://code.jquery.com/jquery.min.js"></script>
     <script src="../dist/jquery.postmessage.js"></script>
     <script src="../dist/bundle.js"></script>
     <script>
-    $(document).ready(function() {
+    document.addEventListener('DOMContentLoaded', function() {
         var queryParameters = {};
         window.location.search.substr(1).split('&').forEach(function (queryPair) {
             queryParameters[queryPair.split('=')[0]] = queryPair.split('=')[1];
@@ -16,7 +15,7 @@
         // This is needed so that DrPublish knows which plugin to communicate with
         PluginAPI.setAppName(queryParameters.name);
 
-        $('#textButton').click(function() {
+        document.querySelector('#textButton').addEventListener('click', function() {
             var value = getValue();
             if (value === null) {
                 return false;
@@ -25,21 +24,22 @@
             PluginAPI.Editor.insertString(value);
         });
 
-        $('#objectButton').click(function() {
+        document.querySelector('#objectButton').addEventListener('click', function() {
             var value = getValue();
             if (value === null) {
                 return false;
             }
             // insert an element at the current cursor position
             // required parameters to make it draggable and non-editable are automatically added by the PluginAPI
-            var element = $('<div>').append($('<p>').attr('data-source', 'foobar').text(value));
+            var element = document.createElement('div');
+            element.innerHTML = '<p data-source="foobar">' + value + '</p>';
             PluginAPI.Editor.insertElement(element);
         });
 
         // triggers each time an element from this app is selected
         PluginAPI.on('pluginElementSelected', function(object) {
             PluginAPI.Editor.getHTMLById(object.data.id, function(element) {
-                $('#title').html('Last selected element: ' + $(element).text());
+                document.querySelector('#title').textContent = 'Last selected element: ' + element.textContent;
             });
         });
 
@@ -47,7 +47,7 @@
         PluginAPI.Editor.initMenu(['deleteButton']);
 
         function getValue() {
-            var value = $('#textInput').val();
+            var value = document.querySelector('#textInput').value;
             if (value.trim() === '') {
                 PluginAPI.showInfoMsg('I shall not insert an empty thing, that would just be silly');
                 return null;
