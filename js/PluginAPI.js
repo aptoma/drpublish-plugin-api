@@ -628,8 +628,8 @@ var PluginAPI = (function () {
 	 * for all plugins having a secret defined within the publication config.
 	 *
 	 */
-	Api.prototype.isAuthenticated = function () {
-		this.request('is-authenticated', {
+	Api.prototype.confirmAuthenticated = function () {
+		this.request('confirm-authenticated', {
 			pluginName: this.appName
 		});
 	};
