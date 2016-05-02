@@ -30,6 +30,8 @@ Listeners registered with `PluginAPI.on()` will now receive the same data object
 
 It was previously possible to provide a `.params` on data sent with events, which could've been used to give multiple arguments to a callback. This was never used, and has been removed.
 
+`PluginAPI.selectedPluginElement` is no longer exposed. If you need it, use listeners to get notified whenever it's set/unset, and store it as needed within your own scope.
+
 v2.0
 ----
 

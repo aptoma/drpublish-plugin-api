@@ -25,7 +25,6 @@ var PluginAPI = (function () {
 		this.errorListeners = new Listeners();
 		this.eventListeners = new Listeners();
 		this.appName = '';
-		this.selectedPluginElement = null;
 
 		var self = this;
 

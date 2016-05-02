@@ -12,11 +12,11 @@ describe('AH5Communicator', function () {
 				}
 			};
 			communicatorFactory(pluginApiMock);
-			listeners.pluginElementClicked({
-				dpArticleId: '10001'
-			});
-
-			expect(pluginApiMock.selectedPluginElement.dpArticleId).toEqual('10001');
+			expect(function () {
+				listeners.pluginElementClicked({
+					dpArticleId: '10001'
+				});
+			}).not.toThrow();
 		});
 	});
 
@@ -50,15 +50,18 @@ describe('AH5Communicator', function () {
 
 		it('should show error message and return if attempting to update an element created by another app', function () {
 			var showErrorMsgSpy = jasmine.createSpy('showErrorMsg');
+			var listeners = {};
 			var pluginApiMock = {
-				on: jasmine.createSpy('on'),
-				selectedPluginElement: true,
+				on: jasmine.createSpy('on').and.callFake(function (name, callback) {
+					listeners[name] = [callback];
+				}),
 				getAppName: function () {
 					return 'foo';
 				},
 				showErrorMsg: showErrorMsgSpy
 			};
 			var communicator = communicatorFactory(pluginApiMock);
+			listeners.pluginElementClicked[0]({});
 			expect(communicator.insertEmbeddedAsset('', {assetSource: 'bar'})).toBeUndefined();
 			expect(showErrorMsgSpy.calls.argsFor(0)).toContain('Can\'t update selected plugin element since it doesn\'t belong to the \'foo\' plugin');
 		});
