@@ -140,7 +140,7 @@ function Listeners() {
  */
 Listeners.prototype.add = function (event, callback) {
 	if (typeof callback !== 'function') {
-		return;
+		throw Error('Listener callback must be a function.');
 	}
 
 	if (this._listeners[event] === undefined) {

@@ -18,11 +18,11 @@ describe('Listeners', function () {
 			expect(listeners._listeners.foo[index]).toEqual(listenerFn);
 		});
 
-		it('should ignore callbacks that are not a function', function () {
+		it('should throw an error when supplied callback is not a function', function () {
 			var listeners = new Listeners();
-			var index = listeners.add('foo', null);
-			expect(index).toBeUndefined();
-			expect(listeners._listeners.foo).toBeUndefined();
+			expect(function () {
+				listeners.add('foo', null);
+			}).toThrow();
 		});
 	});
 
