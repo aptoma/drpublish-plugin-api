@@ -26,6 +26,9 @@ After:
     PluginAPI.on('pluginElementClicked', pluginElementSelected);
     PluginAPI.on('pluginElementDeselected', pluginElementDeselected);
 
+Listeners registered with `PluginAPI.on()` will now receive the same data object that listeners registered with `PluginAPI.addListeners()` received. It was a bug the that format was different for `.on()`.
+
+It was previously possible to provide a `.params` on data sent with events, which could've been used to give multiple arguments to a callback. This was never used, and has been removed.
 
 v2.0
 ----
