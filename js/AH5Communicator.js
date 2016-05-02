@@ -1,10 +1,22 @@
 'use strict';
 
 /**
+ * @typedef {Object} selectedPluginElementData
+ *
+ * @property {String} id The DOM id of the selected element
+ * @property {String} dpArticleId
+ * @property {String} externalId
+ * @property {Boolean} isDigitalAsset
+ */
+
+/**
  * @param {Api} PluginAPI
  * @return {AH5Communicator}
  */
 module.exports = function (PluginAPI) {
+
+	/** @type {selectedPluginElementData|null} */
+	var selectedPluginElement = null;
 
 	/**
 	 * This will be used by editor apps to communicate with the editor
@@ -23,19 +35,16 @@ module.exports = function (PluginAPI) {
 		PluginAPI.on('pluginElementDeselected', pluginElementDeselected);
 
 		/**
-		 * @param {Object} event
-		 * @param {Object} event.data
+		 * @param {selectedPluginElementData} elementData
 		 */
-		function pluginElementSelected(event) {
-			PluginAPI.selectedPluginElement = event;
+		function pluginElementSelected(elementData) {
+			selectedPluginElement = elementData;
 		}
 
 		function pluginElementDeselected() {
-			PluginAPI.selectedPluginElement = null;
+			selectedPluginElement = null;
 		}
 	};
-
-	AH5Communicator.prototype.selectedPluginElement = null;
 
 	/**
 	 * Get name of current active editor
@@ -45,6 +54,7 @@ module.exports = function (PluginAPI) {
 	AH5Communicator.prototype.getActiveEditor = function (callback) {
 		PluginAPI.request('get-active-editor', null, callback);
 	};
+
 	/**
 	 * Registers/Modifies a context menu items for a app element
 	 * The object send should have the following structure
@@ -381,7 +391,7 @@ module.exports = function (PluginAPI) {
 	AH5Communicator.prototype.insertEmbeddedAsset = function (markup, data, callback) {
 		var self = this;
 		var replaceElement = false;
-		if (PluginAPI.selectedPluginElement) {
+		if (selectedPluginElement) {
 			if (data.assetSource !== PluginAPI.getAppName()) {
 				PluginAPI.showErrorMsg('Can\'t update selected plugin element since it doesn\'t belong to the \'' + PluginAPI.getAppName() + '\' plugin');
 				return;
@@ -390,8 +400,8 @@ module.exports = function (PluginAPI) {
 			}
 		}
 
-		if (PluginAPI.selectedPluginElement) {
-			var dpArticleId = PluginAPI.selectedPluginElement.dpArticleId;
+		if (selectedPluginElement) {
+			var dpArticleId = selectedPluginElement.dpArticleId;
 			if (!dpArticleId) {
 				throw Error('Selected plugin element: expected dpArticleId not found (tried reading from attribute \'data-internal-id\')');
 			}
