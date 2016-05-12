@@ -87,8 +87,10 @@ describe('PluginAPI Core', function () {
 	});
 
 	it('should convert a dom element to an html string', function () {
-		var html = '<div><p>foobar</p></div>';
-		expect(api.convertDomToHTML($(html))).toEqual(html);
+		var element = document.createElement('div');
+		element.innerHTML = '<p>foobar</p>';
+		var expected = '<div><p>foobar</p></div>';
+		expect(api.convertDomToHTML(element)).toEqual(expected);
 	});
 
 	it('should be able to send simple requests', function () {

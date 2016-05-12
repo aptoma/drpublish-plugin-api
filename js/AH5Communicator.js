@@ -263,7 +263,7 @@ module.exports = function (PluginAPI) {
 			callback = options;
 		}
 		PluginAPI.request('editor-insert-element', {
-			element: jQuery('<div>').append(element).html(),
+			element: element.outerHTML,
 			select: select
 		}, callback);
 	};

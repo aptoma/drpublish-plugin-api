@@ -289,15 +289,15 @@ var PluginAPI = (function () {
 	/**
 	 * Generates proper html code to represent the dom element. This is NOT an asynchronous function
 	 *
-	 * @param {Object} dom The dom node to convert
+	 * @param {Object|Element} element The dom node to convert
 	 * @return {String} The html code
 	 */
-	// TODO: This function should also be able to take a DOMElement or similar.
-	Api.prototype.convertDomToHTML = function (dom) {
-		if (typeof dom === 'object' && typeof dom.wrap === 'function') {
-			return dom.wrap('<div>').parent().html();
+	Api.prototype.convertDomToHTML = function (element) {
+		// Support for passing in a jQuery element
+		if (typeof element === 'object' && typeof element.wrap === 'function') {
+			return element.wrap('<div>').parent().html();
 		}
-		return '';
+		return element.outerHTML;
 	};
 
 	/**

@@ -20,6 +20,24 @@ describe('AH5Communicator', function () {
 		});
 	});
 
+	describe('insertElement', function () {
+		it('should send a request with the element as html', function () {
+			var requestSpy = jasmine.createSpy('request');
+			var pluginApiMock = {
+				on: jasmine.createSpy('on'),
+				request: requestSpy
+			};
+			var communicator = communicatorFactory(pluginApiMock);
+			var element = document.createElement('div');
+			element.innerHTML = '<span>Foo</span>';
+			communicator.insertElement(element, {select: true});
+
+			expect(requestSpy.calls.argsFor(0)).toContain('editor-insert-element');
+			expect(requestSpy.calls.argsFor(0)[1].element)
+				.toEqual('<div><span>Foo</span></div>');
+		});
+	});
+
 	describe('insertEmbeddedAsset', function () {
 		it('should insert element with id, attributes, class and markup', function () {
 			var requestSpy = jasmine.createSpy('request');
