@@ -9,6 +9,7 @@
     "test": "grunt karma:unit",
     "lint": "grunt eslint",
     "ci": "grunt ci",
+    "prepublish": "grunt webpack:bundle",
     "release": "release-it -n -i patch",
     "release:minor": "release-it -n -i minor",
     "release:major": "release-it -n -i major"
