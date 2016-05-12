@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Example Plugin</title>
+    <script src="../dist/jquery.postmessage.js"></script>
+    <script src="../dist/bundle.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var queryParameters = {};
+        window.location.search.substr(1).split('&').forEach(function (queryPair) {
+            queryParameters[queryPair.split('=')[0]] = queryPair.split('=')[1];
+        });
+        // Register name of the app, sent as a parameter in the iframe url
+        // This is needed so that DrPublish knows which plugin to communicate with
+        PluginAPI.setAppName(queryParameters.name);
+
+        document.querySelector('#textButton').addEventListener('click', function() {
+            var value = getValue();
+            if (value === null) {
+                return false;
+            }
+            // insert a string at the current cursor position
+            PluginAPI.Editor.insertString(value);
+        });
+
+        document.querySelector('#objectButton').addEventListener('click', function() {
+            var value = getValue();
+            if (value === null) {
+                return false;
+            }
+            // insert an element at the current cursor position
+            // required parameters to make it draggable and non-editable are automatically added by the PluginAPI
+            var element = document.createElement('div');
+            element.innerHTML = '<p data-source="foobar">' + value + '</p>';
+            PluginAPI.Editor.insertElement(element);
+        });
+
+        // triggers each time an element from this app is selected
+        PluginAPI.on('pluginElementSelected', function(object) {
+            PluginAPI.Editor.getHTMLById(object.data.id, function(element) {
+                document.querySelector('#title').textContent = 'Last selected element: ' + element.textContent;
+            });
+        });
+
+        // register a delete button for elements inserted by this plugin
+        PluginAPI.Editor.initMenu(['deleteButton']);
+
+        function getValue() {
+            var value = document.querySelector('#textInput').value;
+            if (value.trim() === '') {
+                PluginAPI.showInfoMsg('I shall not insert an empty thing, that would just be silly');
+                return null;
+            }
+            return value;
+        }
+    });
+    </script>
+</head>
+<body>
+<h2 id="title">Last selected element: </h2>
+<p><label>Type stuff here: <input type="text" id="textInput" /></label></p>
+<input type="button" value="Insert As Text" id="textButton" />
+<input type="button" value="Insert As Draggable Object" id="objectButton" />
+</body>
+</html>

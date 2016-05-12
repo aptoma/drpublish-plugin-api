@@ -1,4 +1,7 @@
-/* global PluginAPI: true */
+'use strict';
+
+module.exports = Listeners;
+
 /**
  * @example
  * PluginAPI.on('afterCreate', function() {
@@ -12,7 +15,7 @@
  *
  * @description
  *
- * <p>DrPublish provides a large set of default events that an app can listen for. All events that start their name with &#39;before&#39; can be stopped by an app. This is done by returning &#39;false&#39; from the callback function, as in the &#39;beforSave&#39; example given bellow. </p>
+ * <p>DrPublish provides a large set of default events that an app can listen for. All events that start their name with &#39;before&#39; can be stopped by an app. This is done by returning &#39;false&#39; from the callback function, as in the &#39;beforeSave&#39; example given below. </p>
  * <p>Other apps can also supply their own events using the PluginAPI.emit(...) function. Documention on these events are up to each app to create.</p>
  * <h3 id="available-events">Available Events</h3>
  * <p><code>addCategory</code></p>
@@ -124,38 +127,21 @@
  *     <p><em>triggered when someone deselects a plugin element in the editor</p></em>
  * </blockquote>
  */
-function Listeners () {
-    "use strict";
+function Listeners() {
 	this._listeners = {};
 }
-
-/**
- * @deprecated Use PluginAPI.on(...) instead
- */
-Listeners.prototype.addAll = function(listeners) {
-    "use strict";
-    var createCallback = function(callback) {
-        return function(data) {
-            callback(data.data);
-        };
-    };
-    for (var eventName in listeners) {
-        if (listeners.hasOwnProperty(eventName)) {
-            var callback = listeners[eventName];
-            var callWrapper = createCallback(callback);
-            PluginAPI.on(eventName, callWrapper);
-        }
-    }
-};
 
 /**
  * Adds a new listener
  *
  * @param {String} event Event name
  * @param {Function} callback Function to call when an even of the type is received
+ * @return {int|undefined} The index of the new listener
  */
-Listeners.prototype.add = function(event, callback) {
-    "use strict";
+Listeners.prototype.add = function (event, callback) {
+	if (typeof callback !== 'function') {
+		throw Error('Listener callback must be a function.');
+	}
 
 	if (this._listeners[event] === undefined) {
 		this._listeners[event] = [];
@@ -171,12 +157,10 @@ Listeners.prototype.add = function(event, callback) {
  * @param {String} event Event type
  * @param {Function} index The index of the event handler to remove
  */
-Listeners.prototype.remove = function(event, index) {
-    "use strict";
-
+Listeners.prototype.remove = function (event, index) {
 	if (this._listeners[event] === undefined || this._listeners[event][index] === undefined) {
-        return;
-    }
+		return;
+	}
 
 	/*
 	 * Set to null instead of remove to retain callback indexes
@@ -189,8 +173,7 @@ Listeners.prototype.remove = function(event, index) {
  *
  * @param {String} event Event type to remove handlers for (!event for all)
  */
-Listeners.prototype.removeAll = function(event) {
-    "use strict";
+Listeners.prototype.removeAll = function (event) {
 	if (!event) {
 		this._listeners = [];
 	} else {
@@ -202,26 +185,28 @@ Listeners.prototype.removeAll = function(event) {
  * Notifies all registered listeners that an event has occurred
  *
  * @param {String} event Event type
- * @param {Object} data The event data
+ * @param {Object} payload The event data
+ * @return {Boolean} Whether to continue with the action (for events named `before*`)
  */
-Listeners.prototype.notify = function(event, data) {
-    "use strict";
-    var returnValue = true;
-	if (this._listeners[event] !== undefined) {
-		jQuery.each(this._listeners[event], function(i, e) {
-			if (e && typeof e === "function") {
-				if (data && data.params && data.params === true) {
-					var r = e.apply(null, data.data);
-
-					if (r === false) {
-						returnValue = false;
-					}
-
-				} else if (e(data) === false) {
-                    returnValue = false;
-                }
-			}
-		});
+Listeners.prototype.notify = function (event, payload) {
+	var returnValue = true;
+	if (this._listeners[event] === undefined) {
+		return returnValue;
 	}
+
+	if (!payload) {
+		payload = {
+			data: null
+		};
+	}
+
+	this._listeners[event].forEach(function (listenerFn) {
+		if (typeof listenerFn !== 'function') {
+			return;
+		}
+		if (listenerFn(payload.data) === false) {
+			returnValue = false;
+		}
+	});
 	return returnValue;
 };

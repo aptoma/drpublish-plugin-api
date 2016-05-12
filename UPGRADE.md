@@ -1,5 +1,42 @@
-Upgrading from v1.* to v2.0
-==========================
+Upgrading
+=========
+
+v3.0
+----
+
+### Bundling
+
+The module is now also distributed as a bundle, so that you only need to include `bundle.js` in your own code. The external dependency on jquery.postmessage must also be included.
+
+The bundle is using UMD, so you can use your module loader of choice, or just include it in a script tag.
+
+Starting from v3, we no longer depend on jQuery, so feel free to remove it if you don't use it in your own code.
+
+### Remove deprecated features
+
+Version three removes the previously deprecated `addListeners()` method in PluginAPI and Listeners.
+
+Before:
+
+    PluginAPI.addListeners({
+         pluginElementClicked: pluginElementSelected,
+         pluginElementDeselected: pluginElementDeselected
+    });
+
+After:
+
+    PluginAPI.on('pluginElementClicked', pluginElementSelected);
+    PluginAPI.on('pluginElementDeselected', pluginElementDeselected);
+
+Listeners registered with `PluginAPI.on()` will now receive the same data object that listeners registered with `PluginAPI.addListeners()` received. It was a bug the that format was different for `.on()`.
+
+It was previously possible to provide a `.params` on data sent with events, which could've been used to give multiple arguments to a callback. This was never used, and has been removed.
+
+`PluginAPI.selectedPluginElement` is no longer exposed. If you need it, use listeners to get notified whenever it's set/unset, and store it as needed within your own scope.
+
+v2.0
+----
+
 When upgrading from v1.* to v2.0 there are two important points to keep in mind:
  * The parent object has been renamed to ```PluginAPI```, so all occurences of ```AppAPI``` should be changed.
  * There is no longer an authentication step, so the ```AppAPI.doStandardAuthentication``` and ```AppAPI.doDirectAuthentication``` functions have been removed.
