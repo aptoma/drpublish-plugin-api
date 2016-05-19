@@ -184,6 +184,9 @@ Listeners.prototype.removeAll = function (event) {
 /**
  * Notifies all registered listeners that an event has occurred
  *
+ * If the payload has a key `data`, the value of that field will be passed to listener. If not, the entire payload will
+ * be passed on.
+ *
  * @param {String} event Event type
  * @param {Object} payload The event data
  * @return {Boolean} Whether to continue with the action (for events named `before*`)
@@ -194,17 +197,19 @@ Listeners.prototype.notify = function (event, payload) {
 		return returnValue;
 	}
 
-	if (!payload) {
-		payload = {
-			data: null
-		};
+	// If the payload is an object with a key data, we use that value as the payload we pass to the listener functions.
+	// This is needed as we have some inconsistencies in how we pass data around. This normalization should preferably
+	// be done at the call site.
+	var listenerPayload = payload;
+	if (typeof payload === 'object' && payload !== null && typeof payload.data !== 'undefined') {
+		listenerPayload = payload.data;
 	}
 
 	this._listeners[event].forEach(function (listenerFn) {
 		if (typeof listenerFn !== 'function') {
 			return;
 		}
-		if (listenerFn(payload.data) === false) {
+		if (listenerFn(listenerPayload) === false) {
 			returnValue = false;
 		}
 	});
