@@ -10,6 +10,28 @@
  */
 
 /**
+ * @typedef {Object} EmbeddedAssetData
+ *
+ * @property {Number} embeddedTypeId
+ * @property {String} assetType
+ * @property {String} externalId
+ * @property {String} assetClass
+ * @property {String} assetSource The name of the app that created this asset
+ * @property {String} resourceUri
+ * @property {String} previewUri
+ * @property {String} renditions
+ * @property {AssetRendition} renditions.highRes
+ * @property {AssetRendition} renditions.preview
+ * @property {Object} options An object to hold any arbitrary extra data for this asset
+ */
+
+/**
+ * @typedef {Object} AssetRendition
+ *
+ * @property {String} uri
+ */
+
+/**
  * @param {Api} PluginAPI
  * @return {AH5Communicator}
  */
@@ -384,10 +406,19 @@ module.exports = function (PluginAPI) {
 		PluginAPI.request('total-char-count', null, callback);
 	};
 
+	/**
+	 * @param {EmbeddedAssetData} data
+	 * @param {Function} [callback]
+     */
 	AH5Communicator.prototype.updateAssetData = function (data, callback) {
 		PluginAPI.request('update-asset-media', data, callback);
 	};
 
+	/**
+	 * @param {String} markup The raw markup that will be inserted into the editer
+	 * @param {EmbeddedAssetData} data
+	 * @param {Function} [callback]
+     */
 	AH5Communicator.prototype.insertEmbeddedAsset = function (markup, data, callback) {
 		var self = this;
 		var replaceElement = false;
