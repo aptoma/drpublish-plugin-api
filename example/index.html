@@ -13,7 +13,7 @@
         });
         // Register name of the app, sent as a parameter in the iframe url
         // This is needed so that DrPublish knows which plugin to communicate with
-        PluginAPI.setAppName(queryParameters.name);
+        PluginAPI.setAppName(queryParameters.appName);
 
         document.querySelector('#textButton').addEventListener('click', function() {
             var value = getValue();
