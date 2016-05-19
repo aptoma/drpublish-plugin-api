@@ -5,6 +5,11 @@ var articleCommunicator = require('./articleCommunicator');
 var ah5Communicator = require('./AH5Communicator');
 var Listeners = require('./Listeners');
 
+/**
+ * @extends Api
+ * @property {ArticleCommunicator} Article
+ * @property {AH5Communicator} Editor
+ */
 var PluginAPI = (function () {
 
 	/**
