@@ -33,37 +33,57 @@ var PluginAPI = (function () {
 
 		var self = this;
 
-		pm.bind('event', function (data) {
-			var createEventFunction = function (eventName) {
-				return function (data) {
-					PluginAPI.request(eventName, data);
-				};
-			};
-			var updateObject = function (data) {
+		pm.bind('event', eventListener, '*');
+
+		/**
+		 * @param {Object} event
+		 * @param {String} event.type
+		 * @param {*} event.data
+         * @return {boolean|Object} True if none of listeners want to stop the processing
+         */
+		function eventListener(event) {
+			var continueProcessing = self.eventListeners.notify(
+				event.type,
+				updateObjectWithEventFunctions(event.data)
+			);
+
+			if (continueProcessing === false) {
+				return {abort: true};
+			}
+
+			return true;
+
+			/**
+			 * data can be be anything, but if it's an object, we'll iterate over the keys and look for any values
+			 * that should be treated as function calls.
+			 *
+			 * To be treated as a function call, the value must be an object where `type === 'function'`, and have a key
+			 * `eventKey` which is the event name that should be passed to `PluginAPI.request()`
+			 *
+			 * @param {*} data
+             * @return {*}
+             */
+			function updateObjectWithEventFunctions(data) {
 				for (var key in data) {
 					if (data.hasOwnProperty(key)) {
 						if (typeof data[key] === 'object' && data[key] !== null && data[key].type === 'function') {
 							data[key] = createEventFunction(data[key].eventKey);
 						} else if (typeof data[key] === 'object' && data[key] !== null && typeof data[key].map === 'function') {
-							data[key] = data[key].map(updateObject);
+							data[key] = data[key].map(updateObjectWithEventFunctions);
 						} else if (typeof data[key] === 'object' && data[key] !== null) {
-							data[key] = updateObject(data[key]);
+							data[key] = updateObjectWithEventFunctions(data[key]);
 						}
 					}
 				}
 				return data;
-			};
-			data.data = updateObject(data.data);
+			}
 
-			data = self.eventListeners.notify(data.type, data.data);
-			if (typeof data === 'undefined') {
-				return true;
+			function createEventFunction(eventName) {
+				return function (data) {
+					PluginAPI.request(eventName, data);
+				};
 			}
-			if (data === false) {
-				return {'abort': true};
-			}
-			return data;
-		}, '*');
+		}
 	};
 
 	/**
