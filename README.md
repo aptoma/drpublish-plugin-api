@@ -75,10 +75,10 @@ A simple example JSON schema for an image app could look like:
 }
 ```
 
-What about debugging?
+Debugging
 ---------------------
 
-It just so happens that we did a lot of debugging while setting this up, and we've left the debugging code in there for your convenience. All you need to do to enable it is to set the AppAPI.DEBUG flag to TRUE; If you then open up your browser JS console, you will see output detailing everything interesting that is happening under the bonnet. Note especially warnings and errors since these indicate that something of special interest has happened.
+Enable debugging by setting the AppAPI.DEBUG flag to TRUE; If you then open up your browser JS console, you will see output detailing everything interesting that is happening under the bonnet. Note especially warnings and errors since these indicate that something of special interest has happened.
 
 Documentation Generation
 ------------------------
