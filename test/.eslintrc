@@ -1,7 +1,7 @@
 {
 	"extends": "@aptoma/eslint-config/lib/es5.js",
 	"env": {
-		"browser": false,
+		"browser": true,
 		"jasmine": true
 	},
 	"globals": {

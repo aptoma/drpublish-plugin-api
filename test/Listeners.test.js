@@ -91,5 +91,21 @@ describe('Listeners', function () {
 			var result = listeners.notify(eventName, payload);
 			expect(result).toEqual(true);
 		});
+
+		it('should look for data in the data key of payload', function () {
+			var listeners = new Listeners();
+			listeners.add('foo', function (data) {
+				expect(data).toEqual({foo: 'bar'});
+			});
+			listeners.notify('foo', {data: {foo: 'bar'}});
+		});
+
+		it('should pass on entire payload if payload.data is falsy', function () {
+			var listeners = new Listeners();
+			listeners.add('foo', function (data) {
+				expect(data).toEqual({foo: 'bar'});
+			});
+			listeners.notify('foo', {foo: 'bar'});
+		});
 	});
 });
