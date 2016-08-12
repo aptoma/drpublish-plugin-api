@@ -13,6 +13,7 @@
  * @param {Api} PluginAPI
  * @return {AH5Communicator}
  */
+/* eslint max-statements: ["error", 30] */
 module.exports = function (PluginAPI) {
 
 	/** @type {selectedPluginElementData|null} */
@@ -64,16 +65,16 @@ module.exports = function (PluginAPI) {
 	 *
 	 * @example
 	 * PluginAPI.Editor.registerMenuAction({
-     *      label: 'label in the menu',
-     *      icon: '[Optional] url to possible icon image',
-     *      trigger: '[Optional] css selector, only show menu element when this matches the element',
-     *      callback: function(id, clickedElementId) {
-     *          // callback function
-     *          // first parameter is id of the app element
-     *          // second paramter is id of closest element to the trigger element that has an id
-     *          //      in code: $(event.triggerElement).closest('[id]').attr('id');
-     *      }
-     * })
+	 *      label: 'label in the menu',
+	 *      icon: '[Optional] url to possible icon image',
+	 *      trigger: '[Optional] css selector, only show menu element when this matches the element',
+	 *      callback: function(id, clickedElementId) {
+	 *          // callback function
+	 *          // first parameter is id of the app element
+	 *          // second paramter is id of closest element to the trigger element that has an id
+	 *          //      in code: $(event.triggerElement).closest('[id]').attr('id');
+	 *      }
+	 * })
 	 */
 	AH5Communicator.prototype.registerMenuAction = function (action, callback) {
 		PluginAPI.request('register-menu-action', action, callback);
@@ -85,23 +86,23 @@ module.exports = function (PluginAPI) {
 	 *
 	 * @example
 	 * PluginAPI.Editor.registerMenuActionGroup({
-     *      label: 'label for the group in the menu',
-     *      icon: '[Optional] url to possible icon image',
-     *      actions: [
-     *          {
-     *              label: 'label for the action #1',
-     *              callback: function(id, clickedElementId) {
-     *                  // same as for registerMenuAction
-     *              }
-     *          },
-     *          {
-     *              label: 'label for the action #2',
-     *              callback: function(id, clickedElementId) {
-     *                  // same as for registerMenuAction
-     *              }
-     *          }
-     *      ]
-     * })
+	 *      label: 'label for the group in the menu',
+	 *      icon: '[Optional] url to possible icon image',
+	 *      actions: [
+	 *          {
+	 *              label: 'label for the action #1',
+	 *              callback: function(id, clickedElementId) {
+	 *                  // same as for registerMenuAction
+	 *              }
+	 *          },
+	 *          {
+	 *              label: 'label for the action #2',
+	 *              callback: function(id, clickedElementId) {
+	 *                  // same as for registerMenuAction
+	 *              }
+	 *          }
+	 *      ]
+	 * })
 	 *
 	 * @param {Object} group The action object
 	 * @param {function} callback function()

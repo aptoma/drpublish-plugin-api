@@ -10,6 +10,7 @@ var Listeners = require('./Listeners');
  * @property {ArticleCommunicator} Article
  * @property {AH5Communicator} Editor
  */
+/* eslint max-statements: ["error", 40] */
 var PluginAPI = (function () {
 
 	/**
@@ -39,13 +40,13 @@ var PluginAPI = (function () {
 		 * @param {Object} event
 		 * @param {String} event.type
 		 * @param {*} event.data
-         * @return {boolean|Object} True if none of listeners want to stop the processing
-         */
+		 * @return {boolean|Object} True if none of listeners want to stop the processing
+		 */
 		function eventListener(event) {
 			var continueProcessing = self.eventListeners.notify(
-				event.type,
-				updateObjectWithEventFunctions(event.data)
-			);
+					event.type,
+					updateObjectWithEventFunctions(event.data)
+					);
 
 			if (continueProcessing === false) {
 				return {abort: true};
@@ -61,8 +62,8 @@ var PluginAPI = (function () {
 			 * `eventKey` which is the event name that should be passed to `PluginAPI.request()`
 			 *
 			 * @param {*} data
-             * @return {*}
-             */
+			 * @return {*}
+			 */
 			function updateObjectWithEventFunctions(data) {
 				for (var key in data) {
 					if (data.hasOwnProperty(key)) {
@@ -287,15 +288,15 @@ var PluginAPI = (function () {
 	 *
 	 * @example
 	 * PluginAPI.searchDrLib({
-     *      query: 'articles.json?q=awesome',
-     *      secure: true,
-     *      success: function(data) {
-     *          data.items.forEach(doStuffWithArticle);
-     *      },
-     *      error: function(data) {
-     *          console.warn('something went wrong');
-     *      }
-     * })
+	 *      query: 'articles.json?q=awesome',
+	 *      secure: true,
+	 *      success: function(data) {
+	 *          data.items.forEach(doStuffWithArticle);
+	 *      },
+	 *      error: function(data) {
+	 *          console.warn('something went wrong');
+	 *      }
+	 * })
 	 *
 	 * @param {Object} data Object with three properties; 'query' which is the query to send to DrLib, 'success' which is the callback to execute on success, and 'secure' a boolean to add the internal API key to the query and thus allow searching on unpublished article. This callback's parameter is an object which is the query result as an object. See the json output of DrLib to learn more about this object
 	 * @param {Function} callback function(Boolean)
@@ -568,22 +569,22 @@ var PluginAPI = (function () {
 	 * @example
 	 *
 	 * PluginAPI.createModal('<h1>This is a modal</h1>', {
-     *   buttons: {
-     *     Ok: function () {
-     *       alert('Ok!');
-     *     }
-     *   }
-     * });
+	 *   buttons: {
+	 *     Ok: function () {
+	 *       alert('Ok!');
+	 *     }
+	 *   }
+	 * });
 	 *
 	 * PluginAPI.updateModal('<h1>This is the same modal</h1>');
 	 *
 	 * PluginAPI.createModal('<h1>This is a brand new modal</h1>', {
-     *   buttons: {
-     *     cancel: function() {
-     *       PluginAPI.closeModal(true);
-     *     }
-     *   }
-     * });
+	 *   buttons: {
+	 *     cancel: function() {
+	 *       PluginAPI.closeModal(true);
+	 *     }
+	 *   }
+	 * });
 	 *
 	 * @param {String} content An HTML string
 	 * @param {Object} options A standard jQuery UI options object.
@@ -637,10 +638,10 @@ var PluginAPI = (function () {
 	 *  getModalInputs would return:
 	 *
 	 *  {
-     *      "number-0": {VALUE}
-     *      "name": {VALUE},
-     *      "languages": "en"
-     *  }
+	 *      "number-0": {VALUE}
+	 *      "name": {VALUE},
+	 *      "languages": "en"
+	 *  }
 	 *
 	 * @param {Function} callback
 	 */
