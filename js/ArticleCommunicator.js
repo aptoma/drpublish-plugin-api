@@ -144,7 +144,7 @@ PluginAPI.Article = (function() {
      */
     ArticleCommunicator.prototype.addTag = function(tag, errorFunction, callback) {
         PluginAPI.request('article-tags-add', {
-            tag: tag,
+            tags: [tag],
             onError: errorFunction
         }, callback);
     };
