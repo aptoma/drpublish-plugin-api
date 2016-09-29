@@ -540,6 +540,28 @@ var PluginAPI = (function () {
 		return true;
 	};
 
+	/**
+	 * Searches for tags
+	 *
+	 * @param {String} term The search term to use
+	 * @param {Number} tagTypeId Id of the tagtype to search for
+	 * @param {Function} callback callback function to call with the tags, parameter is an array of tag objects
+	 * @return {Boolean}
+	 */
+	Api.prototype.searchTags = function (term, tagTypeId, callback) {
+		term = term || '';
+		if (typeof tagTypeId !== 'number') {
+			console.error('PlugAPI.searcTags must be have a number as second parameter');
+			return false;
+		}
+		if (typeof callback !== 'function') {
+			console.error('PlugAPI.searcTags must be have a function as third parameter');
+			return false;
+		}
+		this.request('search-tags', {term: term, tagTypeId: tagTypeId, callback: callback});
+		return true;
+	};
+
 
 	/**
 	 * Hide the plugin, so it is no longer visible on the list of open plugins
