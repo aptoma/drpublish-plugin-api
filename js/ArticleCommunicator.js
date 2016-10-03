@@ -517,6 +517,16 @@ PluginAPI.Article = (function() {
         }, callback);
     };
 
+    ArticleCommunicator.prototype.getTopic = function(callback) {
+        PluginAPI.request("article-topic-get", null, callback);
+    };
+
+    ArticleCommunicator.prototype.setTopic = function(name, callback) {
+        PluginAPI.request("article-topic-set", {
+            topic: name
+        }, callback);
+    };
+
     return new ArticleCommunicator();
 
 })();
