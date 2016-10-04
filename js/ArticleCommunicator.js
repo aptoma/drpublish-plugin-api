@@ -142,6 +142,20 @@ PluginAPI.Article = (function() {
      * @param {Function} errorFunction called if error
      * @param {Function} callback function(Boolean), called when tag has been set
      */
+    ArticleCommunicator.prototype.addTags = function(tags, errorFunction, callback) {
+        PluginAPI.request('article-tags-add', {
+            tags: tags,
+            onError: errorFunction
+        }, callback);
+    };
+
+    /**
+     * Add tag for the article
+     *
+     * @param {String} tag Tag to be added
+     * @param {Function} errorFunction called if error
+     * @param {Function} callback function(Boolean), called when tag has been set
+     */
     ArticleCommunicator.prototype.addTag = function(tag, errorFunction, callback) {
         PluginAPI.request('article-tags-add', {
             tags: [tag],
