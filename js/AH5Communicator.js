@@ -141,7 +141,7 @@ module.exports = function (PluginAPI) {
 	 * @param {function} callback function(Boolean), called after deletion is done
 	 */
 	AH5Communicator.prototype.deleteElementById = function (id, callback) {
-		PluginAPI.request('editor-element-replace-byid', {
+		PluginAPI.request('editor-element-delete-byid', {
 			id: id
 		}, callback);
 	};
