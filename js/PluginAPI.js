@@ -10,7 +10,7 @@ var Listeners = require('./Listeners');
  * @property {ArticleCommunicator} Article
  * @property {AH5Communicator} Editor
  */
-/* eslint max-statements: ["error", 40] */
+/* eslint max-statements: ["error", 41] */
 var PluginAPI = (function () {
 
 	/**
@@ -679,6 +679,17 @@ var PluginAPI = (function () {
 	Api.prototype.confirmAuthenticated = function () {
 		this.request('confirm-authenticated', {
 			pluginName: this.appName
+		});
+	};
+
+	/**
+	 * Report current window height to DrPublish, used primarily for adjusting height of iframes when using twin view
+	 *
+	 * @param {Number} height Height of plugin window
+	 */
+	Api.prototype.reportWindowHeight = function (height) {
+		this.request('report-window-height', {
+			height: height
 		});
 	};
 
