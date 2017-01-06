@@ -85,6 +85,17 @@ var PluginAPI = (function () {
 				};
 			}
 		}
+
+		// Report current window height to DrPublish, used primarily for adjusting height of iframes when using twin view
+		function reportWindowHeight() {
+			PluginAPI.request('report-window-height', {
+				height: document.body.scrollHeight
+			});
+		}
+
+
+		window.addEventListener('resize', reportWindowHeight);
+		window.addEventListener('load', reportWindowHeight);
 	};
 
 	/**
@@ -679,17 +690,6 @@ var PluginAPI = (function () {
 	Api.prototype.confirmAuthenticated = function () {
 		this.request('confirm-authenticated', {
 			pluginName: this.appName
-		});
-	};
-
-	/**
-	 * Report current window height to DrPublish, used primarily for adjusting height of iframes when using twin view
-	 *
-	 * @param {Number} height Height of plugin window
-	 */
-	Api.prototype.reportWindowHeight = function (height) {
-		this.request('report-window-height', {
-			height: height
 		});
 	};
 
