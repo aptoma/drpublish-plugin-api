@@ -13,7 +13,7 @@
  * @param {Api} PluginAPI
  * @return {AH5Communicator}
  */
-/* eslint max-statements: ["error", 30] */
+/* eslint max-statements: ["error", 32] */
 module.exports = function (PluginAPI) {
 
 	/** @type {selectedPluginElementData|null} */
@@ -389,13 +389,13 @@ module.exports = function (PluginAPI) {
 		PluginAPI.request('update-asset-media', data, callback);
 	};
 
-    AH5Communicator.prototype.getAssetData = function(assetId, callback) {
-        PluginAPI.request('get-asset-data', assetId, callback);
-    };
+	AH5Communicator.prototype.getAssetData = function (assetId, callback) {
+		PluginAPI.request('get-asset-data', assetId, callback);
+	};
 
-    AH5Communicator.prototype.updateAssetOption = function(data, callback) {
-        PluginAPI.request('update-asset-option', data, callback);
-    };
+	AH5Communicator.prototype.updateAssetOption = function (data, callback) {
+		PluginAPI.request('update-asset-option', data, callback);
+	};
 
 	AH5Communicator.prototype.insertEmbeddedAsset = function (markup, data, callback) {
 		var self = this;
@@ -438,10 +438,10 @@ module.exports = function (PluginAPI) {
 				element.dataset.externalId = data.externalId;
 			}
 			if (data.assetClass) {
-                var array = data.assetClass.split(' ');
-                for (var i = 0, length = array.length; i < length; i++) {
-                    element.classList.add(array[i]);
-                }
+				var array = data.assetClass.split(' ');
+				for (var i = 0, length = array.length; i < length; i++) {
+					element.classList.add(array[i]);
+				}
 			}
 			element.innerHTML = markup;
 			if (!replaceElement) {
