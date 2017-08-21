@@ -4,7 +4,6 @@
  * @param {Api} PluginAPI
  * @return {ArticleCommunicator}
  */
-/* eslint max-statements: ["error", 50] */
 module.exports = function (PluginAPI) {
 	/**
 	 * This class is used for communicating with the article, typically setting and getting values of metadata or in the article content itself.
@@ -138,29 +137,15 @@ module.exports = function (PluginAPI) {
 	};
 
 	/**
-	 * Add tag to the article, create if not exists
+	 * Add tag for the article
 	 *
-	 * @param {String} tags Tag to be (created and) added
+	 * @param {String} tag Tag to be added
 	 * @param {Function} errorFunction called if error
 	 * @param {Function} callback function(Boolean), called when tag has been set
 	 */
-	ArticleCommunicator.prototype.addTag = function (tags, errorFunction, callback) {
-		PluginAPI.request('article-tag-add', {
-			tags: tags,
-			onError: errorFunction
-		}, callback);
-	};
-
-	/**
-	 * Add tags to the article, , create if not exist
-	 *
-	 * @param {String} tags Tags to be (created and) added
-	 * @param {Function} errorFunction called if error
-	 * @param {Function} callback function(Boolean), called when tag has been set
-	 */
-	ArticleCommunicator.prototype.addTags = function (tags, errorFunction, callback) {
+	ArticleCommunicator.prototype.addTag = function (tag, errorFunction, callback) {
 		PluginAPI.request('article-tags-add', {
-			tags: tags,
+			tag: tag,
 			onError: errorFunction
 		}, callback);
 	};
@@ -503,11 +488,11 @@ module.exports = function (PluginAPI) {
 	 *
 	 * @example
 	 * PluginAPI.Article.setProperties({
-	 *     fooProperty: "bar",
-	 *     barProperty: "foo"
-	 * }, function(properties) {
-	 *     // Returns a complete and updated list of properties.
-	 * })
+     *     fooProperty: "bar",
+     *     barProperty: "foo"
+     * }, function(properties) {
+     *     // Returns a complete and updated list of properties.
+     * })
 	 *
 	 * @param {Object} properties An object of property names and corresponding values.
 	 * @param {Function} callback Callback called with an updated list of properties.
