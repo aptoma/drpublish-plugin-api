@@ -80,6 +80,22 @@ module.exports = function (PluginAPI) {
 		PluginAPI.request('register-menu-action', action, callback);
 	};
 
+    AH5Communicator.prototype.registerHoverAction = function (action, callback) {
+        PluginAPI.request('register-hover-action', action, callback);
+    };
+
+    /**
+     * Swap positions between the provided element and the adjacent one
+     * in the specified direction
+     * PluginAPI.Editor.directionalCastle({
+	 *  elementId: 'the provided element id',
+	 *  direction: 'forward/backward'
+	 * })
+     * */
+    AH5Communicator.prototype.directionalCastle = function (movement, callback) {
+        PluginAPI.request('editor-directional-castle', movement, callback);
+    };
+
 	/**
 	 * Registers/Modifies a group of items to in the context menu
 	 * The object send should have the following structure
