@@ -10,7 +10,6 @@ var Listeners = require('./Listeners');
  * @property {ArticleCommunicator} Article
  * @property {AH5Communicator} Editor
  */
-/* eslint max-statements: ["error", 41] */
 var PluginAPI = (function () {
 
 	/**
@@ -40,13 +39,13 @@ var PluginAPI = (function () {
 		 * @param {Object} event
 		 * @param {String} event.type
 		 * @param {*} event.data
-		 * @return {boolean|Object} True if none of listeners want to stop the processing
-		 */
+         * @return {boolean|Object} True if none of listeners want to stop the processing
+         */
 		function eventListener(event) {
 			var continueProcessing = self.eventListeners.notify(
-					event.type,
-					updateObjectWithEventFunctions(event.data)
-					);
+				event.type,
+				updateObjectWithEventFunctions(event.data)
+			);
 
 			if (continueProcessing === false) {
 				return {abort: true};
@@ -62,8 +61,8 @@ var PluginAPI = (function () {
 			 * `eventKey` which is the event name that should be passed to `PluginAPI.request()`
 			 *
 			 * @param {*} data
-			 * @return {*}
-			 */
+             * @return {*}
+             */
 			function updateObjectWithEventFunctions(data) {
 				for (var key in data) {
 					if (data.hasOwnProperty(key)) {
@@ -85,17 +84,6 @@ var PluginAPI = (function () {
 				};
 			}
 		}
-
-		// Report current window height to DrPublish, used primarily for adjusting height of iframes when using twin view
-		function reportWindowHeight() {
-			PluginAPI.request('report-window-height', {
-				height: document.body.scrollHeight
-			});
-		}
-
-
-		window.addEventListener('resize', reportWindowHeight);
-		window.addEventListener('load', reportWindowHeight);
 	};
 
 	/**
@@ -299,15 +287,15 @@ var PluginAPI = (function () {
 	 *
 	 * @example
 	 * PluginAPI.searchDrLib({
-	 *      query: 'articles.json?q=awesome',
-	 *      secure: true,
-	 *      success: function(data) {
-	 *          data.items.forEach(doStuffWithArticle);
-	 *      },
-	 *      error: function(data) {
-	 *          console.warn('something went wrong');
-	 *      }
-	 * })
+     *      query: 'articles.json?q=awesome',
+     *      secure: true,
+     *      success: function(data) {
+     *          data.items.forEach(doStuffWithArticle);
+     *      },
+     *      error: function(data) {
+     *          console.warn('something went wrong');
+     *      }
+     * })
 	 *
 	 * @param {Object} data Object with three properties; 'query' which is the query to send to DrLib, 'success' which is the callback to execute on success, and 'secure' a boolean to add the internal API key to the query and thus allow searching on unpublished article. This callback's parameter is an object which is the query result as an object. See the json output of DrLib to learn more about this object
 	 * @param {Function} callback function(Boolean)
@@ -520,6 +508,7 @@ var PluginAPI = (function () {
 	 * @param {Function} callback function(embeddedObjectId) called once the object has been created, first parameter is the new embedded object id
 	 */
 	Api.prototype.createEmbeddedObject = function (typeId, callback) {
+        console.debug('stef: api create embedded object')
 		this.request('create-embedded-object', {typeId: typeId, callback: callback});
 	};
 
@@ -548,28 +537,6 @@ var PluginAPI = (function () {
 			start = true;
 		}
 		this.request('give-focus', {pluginName: pluginName, start: start, argument: argument});
-		return true;
-	};
-
-	/**
-	 * Searches for tags
-	 *
-	 * @param {String} term The search term to use
-	 * @param {Number} tagTypeId Id of the tagtype to search for
-	 * @param {Function} callback callback function to call with the tags, parameter is an array of tag objects
-	 * @return {Boolean}
-	 */
-	Api.prototype.searchTags = function (term, tagTypeId, callback) {
-		term = term || '';
-		if (typeof tagTypeId !== 'number') {
-			console.error('PlugAPI.searcTags must be have a number as second parameter');
-			return false;
-		}
-		if (typeof callback !== 'function') {
-			console.error('PlugAPI.searcTags must be have a function as third parameter');
-			return false;
-		}
-		this.request('search-tags', {term: term, tagTypeId: tagTypeId, callback: callback});
 		return true;
 	};
 
@@ -602,22 +569,22 @@ var PluginAPI = (function () {
 	 * @example
 	 *
 	 * PluginAPI.createModal('<h1>This is a modal</h1>', {
-	 *   buttons: {
-	 *     Ok: function () {
-	 *       alert('Ok!');
-	 *     }
-	 *   }
-	 * });
+     *   buttons: {
+     *     Ok: function () {
+     *       alert('Ok!');
+     *     }
+     *   }
+     * });
 	 *
 	 * PluginAPI.updateModal('<h1>This is the same modal</h1>');
 	 *
 	 * PluginAPI.createModal('<h1>This is a brand new modal</h1>', {
-	 *   buttons: {
-	 *     cancel: function() {
-	 *       PluginAPI.closeModal(true);
-	 *     }
-	 *   }
-	 * });
+     *   buttons: {
+     *     cancel: function() {
+     *       PluginAPI.closeModal(true);
+     *     }
+     *   }
+     * });
 	 *
 	 * @param {String} content An HTML string
 	 * @param {Object} options A standard jQuery UI options object.
@@ -671,10 +638,10 @@ var PluginAPI = (function () {
 	 *  getModalInputs would return:
 	 *
 	 *  {
-	 *      "number-0": {VALUE}
-	 *      "name": {VALUE},
-	 *      "languages": "en"
-	 *  }
+     *      "number-0": {VALUE}
+     *      "name": {VALUE},
+     *      "languages": "en"
+     *  }
 	 *
 	 * @param {Function} callback
 	 */
