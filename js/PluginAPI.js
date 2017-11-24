@@ -10,6 +10,8 @@ var Listeners = require('./Listeners');
  * @property {ArticleCommunicator} Article
  * @property {AH5Communicator} Editor
  */
+
+/* eslint max-statements: ["error", 50, { "ignoreTopLevelFunctions": true }]*/
 var PluginAPI = (function () {
 
 	/**
@@ -508,7 +510,6 @@ var PluginAPI = (function () {
 	 * @param {Function} callback function(embeddedObjectId) called once the object has been created, first parameter is the new embedded object id
 	 */
 	Api.prototype.createEmbeddedObject = function (typeId, callback) {
-        console.debug('stef: api create embedded object')
 		this.request('create-embedded-object', {typeId: typeId, callback: callback});
 	};
 

@@ -29,6 +29,7 @@ module.exports = function (PluginAPI) {
 	 * @classdesc Functions for talking with the AH5 editor. Accessed through PluginAPI.Editor
 	 * @exports PluginAPI/Editor
 	 */
+    /* eslint max-statements: ["error", 50, { "ignoreTopLevelFunctions": true }]*/
 	var AH5Communicator = function () {
 		this.DEBUG = false;
 		PluginAPI.on('pluginElementClicked', pluginElementSelected);
@@ -64,36 +65,39 @@ module.exports = function (PluginAPI) {
 	 *
 	 * @example
 	 * PluginAPI.Editor.registerMenuAction({
-     *      label: 'label in the menu',
-     *      icon: '[Optional] url to possible icon image',
-     *      trigger: '[Optional] css selector, only show menu element when this matches the element',
-     *      callback: function(id, clickedElementId) {
-     *          // callback function
-     *          // first parameter is id of the app element
-     *          // second paramter is id of closest element to the trigger element that has an id
-     *          //      in code: $(event.triggerElement).closest('[id]').attr('id');
-     *      }
-     * })
+	 *	  label: 'label in the menu',
+	 *	  icon: '[Optional] url to possible icon image',
+	 *	  trigger: '[Optional] css selector, only show menu element when this matches the element',
+	 *	  callback: function(id, clickedElementId) {
+	 *		  // callback function
+	 *		  // first parameter is id of the app element
+	 *		  // second paramter is id of closest element to the trigger element that has an id
+	 *		  //	  in code: $(event.triggerElement).closest('[id]').attr('id');
+	 *	  }
+	 * })
 	 */
 	AH5Communicator.prototype.registerMenuAction = function (action, callback) {
 		PluginAPI.request('register-menu-action', action, callback);
 	};
 
-    AH5Communicator.prototype.registerHoverAction = function (action, callback) {
-        PluginAPI.request('register-hover-action', action, callback);
-    };
 
-    /**
-     * Swap positions between the provided element and the adjacent one
-     * in the specified direction
-     * PluginAPI.Editor.directionalCastle({
+	AH5Communicator.prototype.registerHoverAction = function (action, callback) {
+		PluginAPI.request('register-hover-action', action, callback);
+	};
+
+	/**
+	 * Swap positions between the provided element and the adjacent one
+	 * in the specified direction
+	 * PluginAPI.Editor.directionalCastle({
 	 *  elementId: 'the provided element id',
 	 *  direction: 'forward/backward'
 	 * })
-     * */
-    AH5Communicator.prototype.directionalCastle = function (movement, callback) {
-        PluginAPI.request('editor-directional-castle', movement, callback);
-    };
+     *  @param {String} movement Direction
+     * @param {Function} callback
+	 * */
+	AH5Communicator.prototype.directionalCastle = function (movement, callback) {
+		PluginAPI.request('editor-directional-castle', movement, callback);
+	};
 
 	/**
 	 * Registers/Modifies a group of items to in the context menu
@@ -101,23 +105,23 @@ module.exports = function (PluginAPI) {
 	 *
 	 * @example
 	 * PluginAPI.Editor.registerMenuActionGroup({
-     *      label: 'label for the group in the menu',
-     *      icon: '[Optional] url to possible icon image',
-     *      actions: [
-     *          {
-     *              label: 'label for the action #1',
-     *              callback: function(id, clickedElementId) {
-     *                  // same as for registerMenuAction
-     *              }
-     *          },
-     *          {
-     *              label: 'label for the action #2',
-     *              callback: function(id, clickedElementId) {
-     *                  // same as for registerMenuAction
-     *              }
-     *          }
-     *      ]
-     * })
+	 *	  label: 'label for the group in the menu',
+	 *	  icon: '[Optional] url to possible icon image',
+	 *	  actions: [
+	 *		  {
+	 *			  label: 'label for the action #1',
+	 *			  callback: function(id, clickedElementId) {
+	 *				  // same as for registerMenuAction
+	 *			  }
+	 *		  },
+	 *		  {
+	 *			  label: 'label for the action #2',
+	 *			  callback: function(id, clickedElementId) {
+	 *				  // same as for registerMenuAction
+	 *			  }
+	 *		  }
+	 *	  ]
+	 * })
 	 *
 	 * @param {Object} group The action object
 	 * @param {function} callback function()
@@ -149,19 +153,19 @@ module.exports = function (PluginAPI) {
 		}, callback);
 	};
 
-    /**
-   	 * Replace a plugin element in the article
-   	 *
-   	 * @param {String} id Id of the element
-   	 * @param {String} element The new element
-   	 * @param {function} callback function(Boolean), called after replacement is done
-   	 */
-   	AH5Communicator.prototype.replacePluginElementById = function (id, element, callback) {
-   		PluginAPI.request('editor-element-replace-plugin-element-byid', {
-   			id: id,
-   			element: element
-   		}, callback);
-   	};
+	/**
+	 * Replace a plugin element in the article
+	 *
+	 * @param {String} id Id of the element
+	 * @param {String} element The new element
+	 * @param {function} callback function(Boolean), called after replacement is done
+	 */
+	AH5Communicator.prototype.replacePluginElementById = function (id, element, callback) {
+		PluginAPI.request('editor-element-replace-plugin-element-byid', {
+			id: id,
+			element: element
+		}, callback);
+	};
 
 
 	/**
@@ -420,48 +424,48 @@ module.exports = function (PluginAPI) {
 	};
 
 
-    AH5Communicator.prototype.insertNestedAsset = function(parentElementId, markup, data, callback) {
-        var self = this;
-      		var replaceElement = false;
-            PluginAPI.createEmbeddedObject(
-                        data.embeddedTypeId,
-                        function (dpArticleId) {
-                            insert(dpArticleId, parentElementId, function (data) {
-                                updateEmbeddedAssetRequest(callback(data));
-                            });
-                        }
-             );
-      		function insert(dpArticleId, parentElementId, callback) {
-                data.internalId = dpArticleId;
-                var elementId = 'asset-' + dpArticleId;
-                var element = document.createElement('div');
-                element.id = elementId;
-                element.dataset.internalId = dpArticleId;
-                if (data.externalId) {
-                    element.dataset.externalId = data.externalId;
-                }
-                if (data.assetClass) {
-                    element.classList.add(data.assetClass);
-                }
-                element.innerHTML = markup;
-                PluginAPI.Editor.getHTMLById(parentElementId, function(html) {
-                    var d = document.createElement('div');
-                    d.innerHTML = html;
-                    d.firstChild.setAttribute('id', parentElementId + 'tmp');
-                    self.replacePluginElementById(parentElementId, d.innerHTML, function() {
-                        d = document.createElement('div');
-                        d.innerHTML = html;
-                        var assetContainer =  d.querySelector('.dp-fact-box-image');
-                        assetContainer.innerHTML = element.outerHTML;
-                        self.replacePluginElementById(parentElementId + 'tmp', d.innerHTML, callback);
-                    });
-                });
-      		}
+	AH5Communicator.prototype.insertNestedAsset = function (parentElementId, markup, data, callback) {
+		var self = this;
+		PluginAPI.createEmbeddedObject(
+			data.embeddedTypeId,
+			function (dpArticleId) {
+				insert(dpArticleId, parentElementId, function (data) {
+					return updateEmbeddedAssetRequest(callback(data));
+				});
+			}
+		);
 
-      		function updateEmbeddedAssetRequest(callback) {
-      			PluginAPI.request('update-embedded-asset', data, callback);
-      		}
-    }
+		function insert(dpArticleId, parentElementId, callback) {
+			data.internalId = dpArticleId;
+			var elementId = 'asset-' + dpArticleId;
+			var element = document.createElement('div');
+			element.id = elementId;
+			element.dataset.internalId = dpArticleId;
+			if (data.externalId) {
+				element.dataset.externalId = data.externalId;
+			}
+			if (data.assetClass) {
+				element.classList.add(data.assetClass);
+			}
+			element.innerHTML = markup;
+			PluginAPI.Editor.getHTMLById(parentElementId, function (html) {
+				var d = document.createElement('div');
+				d.innerHTML = html;
+				d.firstChild.setAttribute('id', parentElementId + 'tmp');
+				self.replacePluginElementById(parentElementId, d.innerHTML, function () {
+					d = document.createElement('div');
+					d.innerHTML = html;
+					var assetContainer = d.querySelector('.dp-fact-box-image');
+					assetContainer.innerHTML = element.outerHTML;
+					self.replacePluginElementById(parentElementId + 'tmp', d.innerHTML, callback);
+				});
+			});
+		}
+
+		function updateEmbeddedAssetRequest(callback) {
+			PluginAPI.request('update-embedded-asset', data, callback);
+		}
+	};
 
 	AH5Communicator.prototype.insertEmbeddedAsset = function (markup, data, callback) {
 		var self = this;
@@ -481,14 +485,14 @@ module.exports = function (PluginAPI) {
 				throw Error('Selected plugin element: expected dpArticleId not found (tried reading from attribute \'data-internal-id\')');
 			}
 			insert(dpArticleId, function (data) {
-				updateEmbeddedAssetRequest(callback(data));
+				return updateEmbeddedAssetRequest(callback(data));
 			});
 		} else {
 			PluginAPI.createEmbeddedObject(
 				data.embeddedTypeId,
 				function (dpArticleId) {
 					insert(dpArticleId, function (data) {
-						updateEmbeddedAssetRequest(callback(data));
+						return updateEmbeddedAssetRequest(callback(data));
 					});
 				}
 			);
@@ -523,9 +527,9 @@ module.exports = function (PluginAPI) {
 
 	};
 
-    AH5Communicator.prototype.getSelectedPluginElement = function (callback) {
-        PluginAPI.request('get-selected-plugin-element', {}, callback);
-    }
+	AH5Communicator.prototype.getSelectedPluginElement = function (callback) {
+		PluginAPI.request('get-selected-plugin-element', {}, callback);
+	};
 
 	return new AH5Communicator();
 };

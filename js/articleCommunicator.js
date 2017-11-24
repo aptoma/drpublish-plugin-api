@@ -12,6 +12,8 @@ module.exports = function (PluginAPI) {
 	 * @classdesc Functions for talking with the DrPublish article object. Accessed through PluginAPI.Article
 	 * @exports PluginAPI/Article
 	 */
+
+    /* eslint max-statements: ["error", 50, { "ignoreTopLevelFunctions": true }]*/
 	var ArticleCommunicator = function () {
 		this.DEBUG = false;
 	};
