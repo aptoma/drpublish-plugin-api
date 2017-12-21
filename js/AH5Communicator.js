@@ -419,10 +419,17 @@ module.exports = function (PluginAPI) {
 		PluginAPI.request('total-char-count', null, callback);
 	};
 
-	AH5Communicator.prototype.updateAssetData = function (data, callback) {
-		PluginAPI.request('update-asset-media', data, callback);
-	};
+    AH5Communicator.prototype.updateAssetOption = function (dpArticleId, key, value, callback) {
+        PluginAPI.request('update-asset-option', {dpArticleId : dpArticleId, key : key, value: value}, callback);
+    };
 
+    AH5Communicator.prototype.updateAssetData = function (data, callback) {
+        PluginAPI.request('update-asset-media', data, callback);
+    };
+
+    AH5Communicator.prototype.getAssetData = function (dpArticleId, callback) {
+        PluginAPI.request('get-asset-data', {data: dpArticleId}, callback);
+    };
 
 	AH5Communicator.prototype.insertNestedAsset = function (parentElementId, markup, data, callback) {
 		var self = this;
