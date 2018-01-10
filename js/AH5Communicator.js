@@ -29,7 +29,7 @@ module.exports = function (PluginAPI) {
 	 * @classdesc Functions for talking with the AH5 editor. Accessed through PluginAPI.Editor
 	 * @exports PluginAPI/Editor
 	 */
-    /* eslint max-statements: ["error", 50, { "ignoreTopLevelFunctions": true }]*/
+	/* eslint max-statements: ["error", 50, { "ignoreTopLevelFunctions": true }]*/
 	var AH5Communicator = function () {
 		this.DEBUG = false;
 		PluginAPI.on('pluginElementClicked', pluginElementSelected);
@@ -92,8 +92,8 @@ module.exports = function (PluginAPI) {
 	 *  elementId: 'the provided element id',
 	 *  direction: 'forward/backward'
 	 * })
-     *  @param {String} movement Direction
-     * @param {Function} callback
+	 *  @param {String} movement Direction
+	 * @param {Function} callback
 	 * */
 	AH5Communicator.prototype.directionalCastle = function (movement, callback) {
 		PluginAPI.request('editor-directional-castle', movement, callback);
@@ -419,17 +419,17 @@ module.exports = function (PluginAPI) {
 		PluginAPI.request('total-char-count', null, callback);
 	};
 
-    AH5Communicator.prototype.updateAssetOption = function (dpArticleId, key, value, callback) {
-        PluginAPI.request('update-asset-option', {dpArticleId : dpArticleId, key : key, value: value}, callback);
-    };
+	AH5Communicator.prototype.updateAssetOption = function (dpArticleId, key, value, callback) {
+		PluginAPI.request('update-asset-option', {dpArticleId: dpArticleId, key: key, value: value}, callback);
+	};
 
-    AH5Communicator.prototype.updateAssetData = function (data, callback) {
-        PluginAPI.request('update-asset-media', data, callback);
-    };
+	AH5Communicator.prototype.updateAssetData = function (data, callback) {
+		PluginAPI.request('update-asset-media', data, callback);
+	};
 
-    AH5Communicator.prototype.getAssetData = function (dpArticleId, callback) {
-        PluginAPI.request('get-asset-data', {data: dpArticleId}, callback);
-    };
+	AH5Communicator.prototype.getAssetData = function (dpArticleId, callback) {
+		PluginAPI.request('get-asset-data', {data: dpArticleId}, callback);
+	};
 
 	AH5Communicator.prototype.insertNestedAsset = function (parentElementId, markup, data, callback) {
 		var self = this;
@@ -437,7 +437,7 @@ module.exports = function (PluginAPI) {
 			data.embeddedTypeId,
 			function (dpArticleId) {
 				insert(dpArticleId, parentElementId, function (data) {
-					return updateEmbeddedAssetRequest(callback(data));
+					return updateEmbeddedAssetRequest(callback);
 				});
 			}
 		);
