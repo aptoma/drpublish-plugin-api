@@ -492,14 +492,18 @@ module.exports = function (PluginAPI) {
 				throw Error('Selected plugin element: expected dpArticleId not found (tried reading from attribute \'data-internal-id\')');
 			}
 			insert(dpArticleId, function (data) {
-				return updateEmbeddedAssetRequest(callback(data));
+				if (typeof callback === 'function') {
+					return updateEmbeddedAssetRequest(callback(data));
+				}
 			});
 		} else {
 			PluginAPI.createEmbeddedObject(
 				data.embeddedTypeId,
 				function (dpArticleId) {
 					insert(dpArticleId, function (data) {
-						return updateEmbeddedAssetRequest(callback(data));
+						if (typeof callback === 'function') {
+							return updateEmbeddedAssetRequest(callback(data));
+						}
 					});
 				}
 			);
