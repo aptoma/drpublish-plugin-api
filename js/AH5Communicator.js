@@ -510,6 +510,9 @@ module.exports = function (PluginAPI) {
 			if (data.assetClass) {
 				element.classList.add(data.assetClass);
 			}
+            if (data.options && data.options.width) {
+                element.dataset.width = data.options.width;
+            }
 			element.innerHTML = markup;
 			if (!replaceElement) {
 				self.insertElement(element, {select: true});
