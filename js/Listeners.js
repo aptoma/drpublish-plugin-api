@@ -1,7 +1,4 @@
-'use strict';
-
-module.exports = Listeners;
-
+/* global PluginAPI: true */
 /**
  * @example
  * PluginAPI.on('afterCreate', function() {
@@ -15,7 +12,7 @@ module.exports = Listeners;
  *
  * @description
  *
- * <p>DrPublish provides a large set of default events that an app can listen for. All events that start their name with &#39;before&#39; can be stopped by an app. This is done by returning &#39;false&#39; from the callback function, as in the &#39;beforeSave&#39; example given below. </p>
+ * <p>DrPublish provides a large set of default events that an app can listen for. All events that start their name with &#39;before&#39; can be stopped by an app. This is done by returning &#39;false&#39; from the callback function, as in the &#39;beforSave&#39; example given bellow. </p>
  * <p>Other apps can also supply their own events using the PluginAPI.emit(...) function. Documention on these events are up to each app to create.</p>
  * <h3 id="available-events">Available Events</h3>
  * <p><code>addCategory</code></p>
@@ -127,21 +124,38 @@ module.exports = Listeners;
  *     <p><em>triggered when someone deselects a plugin element in the editor</p></em>
  * </blockquote>
  */
-function Listeners() {
+function Listeners () {
+    "use strict";
 	this._listeners = {};
 }
+
+/**
+ * @deprecated Use PluginAPI.on(...) instead
+ */
+Listeners.prototype.addAll = function(listeners) {
+    "use strict";
+    var createCallback = function(callback) {
+        return function(data) {
+            callback(data.data);
+        };
+    };
+    for (var eventName in listeners) {
+        if (listeners.hasOwnProperty(eventName)) {
+            var callback = listeners[eventName];
+            var callWrapper = createCallback(callback);
+            PluginAPI.on(eventName, callWrapper);
+        }
+    }
+};
 
 /**
  * Adds a new listener
  *
  * @param {String} event Event name
  * @param {Function} callback Function to call when an even of the type is received
- * @return {int|undefined} The index of the new listener
  */
-Listeners.prototype.add = function (event, callback) {
-	if (typeof callback !== 'function') {
-		throw Error('Listener callback must be a function.');
-	}
+Listeners.prototype.add = function(event, callback) {
+    "use strict";
 
 	if (this._listeners[event] === undefined) {
 		this._listeners[event] = [];
@@ -157,10 +171,12 @@ Listeners.prototype.add = function (event, callback) {
  * @param {String} event Event type
  * @param {Function} index The index of the event handler to remove
  */
-Listeners.prototype.remove = function (event, index) {
+Listeners.prototype.remove = function(event, index) {
+    "use strict";
+
 	if (this._listeners[event] === undefined || this._listeners[event][index] === undefined) {
-		return;
-	}
+        return;
+    }
 
 	/*
 	 * Set to null instead of remove to retain callback indexes
@@ -173,7 +189,8 @@ Listeners.prototype.remove = function (event, index) {
  *
  * @param {String} event Event type to remove handlers for (!event for all)
  */
-Listeners.prototype.removeAll = function (event) {
+Listeners.prototype.removeAll = function(event) {
+    "use strict";
 	if (!event) {
 		this._listeners = [];
 	} else {
@@ -184,34 +201,27 @@ Listeners.prototype.removeAll = function (event) {
 /**
  * Notifies all registered listeners that an event has occurred
  *
- * If the payload has a key `data`, the value of that field will be passed to listener. If not, the entire payload will
- * be passed on.
- *
  * @param {String} event Event type
- * @param {Object} payload The event data
- * @return {Boolean} Whether to continue with the action (for events named `before*`)
+ * @param {Object} data The event data
  */
-Listeners.prototype.notify = function (event, payload) {
-	var returnValue = true;
-	if (this._listeners[event] === undefined) {
-		return returnValue;
-	}
+Listeners.prototype.notify = function(event, data) {
+    "use strict";
+    var returnValue = true;
+	if (this._listeners[event] !== undefined) {
+		jQuery.each(this._listeners[event], function(i, e) {
+			if (e && typeof e === "function") {
+				if (data && data.params && data.params === true) {
+					var r = e.apply(null, data.data);
 
-	// If the payload is an object with a key data, we use that value as the payload we pass to the listener functions.
-	// This is needed as we have some inconsistencies in how we pass data around. This normalization should preferably
-	// be done at the call site.
-	var listenerPayload = payload;
-	if (typeof payload === 'object' && payload !== null && typeof payload.data !== 'undefined') {
-		listenerPayload = payload.data;
-	}
+					if (r === false) {
+						returnValue = false;
+					}
 
-	this._listeners[event].forEach(function (listenerFn) {
-		if (typeof listenerFn !== 'function') {
-			return;
-		}
-		if (listenerFn(listenerPayload) === false) {
-			returnValue = false;
-		}
-	});
+				} else if (e(data) === false) {
+                    returnValue = false;
+                }
+			}
+		});
+	}
 	return returnValue;
 };
