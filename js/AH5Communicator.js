@@ -492,18 +492,14 @@ module.exports = function (PluginAPI) {
 				throw Error('Selected plugin element: expected dpArticleId not found (tried reading from attribute \'data-internal-id\')');
 			}
 			insert(dpArticleId, function (data) {
-				if (typeof callback === 'function') {
-					return updateEmbeddedAssetRequest(callback(data));
-				}
+				return updateEmbeddedAssetRequest(typeof callback === 'function' ? callback(data) : null);
 			});
 		} else {
 			PluginAPI.createEmbeddedObject(
 				data.embeddedTypeId,
 				function (dpArticleId) {
 					insert(dpArticleId, function (data) {
-						if (typeof callback === 'function') {
-							return updateEmbeddedAssetRequest(callback(data));
-						}
+						return addEmbeddedAssetRequest(typeof callback === 'function' ? callback(data) : null);
 					});
 				}
 			);
@@ -532,10 +528,13 @@ module.exports = function (PluginAPI) {
 			}
 		}
 
+		function addEmbeddedAssetRequest(callback) {
+			PluginAPI.request('add-embedded-asset', data, callback);
+		}
+
 		function updateEmbeddedAssetRequest(callback) {
 			PluginAPI.request('update-embedded-asset', data, callback);
 		}
-
 	};
 
 	AH5Communicator.prototype.getSelectedPluginElement = function (callback) {
