@@ -205,7 +205,7 @@ Listeners.prototype.notify = function (event, payload) {
 			return;
 		}
 		var res = null;
-		if (payload.params && payload.params === true) {
+		if (payload && payload.params && payload.params === true) {
 			res = listenerFn.apply(null, payload.data);
 		} else if (typeof payload === 'object' && payload !== null && typeof payload.data !== 'undefined') {
 			res = listenerFn(payload.data);
