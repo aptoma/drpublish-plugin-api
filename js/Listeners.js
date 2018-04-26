@@ -192,7 +192,6 @@ Listeners.prototype.removeAll = function (event) {
  * @return {Boolean} Whether to continue with the action (for events named `before*`)
  */
 Listeners.prototype.notify = function (event, payload) {
-	console.log(payload);
 	var returnValue = true;
 	if (this._listeners[event] === undefined) {
 		return returnValue;
