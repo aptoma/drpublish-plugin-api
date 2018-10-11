@@ -521,7 +521,7 @@ module.exports = function (PluginAPI) {
 			if (!replaceElement) {
 				self.insertElement(element, {select: true});
 			} else {
-				self.replaceElementById(elementId, element.outerHTML, {select: true});
+				self.replaceElementById(elementId, element.outerHTML, null);
 			}
 			if (typeof callback === 'function') {
 				return callback();
