@@ -1,6 +1,6 @@
 {
   "name": "@aptoma/drpublish-plugin-api",
-  "version": "3.9.3",
+  "version": "3.9.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/aptoma/drpublish-plugin-api.git"
