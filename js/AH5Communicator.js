@@ -519,12 +519,9 @@ module.exports = function (PluginAPI) {
 			}
 			element.innerHTML = markup;
 			if (!replaceElement) {
-				self.insertElement(element, {select: true});
+				self.insertElement(element, {select: true}, callback);
 			} else {
-				self.replaceElementById(elementId, element.outerHTML, {select: true});
-			}
-			if (typeof callback === 'function') {
-				return callback();
+				self.replaceElementById(elementId, element.outerHTML, callback);
 			}
 		}
 
