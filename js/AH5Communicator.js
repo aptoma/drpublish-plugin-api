@@ -445,16 +445,17 @@ module.exports = function (PluginAPI) {
 		function insert(dpArticleId, parentElementId, callback) {
 			data.internalId = dpArticleId;
 			var elementId = 'asset-' + dpArticleId;
-			var element = document.createElement('div');
-			element.id = elementId;
-			element.dataset.internalId = dpArticleId;
+			var $element = $('<div />');
+			$element.attr('id', elementId);
+			$element.attr('data-internalId', dpArticleId);
 			if (data.externalId) {
-				element.dataset.externalId = data.externalId;
+                $element.attr('data-externalId', data.externalId);
 			}
 			if (data.assetClass) {
-				element.classList.add(data.assetClass);
+				$element.addClass(data.assetClass);
 			}
-			element.innerHTML = markup;
+			$element.addClass('dp-plugin-element');
+			$element.html(markup);
 			PluginAPI.Editor.getHTMLById(parentElementId, function (html) {
 				var d = document.createElement('div');
 				d.innerHTML = html;
@@ -462,8 +463,12 @@ module.exports = function (PluginAPI) {
 				self.replacePluginElementById(parentElementId, d.innerHTML, function () {
 					d = document.createElement('div');
 					d.innerHTML = html;
-					var assetContainer = d.querySelector('.dp-fact-box-image');
-					assetContainer.innerHTML = element.outerHTML;
+					var assetContainer = d.querySelector('.dp-fact-box-image, .dp-nested-asset-container');
+					if (data.isMultiple) {
+						$(assetContainer).append($element.get(0).outerHTML);
+					} else {
+						assetContainer.innerHTML = $element.get(0).outerHTML;
+					}
 					self.replacePluginElementById(parentElementId + 'tmp', d.innerHTML, callback);
 				});
 			});
