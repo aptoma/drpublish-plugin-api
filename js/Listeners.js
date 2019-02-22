@@ -213,15 +213,24 @@ Listeners.prototype.notify = function(event, data) {
 				if (data && data.params && data.params === true) {
 					var r = e.apply(null, data.data);
 
-					if (r === false) {
-						returnValue = false;
-					}
-
-				} else if (e(data) === false) {
-                    returnValue = false;
-                }
-			}
-		});
-	}
+	// If the payload is an object with a key data, we use that value as the payload we pass to the listener functions.
+	// This is needed as we have some inconsistencies in how we pass data around. This normalization should preferably
+	// be done at the call site.
+	this._listeners[event].forEach(function (listenerFn) {
+		if (typeof listenerFn !== 'function') {
+			return;
+		}
+		var res = null;
+		if (payload && payload.params && payload.params === true) {
+			res = listenerFn.apply(null, payload.data);
+		} else if (typeof payload === 'object' && payload !== null && typeof payload.data !== 'undefined') {
+			res = listenerFn(payload.data);
+		} else {
+			res = listenerFn(payload);
+		}
+		if (res === false) {
+			returnValue = false;
+		}
+	});
 	return returnValue;
 };

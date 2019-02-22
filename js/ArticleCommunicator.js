@@ -164,6 +164,20 @@ PluginAPI.Article = (function() {
 	};
 
 	/**
+	 * Add tags for the article
+	 *
+	 * @param {String} tags Tags to be added
+	 * @param {Function} errorFunction called if error
+	 * @param {Function} callback function(Boolean), called when tag has been set
+	 */
+	ArticleCommunicator.prototype.addTags = function (tags, errorFunction, callback) {
+		PluginAPI.request('article-tags-add', {
+			tags: tags,
+			onError: errorFunction
+		}, callback);
+	};
+
+	/**
 	 * Remove tag from article
 	 *
 	 * @param {String} tag Tag to remove
@@ -531,12 +545,12 @@ PluginAPI.Article = (function() {
 		}, callback);
 	};
 
-	ArticleCommunicator.prototype.getTopic = function(callback) {
-		PluginAPI.request("article-topic-get", null, callback);
+	ArticleCommunicator.prototype.getTopic = function (callback) {
+		PluginAPI.request('article-topic-get', null, callback);
 	};
 
-	ArticleCommunicator.prototype.setTopic = function(name, callback) {
-		PluginAPI.request("article-topic-set", {
+	ArticleCommunicator.prototype.setTopic = function (name, callback) {
+		PluginAPI.request('article-topic-set', {
 			topic: name
 		}, callback);
 	};
