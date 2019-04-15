@@ -80,6 +80,17 @@ module.exports = function (PluginAPI) {
 		PluginAPI.request('package-guid-get', null, callback);
 	};
 
+
+	/**
+	 * Get the package type name of the article package currently edited
+	 *
+	 * @param {Function} callback function(String), name of the current package type
+	 */
+	ArticleCommunicator.prototype.getPackageType = function (callback) {
+		PluginAPI.request('package-type-get', null, callback);
+	};
+
+
 	/**
 	 * Clear the meta information summary
 	 *
