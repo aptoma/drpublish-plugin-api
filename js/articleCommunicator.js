@@ -135,6 +135,15 @@ module.exports = function (PluginAPI) {
 		}, callback);
 	};
 
+    /**
+     * Marks article model as having meta data changes
+     *
+     * @param {Function} callback function()
+     */
+    ArticleCommunicator.prototype.setMetaChanged = function(callback) {
+        PluginAPI.request('article-meta-changed', null, callback);
+    };
+
 	/**
 	 * Set tags for the article
 	 *
