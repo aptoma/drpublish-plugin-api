@@ -448,8 +448,9 @@ module.exports = function (PluginAPI) {
 			var $element = $('<div />');
 			$element.attr('id', elementId);
 			$element.attr('data-internalId', dpArticleId);
+			$element.attr('data-ah5-type', data.assetSource);
 			if (data.externalId) {
-                $element.attr('data-externalId', data.externalId);
+                		$element.attr('data-externalId', data.externalId);
 			}
 			if (data.assetClass) {
 				$element.addClass(data.assetClass);
