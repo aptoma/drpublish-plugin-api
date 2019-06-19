@@ -16,7 +16,7 @@
 module.exports = function (PluginAPI) {
 
 	/** @type {selectedPluginElementData|null} */
-	var selectedPluginElement = null;
+	let selectedPluginElement = null;
 
 	/**
 	 * This will be used by editor apps to communicate with the editor
@@ -30,7 +30,7 @@ module.exports = function (PluginAPI) {
 	 * @exports PluginAPI/Editor
 	 */
 	/* eslint max-statements: ["error", 50, { "ignoreTopLevelFunctions": true }]*/
-	var AH5Communicator = function () {
+	const AH5Communicator = function () {
 		this.DEBUG = false;
 		PluginAPI.on('pluginElementClicked', pluginElementSelected);
 		PluginAPI.on('pluginElementDeselected', pluginElementDeselected);
@@ -290,7 +290,7 @@ module.exports = function (PluginAPI) {
 	 * @param {Function} [callback] function(String), id of the newly inserted element
 	 */
 	AH5Communicator.prototype.insertElement = function (element, options, callback) {
-		var select = false;
+		let select = false;
 		if (typeof options === 'object') {
 			options = options || {};
 			select = typeof options.select === 'boolean' ? options.select : false;
@@ -432,11 +432,11 @@ module.exports = function (PluginAPI) {
 	};
 
 	AH5Communicator.prototype.insertNestedAsset = function (parentElementId, markup, data, callback) {
-		var self = this;
+		const self = this;
 		PluginAPI.createEmbeddedObject(
 			data.embeddedTypeId,
-			function (dpArticleId) {
-				insert(dpArticleId, parentElementId, function (data) {
+			(dpArticleId) => {
+				insert(dpArticleId, parentElementId, (data) => {
 					return updateEmbeddedAssetRequest(callback);
 				});
 			}
@@ -444,27 +444,27 @@ module.exports = function (PluginAPI) {
 
 		function insert(dpArticleId, parentElementId, callback) {
 			data.internalId = dpArticleId;
-			var elementId = 'asset-' + dpArticleId;
-			var $element = $('<div />');
+			const elementId = 'asset-' + dpArticleId;
+			const $element = $('<div />');
 			$element.attr('id', elementId);
 			$element.attr('data-internalId', dpArticleId);
 			$element.attr('data-ah5-type', data.assetSource);
 			if (data.externalId) {
-                		$element.attr('data-externalId', data.externalId);
+				$element.attr('data-externalId', data.externalId);
 			}
 			if (data.assetClass) {
 				$element.addClass(data.assetClass);
 			}
 			$element.addClass('dp-plugin-element');
 			$element.html(markup);
-			PluginAPI.Editor.getHTMLById(parentElementId, function (html) {
-				var d = document.createElement('div');
+			PluginAPI.Editor.getHTMLById(parentElementId, (html) => {
+				let d = document.createElement('div');
 				d.innerHTML = html;
 				d.firstChild.setAttribute('id', parentElementId + 'tmp');
-				self.replacePluginElementById(parentElementId, d.innerHTML, function () {
+				self.replacePluginElementById(parentElementId, d.innerHTML, () => {
 					d = document.createElement('div');
 					d.innerHTML = html;
-					var assetContainer = d.querySelector('.dp-fact-box-image, .dp-nested-asset-container');
+					const assetContainer = d.querySelector('.dp-fact-box-image, .dp-nested-asset-container');
 					if (data.isMultiple) {
 						$(assetContainer).append($element.get(0).outerHTML);
 					} else {
@@ -481,8 +481,8 @@ module.exports = function (PluginAPI) {
 	};
 
 	AH5Communicator.prototype.insertEmbeddedAsset = function (markup, data, callback) {
-		var self = this;
-		var replaceElement = false;
+		const self = this;
+		let replaceElement = false;
 		if (selectedPluginElement) {
 			if (data.assetSource !== PluginAPI.getAppName()) {
 				PluginAPI.showErrorMsg('Can\'t update selected plugin element since it doesn\'t belong to the \'' + PluginAPI.getAppName() + '\' plugin');
@@ -493,18 +493,18 @@ module.exports = function (PluginAPI) {
 		}
 
 		if (selectedPluginElement) {
-			var dpArticleId = selectedPluginElement.dpArticleId;
+			const dpArticleId = selectedPluginElement.dpArticleId;
 			if (!dpArticleId) {
 				throw Error('Selected plugin element: expected dpArticleId not found (tried reading from attribute \'data-internal-id\')');
 			}
-			insert(dpArticleId, function (data) {
+			insert(dpArticleId, (data) => {
 				return updateEmbeddedAssetRequest(typeof callback === 'function' ? callback(data) : null);
 			});
 		} else {
 			PluginAPI.createEmbeddedObject(
 				data.embeddedTypeId,
-				function (dpArticleId) {
-					insert(dpArticleId, function (data) {
+				(dpArticleId) => {
+					insert(dpArticleId, (data) => {
 						return addEmbeddedAssetRequest(typeof callback === 'function' ? callback(data) : null);
 					});
 				}
@@ -513,8 +513,8 @@ module.exports = function (PluginAPI) {
 
 		function insert(dpArticleId, callback) {
 			data.internalId = dpArticleId;
-			var elementId = 'asset-' + dpArticleId;
-			var element = document.createElement('div');
+			const elementId = 'asset-' + dpArticleId;
+			const element = document.createElement('div');
 			element.id = elementId;
 			element.dataset.internalId = dpArticleId;
 			if (data.externalId) {

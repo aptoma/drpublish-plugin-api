@@ -1,9 +1,10 @@
 {
-	"extends": "@aptoma/eslint-config/lib/es5.js",
+	"extends": "@aptoma/eslint-config",
 	"env": {
 		"browser": true,
+		"jquery": true,
 		"commonjs": true,
-		"jquery": true
+		"es6": true
 	},
 	"rules": {
 		"max-statements": 1
