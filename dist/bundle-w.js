@@ -53,6 +53,7 @@
 
 	'use strict';
 	/* jshint maxstatements:50 */
+	/* global pm */
 	
 	const ah5Communicator = __webpack_require__(2);
 	const articleCommunicator = __webpack_require__(3);
@@ -1275,7 +1276,7 @@
 
 	'use strict';
 	
-	/* jshint maxstatements:50 */
+	/* jshint maxstatements:52 */
 	module.exports = function (PluginAPI) {
 	
 		/**

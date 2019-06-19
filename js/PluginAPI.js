@@ -1,5 +1,6 @@
 'use strict';
 /* jshint maxstatements:50 */
+/* global pm */
 
 const ah5Communicator = require('./AH5Communicator');
 const articleCommunicator = require('./ArticleCommunicator');

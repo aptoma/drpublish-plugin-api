@@ -1,10 +1,10 @@
 /* eslint-env node */
 'use strict';
-var webpack = require('webpack');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
 
 module.exports = function (grunt) {
+	require('webpack');
 	require('load-grunt-tasks')(grunt);
 	require('time-grunt')(grunt);
 
