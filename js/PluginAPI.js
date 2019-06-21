@@ -1,4 +1,3 @@
-'use strict';
 /* jshint maxstatements:50 */
 /* global pm */
 
@@ -317,8 +316,12 @@ const PluginAPI = (function () {
 	Api.prototype.convertDomToHTML = function (dom) {
 		if (typeof dom === 'object' && typeof dom.wrap === 'function') {
 			return dom.wrap('<div>').parent().html();
+		} else {
+			const domClone = dom.cloneNode(true);
+			const wrapper = document.createElement('div');
+			wrapper.appendChild(domClone);
+			return wrapper.innerHTML;
 		}
-		return '';
 	};
 
 	/**

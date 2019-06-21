@@ -1,5 +1,3 @@
-'use strict';
-
 /* jshint maxstatements:52 */
 module.exports = function (PluginAPI) {
 

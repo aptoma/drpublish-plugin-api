@@ -1,11 +1,25 @@
+dist: trusty
+
 language: node_js
 
 node_js:
-  - 4
+  - 6
 
 cache:
   directories:
     - node_modules
 
+sudo: required
+
+addons:
+  chrome: stable
+
+before_install:
+  - sudo chown root:$USER /opt/google/chrome/chrome-sandbox
+  - sudo chmod 4755 /opt/google/chrome/chrome-sandbox
+
 script:
-  - ./node_modules/.bin/grunt ci
+  - export CHROME_BIN=google-chrome-stable
+  - npm run-script prebuild
+  - npm run-script build
+  - npm test

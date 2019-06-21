@@ -1,7 +1,3 @@
-'use strict';
-
-module.exports = Listeners;
-
 /**
  * @example
  * PluginAPI.on('afterCreate', function() {
@@ -127,110 +123,120 @@ module.exports = Listeners;
  *     <p><em>triggered when someone deselects a plugin element in the editor</p></em>
  * </blockquote>
  */
-function Listeners() {
-	this._listeners = {};
-}
+class Listeners {
+	constructor() {
+		this._listeners = {};
+	}
 
-/**
- * @deprecated Use PluginAPI.on(...) instead
- * @param {Object} listeners
- */
-Listeners.prototype.addAll = function (listeners) {
-	const PluginAPI = require('./PluginAPI');
-	'use strict';
-	const createCallback = function (callback) {
-		return function (data) {
-			callback(data.data);
+
+	/**
+	 * @deprecated Use PluginAPI.on(...) instead
+	 * @param {Object} listeners
+	 */
+	addAll(listeners) {
+		const PluginAPI = require('./PluginAPI');
+		'use strict';
+		const createCallback = function (callback) {
+			return function (data) {
+				callback(data.data);
+			};
 		};
-	};
-	for (const eventName in listeners) {
-		if (listeners.hasOwnProperty(eventName)) {
-			const callback = listeners[eventName];
-			const callWrapper = createCallback(callback);
-			PluginAPI.on(eventName, callWrapper);
+		for (const eventName in listeners) {
+			if (listeners.hasOwnProperty(eventName)) {
+				const callback = listeners[eventName];
+				const callWrapper = createCallback(callback);
+				PluginAPI.on(eventName, callWrapper);
+			}
 		}
 	}
-};
 
-/**
- * Adds a new listener
- *
- * @param {String} event Event name
- * @param {Function} callback Function to call when an even of the type is received
- * @return {number}
- */
-Listeners.prototype.add = function (event, callback) {
-
-	if (this._listeners[event] === undefined) {
-		this._listeners[event] = [];
-	}
-
-	this._listeners[event].push(callback);
-	return this._listeners[event].length - 1;
-};
-
-/**
- * Removes the listener at the given index
- *
- * @param {String} event Event type
- * @param {Function} index The index of the event handler to remove
- */
-Listeners.prototype.remove = function (event, index) {
-
-	if (this._listeners[event] === undefined || this._listeners[event][index] === undefined) {
-		return;
-	}
-
-	/*
-	 * Set to null instead of remove to retain callback indexes
+	/**
+	 * Adds a new listener
+	 *
+	 * @param {String} event Event name
+	 * @param {Function} callback Function to call when an even of the type is received
+	 * @return {number}
 	 */
-	this._listeners[event][index] = false;
-};
+	add(event, callback) {
 
-/**
- * Removes all listeners for the given event type, or if !event then removes all listeners
- *
- * @param {String} event Event type to remove handlers for (!event for all)
- */
-Listeners.prototype.removeAll = function (event) {
-	if (!event) {
-		this._listeners = [];
-	} else {
-		this._listeners[event] = [];
+		if (typeof callback !== 'function') {
+			throw new Error('not a function');
+		}
+
+		if (this._listeners[event] === undefined) {
+			this._listeners[event] = [];
+		}
+
+		this._listeners[event].push(callback);
+		return this._listeners[event].length - 1;
 	}
-};
 
-/**
- * Notifies all registered listeners that an event has occurred
- *
- * @param {String} event Event type
- * @param {Object} payload The event data
- * @return {Boolean}
- */
-Listeners.prototype.notify = function (event, payload) {
-	let returnValue = true;
-	if (this._listeners[event] === undefined) {
+	/**
+	 * Removes the listener at the given index
+	 *
+	 * @param {String} event Event type
+	 * @param {Function} index The index of the event handler to remove
+	 */
+	remove(event, index) {
+
+		if (this._listeners[event] === undefined || this._listeners[event][index] === undefined) {
+			return;
+		}
+
+		/*
+		 * Set to null instead of remove to retain callback indexes
+		 */
+		this._listeners[event][index] = false;
+	}
+
+	/**
+	 * Removes all listeners for the given event type, or if !event then removes all listeners
+	 *
+	 * @param {String} event Event type to remove handlers for (!event for all)
+	 */
+	removeAll(event) {
+		if (!event) {
+			this._listeners = [];
+		} else {
+			this._listeners[event] = [];
+		}
+	}
+
+	/**
+	 * Notifies all registered listeners that an event has occurred
+	 *
+	 * @param {String} event Event type
+	 * @param {Object} payload The event data
+	 * @return {Boolean}
+	 */
+	notify(event, payload) {
+		let returnValue = true;
+		if (this._listeners[event] === undefined) {
+			return returnValue;
+		}
+
+		// If the payload is an object with a key data, we use that value as the payload we pass to the listener functions.
+		// This is needed as we have some inconsistencies in how we pass data around. This normalization should preferably
+		// be done at the call site.
+		this._listeners[event].forEach((listenerFn) => {
+			if (typeof listenerFn !== 'function') {
+				return;
+			}
+			let res = null;
+			if (payload && payload.params && payload.params === true) {
+				res = listenerFn.apply(null, payload.data);
+			} else if (typeof payload === 'object' && payload !== null && typeof payload.data !== 'undefined') {
+				res = listenerFn(payload.data);
+			} else {
+				res = listenerFn(payload);
+			}
+			if (res === false) {
+				returnValue = false;
+			}
+		});
 		return returnValue;
 	}
 
-	// If the payload is an object with a key data, we use that value as the payload we pass to the listener functions.
-	// This is needed as we have some inconsistencies in how we pass data around. This normalization should preferably
-	// be done at the call site.
-	this._listeners[event].forEach((listenerFn) => {
-		if (typeof listenerFn !== 'function') {
-			return;
-		}
-		let res = null;
-		if (payload && payload.params && payload.params === true) {
-			res = listenerFn.apply(null, payload.data);
-		} else if (typeof payload === 'object' && payload !== null && typeof payload.data !== 'undefined') {
-			res = listenerFn(payload.data);
-		} else {
-			res = listenerFn(payload);
-		}
-		if (res === false) {
-			returnValue = false;
-		}
-	});
-	return returnValue;
-};
+}
+
+module.exports = Listeners;

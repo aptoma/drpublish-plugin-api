@@ -1,12 +1,18 @@
 {
-	"extends": "@aptoma/eslint-config",
-	"env": {
-		"browser": true,
-		"jquery": true,
-		"commonjs": true,
-		"es6": true
-	},
-	"rules": {
-		"max-statements": 1
-	}
+  "extends": "@aptoma/eslint-config",
+  "env": {
+    "browser": true,
+    "jquery": true,
+    "commonjs": true,
+    "es6": true
+  },
+  "rules": {
+    "max-statements": 1,
+    "complexity": ["error", 11]
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module",
+    "allowImportExportEverywhere": true
+  }
 }
