@@ -5,11 +5,6 @@ language: node_js
 node_js:
   - 6
 
-env:
-  global:
-  # travis encrypt 'NPM_TOKEN=[NPM_TOKEN]'
-  - secure: "QT8z2iGY7fDuVLiyKVUABaaV50+SJf4HJCyr/crUtbS+EHW9LnYJddNo+HktA1kklEl5bzLwytb6G55fpHuFF5wY3IeWooBJk8WgSxz0F08sXxKpPwo/vELacxwFPRDJSXwy06Rmx+2yaiQYPORlQblyo9u1fIY64mFWp3bGZVhY+JXcg+xv9I64AHAxiyyHWV2G0BJNb3rwgGk/r7IsshBcAleh5YcuYZoTKLv9HWD193fG4vXmXRJ8ghETosio94/vJmh2V6zvgKK1Xr8uGKHiwy1oIAtomTiDCpmt21Sl2RiQ0ikiqQOsuoQk24sRtdw8prlUVA/HkeQIqVwDhDfN91UFb99x4o8ESqJFQ5jwXzjxqS0NKI+f12D9LuYHa/pLRtPSUE2xabkqTmH7js+YdvN5BX02/OBT1F3gJsziyzH8ce4uszMlsYPIpDWZamZh7/267ouzcdElEY6YRjxxJQ6kTfO2k+UGBqL1IC9GbPFtGl3SLAC3NpZQ4QlstE9DOCShQ4hFiwEH/zPiON7mx+3dqRHoH0sYW6wMDdIrtMXF4LU7ZFNChT7v/u+E9CttgalVddJJonJcq5Azkh88RrJhp47QlQP2K6pgSeoUiDn98xw5Ny4RktIkMKwwdtJlEmwYl8y2hiAgzTmMhcZJmr+bKTpk2NE7ka56l+I="
-
 cache:
   directories:
     - node_modules
@@ -20,7 +15,7 @@ addons:
   chrome: stable
 
 before_install:
-  - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+  - ln -s /var/lib/dbus/machine-id /etc/machine-id
   - sudo chown root:$USER /opt/google/chrome/chrome-sandbox
   - sudo chmod 4755 /opt/google/chrome/chrome-sandbox
 
