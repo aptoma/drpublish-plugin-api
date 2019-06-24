@@ -1,11 +1,11 @@
 {
   "name": "@aptoma/drpublish-plugin-api",
-  "version": "3.11.4",
+  "version": "3.11.5",
   "repository": {
     "type": "git",
     "url": "https://github.com/aptoma/drpublish-plugin-api.git"
   },
-  "main": "src/PluginAPI.js",
+  "main": "js/PluginAPI.js",
   "scripts": {
     "test": "karma start --single-run --no-auto-watch",
     "test:watch": "karma start",
