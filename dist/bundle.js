@@ -603,11 +603,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         var elementId = 'asset-' + dpArticleId;
         var $element = $('<div />');
         $element.attr('id', elementId);
-        $element.attr('data-internalId', dpArticleId);
+        $element.attr('data-internal-id', dpArticleId);
         $element.attr('data-ah5-type', data.assetSource);
 
         if (data.externalId) {
-          $element.attr('data-externalId', data.externalId);
+          $element.attr('data-external-id', data.externalId);
         }
 
         if (data.assetClass) {

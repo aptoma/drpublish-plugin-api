@@ -445,10 +445,10 @@ module.exports = function (PluginAPI) {
 			const elementId = 'asset-' + dpArticleId;
 			const $element = $('<div />');
 			$element.attr('id', elementId);
-			$element.attr('data-internalId', dpArticleId);
+			$element.attr('data-internal-id', dpArticleId);
 			$element.attr('data-ah5-type', data.assetSource);
 			if (data.externalId) {
-				$element.attr('data-externalId', data.externalId);
+				$element.attr('data-external-id', data.externalId);
 			}
 			if (data.assetClass) {
 				$element.addClass(data.assetClass);
