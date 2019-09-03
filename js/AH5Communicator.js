@@ -165,6 +165,19 @@ module.exports = function (PluginAPI) {
 		}, callback);
 	};
 
+    /**
+     * Set the content of an element in the article
+     *
+     * @param {String} id Id of the element
+     * @param {String} content The new content
+     * @param {function} callback function(Boolean), called when done
+     */
+    AH5Communicator.prototype.setElementContentById = function(id, content, callback) {
+        PluginAPI.request('editor-element-set-byid', {
+            id: id,
+            element: content
+        }, callback);
+    };
 
 	/**
 	 * Delete an element in the article
@@ -480,13 +493,13 @@ module.exports = function (PluginAPI) {
 
 	AH5Communicator.prototype.insertEmbeddedAsset = function (markup, data, callback) {
 		const self = this;
-		let replaceElement = false;
+		let updateContent = false;
 		if (selectedPluginElement) {
 			if (data.assetSource !== PluginAPI.getAppName()) {
 				PluginAPI.showErrorMsg('Can\'t update selected plugin element since it doesn\'t belong to the \'' + PluginAPI.getAppName() + '\' plugin');
 				return;
 			} else {
-				replaceElement = true;
+				updateContent = true;
 			}
 		}
 
@@ -522,10 +535,10 @@ module.exports = function (PluginAPI) {
 				element.classList.add(data.assetClass);
 			}
 			element.innerHTML = markup;
-			if (!replaceElement) {
+			if (!updateContent) {
 				self.insertElement(element, {select: true});
 			} else {
-				self.replaceElementById(elementId, element.outerHTML, null);
+				self.setElementContentById(elementId, element.innerHTML, null);
 			}
 			if (typeof callback === 'function') {
 				return callback();
