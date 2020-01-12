@@ -219,13 +219,17 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
      *  elementId: 'the provided element id',
      *  direction: 'forward/backward'
      * })
-     *  @param {String} movement Direction
-     * @param {Function} callback
+     *  @param {String} elementId DOM element id
+     *  @param {String} direction Direction
+     *  @param {function} callback
      * */
 
 
-    AH5Communicator.prototype.directionalCastle = function (movement, callback) {
-      PluginAPI.request('editor-directional-castle', movement, callback);
+    AH5Communicator.prototype.directionalCastle = function (elementId, direction, callback) {
+      PluginAPI.request('editor-directional-castle', {
+        elementId: elementId,
+        direction: direction
+      }, callback);
     };
     /**
      * Registers/Modifies a group of items to in the context menu
@@ -297,6 +301,21 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       PluginAPI.request('editor-element-replace-plugin-element-byid', {
         id: id,
         element: element
+      }, callback);
+    };
+    /**
+        * Set the content of an element in the article
+        *
+        * @param {String} id Id of the element
+        * @param {String} content The new content
+        * @param {function} callback function(Boolean), called when done
+        */
+
+
+    AH5Communicator.prototype.setElementContentById = function (id, content, callback) {
+      PluginAPI.request('editor-element-set-byid', {
+        id: id,
+        element: content
       }, callback);
     };
     /**
@@ -427,7 +446,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
      * The element will be given the class dp-app-element, and given a unique ID (if none is present)
      *
      * @param {Element} element The element that should be inserted
-     * @param {Object/Function} options (can be omitted) Options object, supports option 'select' - set to true to automatically select the inserted element
+     * @param {Object | Function} options (can be omitted) Options object, supports option 'select' - set to true to automatically select the inserted element
      * @param {Function} [callback] function(String), id of the newly inserted element
      */
 
@@ -444,7 +463,8 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
       PluginAPI.request('editor-insert-element', {
         element: element.outerHTML,
-        select: select
+        select: select,
+        options: options
       }, callback);
     };
     /**
@@ -643,14 +663,14 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
     AH5Communicator.prototype.insertEmbeddedAsset = function (markup, data, callback) {
       var self = this;
-      var replaceElement = false;
+      var updateContent = false;
 
       if (selectedPluginElement) {
         if (data.assetSource !== PluginAPI.getAppName()) {
           PluginAPI.showErrorMsg('Can\'t update selected plugin element since it doesn\'t belong to the \'' + PluginAPI.getAppName() + '\' plugin');
           return;
         } else {
-          replaceElement = true;
+          updateContent = true;
         }
       }
 
@@ -689,12 +709,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
         element.innerHTML = markup;
 
-        if (!replaceElement) {
-          self.insertElement(element, {
-            select: true
-          });
+        if (!updateContent) {
+          data.select = true;
+          self.insertElement(element, data);
         } else {
-          self.replaceElementById(elementId, element.outerHTML, null);
+          self.setElementContentById(elementId, element.innerHTML, null);
         }
 
         if (typeof callback === 'function') {
@@ -738,7 +757,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 })(this, function (module) {
   "use strict";
 
-  /* jshint maxstatements:52 */
+  /* eslint max-statements: ["error", 100000000] */
+
+  /* eslint complexity: ["error", 100000000] */
   module.exports = function (PluginAPI) {
     /**
      * This class is used for communicating with the article, typically setting and getting values of metadata or in the article content itself.

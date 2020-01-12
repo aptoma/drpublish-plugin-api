@@ -1,4 +1,5 @@
-/* jshint maxstatements:50 */
+/* eslint max-statements: ["error", 100000000] */
+/* eslint complexity: ["error", 100000000] */
 /* global pm */
 
 const ah5Communicator = require('./AH5Communicator');

@@ -1,4 +1,5 @@
-/* jshint maxstatements:52 */
+/* eslint max-statements: ["error", 100000000] */
+/* eslint complexity: ["error", 100000000] */
 module.exports = function (PluginAPI) {
 
 	/**

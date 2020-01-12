@@ -90,11 +90,15 @@ module.exports = function (PluginAPI) {
 	 *  elementId: 'the provided element id',
 	 *  direction: 'forward/backward'
 	 * })
-	 *  @param {String} movement Direction
-	 * @param {Function} callback
+	 *  @param {String} elementId DOM element id
+	 *  @param {String} direction Direction
+	 *  @param {function} callback
 	 * */
-	AH5Communicator.prototype.directionalCastle = function (movement, callback) {
-		PluginAPI.request('editor-directional-castle', movement, callback);
+	AH5Communicator.prototype.directionalCastle = function (elementId, direction, callback) {
+		PluginAPI.request('editor-directional-castle', {
+			elementId: elementId,
+			direction: direction
+		}, callback);
 	};
 
 	/**
@@ -165,19 +169,19 @@ module.exports = function (PluginAPI) {
 		}, callback);
 	};
 
-    /**
+	/**
      * Set the content of an element in the article
      *
      * @param {String} id Id of the element
      * @param {String} content The new content
      * @param {function} callback function(Boolean), called when done
      */
-    AH5Communicator.prototype.setElementContentById = function(id, content, callback) {
-        PluginAPI.request('editor-element-set-byid', {
-            id: id,
-            element: content
-        }, callback);
-    };
+	AH5Communicator.prototype.setElementContentById = function (id, content, callback) {
+		PluginAPI.request('editor-element-set-byid', {
+			id: id,
+			element: content
+		}, callback);
+	};
 
 	/**
 	 * Delete an element in the article
@@ -297,7 +301,7 @@ module.exports = function (PluginAPI) {
 	 * The element will be given the class dp-app-element, and given a unique ID (if none is present)
 	 *
 	 * @param {Element} element The element that should be inserted
-	 * @param {Object/Function} options (can be omitted) Options object, supports option 'select' - set to true to automatically select the inserted element
+	 * @param {Object | Function} options (can be omitted) Options object, supports option 'select' - set to true to automatically select the inserted element
 	 * @param {Function} [callback] function(String), id of the newly inserted element
 	 */
 	AH5Communicator.prototype.insertElement = function (element, options, callback) {
@@ -310,7 +314,8 @@ module.exports = function (PluginAPI) {
 		}
 		PluginAPI.request('editor-insert-element', {
 			element: element.outerHTML,
-			select: select
+			select: select,
+			options: options
 		}, callback);
 	};
 
@@ -536,7 +541,8 @@ module.exports = function (PluginAPI) {
 			}
 			element.innerHTML = markup;
 			if (!updateContent) {
-				self.insertElement(element, {select: true});
+				data.select = true;
+				self.insertElement(element, data);
 			} else {
 				self.setElementContentById(elementId, element.innerHTML, null);
 			}
