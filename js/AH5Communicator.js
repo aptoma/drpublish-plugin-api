@@ -48,18 +48,18 @@ module.exports = function (PluginAPI) {
 	/**
 	 * Get name of current active editor
 	 *
-	 * @param {function} callback function(String)
+	 * @param {Function} callback function(String)
 	 */
 	AH5Communicator.prototype.getActiveEditor = function (callback) {
 		PluginAPI.request('get-active-editor', null, callback);
 	};
 
 	/**
-	 * Registers/Modifies a context menu items for a app element
+	 * Registers/Modifies a context menu items for a plugin element
 	 * The object send should have the following structure
 	 *
 	 * @param {Object} action The action object
-	 * @param {function} callback function()
+	 * @param {Function} callback function()
 	 *
 	 * @example
 	 * PluginAPI.Editor.registerMenuAction({
@@ -68,7 +68,7 @@ module.exports = function (PluginAPI) {
 	 *	  trigger: '[Optional] css selector, only show menu element when this matches the element',
 	 *	  callback: function(id, clickedElementId) {
 	 *		  // callback function
-	 *		  // first parameter is id of the app element
+	 *		  // first parameter is id of the plugin element
 	 *		  // second paramter is id of closest element to the trigger element that has an id
 	 *		  //	  in code: $(event.triggerElement).closest('[id]').attr('id');
 	 *	  }
@@ -78,9 +78,23 @@ module.exports = function (PluginAPI) {
 		PluginAPI.request('register-menu-action', action, callback);
 	};
 
-
+	/**
+     * Adds a mouseover action to plugin elements
+     *
+	 * @param {function} action to perform
+     * @param {function} callback function(String)
+     */
 	AH5Communicator.prototype.registerHoverAction = function (action, callback) {
 		PluginAPI.request('register-hover-action', action, callback);
+	};
+
+	/**
+     * Gets the selected plugin element from the editor
+     *
+     * @param {function} callback function(String)
+     */
+	AH5Communicator.prototype.getSelectedPluginElement = function (callback) {
+		PluginAPI.request('get-selected-plugin-element', {}, callback);
 	};
 
 	/**
@@ -298,7 +312,7 @@ module.exports = function (PluginAPI) {
 	 * Insert an element into the editor
 	 *
 	 * Note that the HTML of the element is what will be transferred, and nothing else!
-	 * The element will be given the class dp-app-element, and given a unique ID (if none is present)
+	 * The element will be given the class dp-plugin-element, and given a unique ID (if none is present)
 	 *
 	 * @param {Element} element The element that should be inserted
 	 * @param {Object | Function} options (can be omitted) Options object, supports option 'select' - set to true to automatically select the inserted element
@@ -435,18 +449,96 @@ module.exports = function (PluginAPI) {
 		PluginAPI.request('total-char-count', null, callback);
 	};
 
+	/**
+     * Update one data option of the referenced embedded asset
+     *
+     * @param {Number} dpArticleId DrPublish's embedded asset id
+     * @param {String} key Name of the property
+     * @param {String} value Value of the property
+     * @param {Function} callback Receives the total character count as its single parameter
+     */
 	AH5Communicator.prototype.updateAssetOption = function (dpArticleId, key, value, callback) {
 		PluginAPI.request('update-asset-option', {dpArticleId: dpArticleId, key: key, value: value}, callback);
 	};
 
+	/**
+     * Update all asset data of the referenced embedded asset
+     *
+     * @param {Object} data Updated data
+     * @param {Function} callback Receives the total character count as its single parameter
+	 *
+	 * @example
+	 *  var data = {
+     *   internalId: assetDpArticleId,
+     *   assetElementId: activeAssetId,
+     *   assetType: 'picture',
+     *   assetSource: PluginAPI.getPluginName(),
+     *   resourceUri: fullsizeUrl,
+     *   previewUri: fullsizeUrl,
+     *   renditions: {
+     *       highRes: {uri: fullsizeUrl},
+     *       thumbnail: {uri: thumbnailUrl}
+     *   },
+     *   options: {}
+     * }
+     * PluginAPI.Editor.updateAssetData(data);
+     */
 	AH5Communicator.prototype.updateAssetData = function (data, callback) {
 		PluginAPI.request('update-asset-media', data, callback);
 	};
 
+	/**
+     * Get all data option of the referenced embedded asset
+     *
+     * @param {Number} dpArticleId DrPublish's embedded asset id
+     * @param {Function} callback Receives the total character count as its single parameter
+     */
 	AH5Communicator.prototype.getAssetData = function (dpArticleId, callback) {
 		PluginAPI.request('get-asset-data', {data: dpArticleId}, callback);
 	};
 
+	/**
+     * Insert an embedded asset inside of an existing one
+     *
+     * @param {Number} parentElementId DOM element id of the receiving asset
+     * @param {String} markup HTML to inject
+	 * @param {Object} data Asset data
+     * @param {Function} callback Receives the total character count as its single parameter
+     *
+     * @example
+     * var title = response.data.title ? response.data.title : '';
+     * var caption = response.data.description ? response.data.description : '';
+     * var credit = response.data.byline ? response.data.byline : '';
+     * var source = response.data.source ? response.data.source : '';
+     * var markup = '<div class="dp-article-image-container"><img src="' + fullsizeUrl + '" /></div>';
+     * markup += '<div class="dp-article-image-headline" data-dp-editable-type="textfield" data-dp-editable-name="headline">' + title + '</div>...';
+     * var options = response.data.options ? response.data.options : {};
+     * var callback = function () {
+	 *   // do something here
+     *  };
+     * var rends = renditions || {};
+     * rends.highRes = {uri: fullsizeUrl};
+     * rends.preview = {uri: fullsizeUrl};
+     * var drpdata = {
+     *               embeddedTypeId: 5,
+     *               isMultiple: true,
+     *               assetType: 'picture',
+     *               externalId: id,
+     *               assetClass: 'dp-picture',
+     *               assetSource: 'images',
+     *               resourceUri: fullsizeUrl,
+     *               previewUri: fullsizeUrl,
+     *               renditions: rends,
+     *               options: options
+     *           };
+     * var  insertNested = function () {
+     *   PluginAPI.Editor.insertNestedAsset(
+     *       selectedSlideshowAsset.id,
+     *       markup,
+     *       drpdata
+     * };
+     * PluginAPI.Editor.getSelectedPluginElement(insertNested);
+     */
 	AH5Communicator.prototype.insertNestedAsset = function (parentElementId, markup, data, callback) {
 		const self = this;
 		PluginAPI.createEmbeddedObject(
@@ -496,6 +588,42 @@ module.exports = function (PluginAPI) {
 		}
 	};
 
+	/**
+     * Insert an embedded asset
+     *
+     * @param {String} markup HTML to inject
+     * @param {Object} data Asset data
+     * @param {Function} callback Receives the total character count as its single parameter
+     *
+     * @example
+     * var title = response.data.title ? response.data.title : '';
+     * var caption = response.data.description ? response.data.description : '';
+     * var credit = response.data.byline ? response.data.byline : '';
+     * var source = response.data.source ? response.data.source : '';
+     * var markup = '<div class="dp-article-image-container"><img src="' + fullsizeUrl + '" /></div>';
+     * markup += '<div class="dp-article-image-headline" data-dp-editable-type="textfield" data-dp-editable-name="headline">' + title + '</div>';
+     * markup += '<div class="dp-article-image-caption" data-dp-editable-type="html" data-dp-editable-name="caption">' + caption + '</div>...';
+     * var options = response.data.options ? response.data.options : {};
+     * var callback = function () {
+     *   // do something here
+     *  };
+     * var rends = renditions || {};
+     * rends.highRes = {uri: fullsizeUrl};
+     * rends.preview = {uri: fullsizeUrl};
+     * var drpdata = {
+     *               embeddedTypeId: 5,
+     *               isMultiple: true,
+     *               assetType: 'picture',
+     *               externalId: id,
+     *               assetClass: 'dp-picture',
+     *               assetSource: 'images',
+     *               resourceUri: fullsizeUrl,
+     *               previewUri: fullsizeUrl,
+     *               renditions: rends,
+     *               options: options
+     *           };
+     * PluginAPI.Editor.insertEmbeddedAsset(markup, drpdata, callback);
+     */
 	AH5Communicator.prototype.insertEmbeddedAsset = function (markup, data, callback) {
 		const self = this;
 		let updateContent = false;
@@ -558,10 +686,6 @@ module.exports = function (PluginAPI) {
 		function updateEmbeddedAssetRequest(callback) {
 			PluginAPI.request('update-embedded-asset', data, callback);
 		}
-	};
-
-	AH5Communicator.prototype.getSelectedPluginElement = function (callback) {
-		PluginAPI.request('get-selected-plugin-element', {}, callback);
 	};
 
 	return new AH5Communicator();

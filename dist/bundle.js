@@ -176,7 +176,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     /**
      * Get name of current active editor
      *
-     * @param {function} callback function(String)
+     * @param {Function} callback function(String)
      */
 
 
@@ -184,11 +184,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       PluginAPI.request('get-active-editor', null, callback);
     };
     /**
-     * Registers/Modifies a context menu items for a app element
+     * Registers/Modifies a context menu items for a plugin element
      * The object send should have the following structure
      *
      * @param {Object} action The action object
-     * @param {function} callback function()
+     * @param {Function} callback function()
      *
      * @example
      * PluginAPI.Editor.registerMenuAction({
@@ -197,7 +197,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
      *	  trigger: '[Optional] css selector, only show menu element when this matches the element',
      *	  callback: function(id, clickedElementId) {
      *		  // callback function
-     *		  // first parameter is id of the app element
+     *		  // first parameter is id of the plugin element
      *		  // second paramter is id of closest element to the trigger element that has an id
      *		  //	  in code: $(event.triggerElement).closest('[id]').attr('id');
      *	  }
@@ -208,9 +208,26 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     AH5Communicator.prototype.registerMenuAction = function (action, callback) {
       PluginAPI.request('register-menu-action', action, callback);
     };
+    /**
+        * Adds a mouseover action to plugin elements
+        *
+     * @param {function} action to perform
+        * @param {function} callback function(String)
+        */
+
 
     AH5Communicator.prototype.registerHoverAction = function (action, callback) {
       PluginAPI.request('register-hover-action', action, callback);
+    };
+    /**
+        * Gets the selected plugin element from the editor
+        *
+        * @param {function} callback function(String)
+        */
+
+
+    AH5Communicator.prototype.getSelectedPluginElement = function (callback) {
+      PluginAPI.request('get-selected-plugin-element', {}, callback);
     };
     /**
      * Swap positions between the provided element and the adjacent one
@@ -443,7 +460,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
      * Insert an element into the editor
      *
      * Note that the HTML of the element is what will be transferred, and nothing else!
-     * The element will be given the class dp-app-element, and given a unique ID (if none is present)
+     * The element will be given the class dp-plugin-element, and given a unique ID (if none is present)
      *
      * @param {Element} element The element that should be inserted
      * @param {Object | Function} options (can be omitted) Options object, supports option 'select' - set to true to automatically select the inserted element
@@ -591,6 +608,15 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     AH5Communicator.prototype.getTotalCharCount = function (callback) {
       PluginAPI.request('total-char-count', null, callback);
     };
+    /**
+        * Update one data option of the referenced embedded asset
+        *
+        * @param {Number} dpArticleId DrPublish's embedded asset id
+        * @param {String} key Name of the property
+        * @param {String} value Value of the property
+        * @param {Function} callback Receives the total character count as its single parameter
+        */
+
 
     AH5Communicator.prototype.updateAssetOption = function (dpArticleId, key, value, callback) {
       PluginAPI.request('update-asset-option', {
@@ -599,16 +625,89 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         value: value
       }, callback);
     };
+    /**
+        * Update all asset data of the referenced embedded asset
+        *
+        * @param {Object} data Updated data
+        * @param {Function} callback Receives the total character count as its single parameter
+     *
+     * @example
+     *  var data = {
+        *   internalId: assetDpArticleId,
+        *   assetElementId: activeAssetId,
+        *   assetType: 'picture',
+        *   assetSource: PluginAPI.getPluginName(),
+        *   resourceUri: fullsizeUrl,
+        *   previewUri: fullsizeUrl,
+        *   renditions: {
+        *       highRes: {uri: fullsizeUrl},
+        *       thumbnail: {uri: thumbnailUrl}
+        *   },
+        *   options: {}
+        * }
+        * PluginAPI.Editor.updateAssetData(data);
+        */
+
 
     AH5Communicator.prototype.updateAssetData = function (data, callback) {
       PluginAPI.request('update-asset-media', data, callback);
     };
+    /**
+        * Get all data option of the referenced embedded asset
+        *
+        * @param {Number} dpArticleId DrPublish's embedded asset id
+        * @param {Function} callback Receives the total character count as its single parameter
+        */
+
 
     AH5Communicator.prototype.getAssetData = function (dpArticleId, callback) {
       PluginAPI.request('get-asset-data', {
         data: dpArticleId
       }, callback);
     };
+    /**
+        * Insert an embedded asset inside of an existing one
+        *
+        * @param {Number} parentElementId DOM element id of the receiving asset
+        * @param {String} markup HTML to inject
+     * @param {Object} data Asset data
+        * @param {Function} callback Receives the total character count as its single parameter
+        *
+        * @example
+        * var title = response.data.title ? response.data.title : '';
+        * var caption = response.data.description ? response.data.description : '';
+        * var credit = response.data.byline ? response.data.byline : '';
+        * var source = response.data.source ? response.data.source : '';
+        * var markup = '<div class="dp-article-image-container"><img src="' + fullsizeUrl + '" /></div>';
+        * markup += '<div class="dp-article-image-headline" data-dp-editable-type="textfield" data-dp-editable-name="headline">' + title + '</div>...';
+        * var options = response.data.options ? response.data.options : {};
+        * var callback = function () {
+     *   // do something here
+        *  };
+        * var rends = renditions || {};
+        * rends.highRes = {uri: fullsizeUrl};
+        * rends.preview = {uri: fullsizeUrl};
+        * var drpdata = {
+        *               embeddedTypeId: 5,
+        *               isMultiple: true,
+        *               assetType: 'picture',
+        *               externalId: id,
+        *               assetClass: 'dp-picture',
+        *               assetSource: 'images',
+        *               resourceUri: fullsizeUrl,
+        *               previewUri: fullsizeUrl,
+        *               renditions: rends,
+        *               options: options
+        *           };
+        * var  insertNested = function () {
+        *   PluginAPI.Editor.insertNestedAsset(
+        *       selectedSlideshowAsset.id,
+        *       markup,
+        *       drpdata
+        * };
+        * PluginAPI.Editor.getSelectedPluginElement(insertNested);
+        */
+
 
     AH5Communicator.prototype.insertNestedAsset = function (parentElementId, markup, data, callback) {
       var self = this;
@@ -660,6 +759,43 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         PluginAPI.request('update-embedded-asset', data, callback);
       }
     };
+    /**
+        * Insert an embedded asset
+        *
+        * @param {String} markup HTML to inject
+        * @param {Object} data Asset data
+        * @param {Function} callback Receives the total character count as its single parameter
+        *
+        * @example
+        * var title = response.data.title ? response.data.title : '';
+        * var caption = response.data.description ? response.data.description : '';
+        * var credit = response.data.byline ? response.data.byline : '';
+        * var source = response.data.source ? response.data.source : '';
+        * var markup = '<div class="dp-article-image-container"><img src="' + fullsizeUrl + '" /></div>';
+        * markup += '<div class="dp-article-image-headline" data-dp-editable-type="textfield" data-dp-editable-name="headline">' + title + '</div>';
+        * markup += '<div class="dp-article-image-caption" data-dp-editable-type="html" data-dp-editable-name="caption">' + caption + '</div>...';
+        * var options = response.data.options ? response.data.options : {};
+        * var callback = function () {
+        *   // do something here
+        *  };
+        * var rends = renditions || {};
+        * rends.highRes = {uri: fullsizeUrl};
+        * rends.preview = {uri: fullsizeUrl};
+        * var drpdata = {
+        *               embeddedTypeId: 5,
+        *               isMultiple: true,
+        *               assetType: 'picture',
+        *               externalId: id,
+        *               assetClass: 'dp-picture',
+        *               assetSource: 'images',
+        *               resourceUri: fullsizeUrl,
+        *               previewUri: fullsizeUrl,
+        *               renditions: rends,
+        *               options: options
+        *           };
+        * PluginAPI.Editor.insertEmbeddedAsset(markup, drpdata, callback);
+        */
+
 
     AH5Communicator.prototype.insertEmbeddedAsset = function (markup, data, callback) {
       var self = this;
@@ -730,10 +866,6 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }
     };
 
-    AH5Communicator.prototype.getSelectedPluginElement = function (callback) {
-      PluginAPI.request('get-selected-plugin-element', {}, callback);
-    };
-
     return new AH5Communicator();
   };
 });
@@ -762,108 +894,138 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   /* eslint complexity: ["error", 100000000] */
   module.exports = function (PluginAPI) {
     /**
-     * This class is used for communicating with the article, typically setting and getting values of metadata or in the article content itself.
-     *
-     * @class
-     * @classdesc Functions for talking with the DrPublish article object. Accessed through PluginAPI.Article
-     * @exports PluginAPI/Article
-     */
+        * This class is used for communicating with the article, typically setting and getting values of metadata or in the article content itself.
+        *
+        * @class
+        * @classdesc Functions for talking with the DrPublish article object. Accessed through PluginAPI.Article
+        * @exports PluginAPI/Article
+        */
     var ArticleCommunicator = function ArticleCommunicator() {
       this.DEBUG = false;
     };
     /**
-     * Give focus to yourself
-     *
-     * @param {Function} callback function(Boolean), called as the app gets focus
-     */
+        * Give focus to yourself
+        *
+        * @param {Function} callback function(Boolean), called as the plugin gets focus
+        */
 
 
-    ArticleCommunicator.prototype.focusApp = function (callback) {
+    ArticleCommunicator.prototype.focusPlugin = function (callback) {
       PluginAPI.request('app-focus', {}, callback);
     };
     /**
-     * Start the given app
-     *
-     * @param {String} name Name of the app from settings.php
-     * @param {Object} options Options for initializing the app
-     * @param {Function} callback function(Boolean), called after app is started
-     */
+        * Give focus to yourself
+        * @deprecated use focusPlugin instead
+        * @param {Function} callback function(Boolean), called after plugin is started
+        */
 
 
-    ArticleCommunicator.prototype.startApp = function (name, options, callback) {
+    ArticleCommunicator.prototype.focusApp = function (callback) {
+      this.focusPlugin(callback);
+    };
+    /**
+        * Start the given plugin
+        *
+        * @param {String} name Name of the plugin as defined on publication settings
+        * @param {Object} options Options for initializing the plugin
+        * @param {Function} callback function(Boolean), called after plugin is started
+        */
+
+
+    ArticleCommunicator.prototype.startPlugin = function (name, options, callback) {
       PluginAPI.request('app-start', {
         app: name,
         option: options
       }, callback);
     };
     /**
-     * Stop the given app
-     *
-     * @param {String} name Name of the app from settings.php
-     */
+        * @deprecated use startPlugin instead
+        * @param {String} name Name of the plugin as defined on publication settings
+        * @param {Object} options Options for initializing the plugin
+        * @param {Function} callback function(Boolean), called after plugin is started
+        */
 
 
-    ArticleCommunicator.prototype.stopApp = function (name) {
+    ArticleCommunicator.prototype.startApp = function (name, options, callback) {
+      this.startPlugin(name, options, callback);
+    };
+    /**
+        * Stop the given plugin
+        *
+        * @param {String} name Name of the plugin, as defined on publication config
+        */
+
+
+    ArticleCommunicator.prototype.stopPlugin = function (name) {
       PluginAPI.request('app-stop', {
         app: name
       });
     };
     /**
-     * Get the id of the article currently edited
-     *
-     * @param {Function} callback function(Int), id of the current article
-     */
+        * @deprecated use  stopPlugin instead
+        * @param {String} name Name of the plugin, as defined on publication config
+        */
+
+
+    ArticleCommunicator.prototype.stopApp = function (name) {
+      this.stopPlugin(name);
+    };
+    /**
+        * Get the id of the article currently edited
+        *
+        * @param {Function} callback function(Int), id of the current article
+        */
 
 
     ArticleCommunicator.prototype.getId = function (callback) {
       PluginAPI.request('article-id-get', null, callback);
     };
     /**
-     * Get the guid of the article package currently edited
-     *
-     * @param {Function} callback function(Int), id of the current article
-     */
+        * Get the guid of the article package currently edited
+        *
+        * @param {Function} callback function(Int), id of the current article
+        */
 
 
     ArticleCommunicator.prototype.getPackageId = function (callback) {
       PluginAPI.request('package-id-get', null, callback);
     };
     /**
-     * Get the guid of the article package currently edited
-     *
-     * @param {Function} callback function(Int), id of the current article
-     */
+        * Get the guid of the article package currently edited
+        *
+        * @param {Function} callback function(Int), id of the current article
+        */
 
 
     ArticleCommunicator.prototype.getPackageGuid = function (callback) {
       PluginAPI.request('package-guid-get', null, callback);
     };
     /**
-     * Clear the meta information summary
-     *
-     * @param {Function} callback function(Boolean), called when meta data has been cleared
-     */
+        * Clear the meta information summary
+        *
+        * @param {Function} callback function(Boolean), called when meta data has been cleared
+        */
 
 
     ArticleCommunicator.prototype.clearMetaInfo = function (callback) {
       PluginAPI.request('article-metainfo-clear', null, callback);
     };
     /**
-     * Get tags used in the article
-     *
-     * @param {Function} callback function([Object Tag]), array with tags connected to an article
-     */
+        * Get tags used in the article
+        *
+        * @param {Function} callback function([Object Tag]), array with tags connected to an article
+        */
 
 
     ArticleCommunicator.prototype.getTags = function (callback) {
       PluginAPI.request('article-tags-get', null, callback);
     };
     /**
-     * Retrieve custom meta value for the article
-     *
-     * @param {String} name Name of the custom meta value
-     * @param {Function} callback function(Object), the parameter is an object containing the given custom meta value
-     */
+        * Retrieve custom meta value for the article
+        *
+        * @param {String} name Name of the custom meta value
+        * @param {Function} callback function(Object), the parameter is an object containing the given custom meta value
+        */
 
 
     ArticleCommunicator.prototype.getCustomMeta = function (name, callback) {
@@ -872,12 +1034,12 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Set custom meta value for the article
-     *
-     * @param {String} name Name of the meta value
-     * @param {Object} value Value to set
-     * @param {Function} callback function()
-     */
+        * Set custom meta value for the article
+        *
+        * @param {String} name Name of the meta value
+        * @param {Object} value Value to set
+        * @param {Function} callback function()
+        */
 
 
     ArticleCommunicator.prototype.setCustomMeta = function (name, value, callback) {
@@ -887,22 +1049,22 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Marks article model as having meta data changes
-     *
-     * @param {Function} callback function()
-     */
+        * Marks article model as having meta data changes
+        *
+        * @param {Function} callback function()
+        */
 
 
     ArticleCommunicator.prototype.setMetaChanged = function (callback) {
       PluginAPI.request('article-meta-changed', null, callback);
     };
     /**
-     * Set tags for the article
-     *
-     * @param {Array} tags List of tags that should be set
-     * @param {Boolean} save Set to true to force save once the tags are updated
-     * @param {Function} callback function(Boolean), called when tags have been set
-     */
+        * Set tags for the article
+        *
+        * @param {Array} tags List of tags that should be set
+        * @param {Boolean} save Set to true to force save once the tags are updated
+        * @param {Function} callback function(Boolean), called when tags have been set
+        */
 
 
     ArticleCommunicator.prototype.setTags = function (tags, save, callback) {
@@ -912,12 +1074,12 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Add tag for the article
-     *
-     * @param {Array} tags Tags to be added
-     * @param {Function} errorFunction called if error
-     * @param {Function} callback function(Boolean), called when tag has been set
-     */
+        * Add tag for the article
+        *
+        * @param {Array} tags Tags to be added
+        * @param {Function} errorFunction called if error
+        * @param {Function} callback function(Boolean), called when tag has been set
+        */
 
 
     ArticleCommunicator.prototype.addTags = function (tags, errorFunction, callback) {
@@ -927,12 +1089,12 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Add tag for the article
-     *
-     * @param {String} tag Tag to be added
-     * @param {Function} errorFunction called if error
-     * @param {Function} callback function(Boolean), called when tag has been set
-     */
+        * Add tag for the article
+        *
+        * @param {String} tag Tag to be added
+        * @param {Function} errorFunction called if error
+        * @param {Function} callback function(Boolean), called when tag has been set
+        */
 
 
     ArticleCommunicator.prototype.addTag = function (tag, errorFunction, callback) {
@@ -942,12 +1104,12 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Add tags for the article
-     *
-     * @param {String} tags Tags to be added
-     * @param {Function} errorFunction called if error
-     * @param {Function} callback function(Boolean), called when tag has been set
-     */
+        * Add tags for the article
+        *
+        * @param {String} tags Tags to be added
+        * @param {Function} errorFunction called if error
+        * @param {Function} callback function(Boolean), called when tag has been set
+        */
 
 
     ArticleCommunicator.prototype.addTags = function (tags, errorFunction, callback) {
@@ -957,11 +1119,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Remove tag from article
-     *
-     * @param {String} tag Tag to remove
-     * @param {Function} callback function(Boolean), called when tag has been removed
-     */
+        * Remove tag from article
+        *
+        * @param {String} tag Tag to remove
+        * @param {Function} callback function(Boolean), called when tag has been removed
+        */
 
 
     ArticleCommunicator.prototype.removeTag = function (tag, callback) {
@@ -970,20 +1132,20 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Get the selected categories
-     *
-     * @param {Function} callback function([String]), array with category ids
-     */
+        * Get the selected categories
+        *
+        * @param {Function} callback function([String]), array with category ids
+        */
 
 
     ArticleCommunicator.prototype.getSelectedCategories = function (callback) {
       PluginAPI.request('article-categories-selected-get', null, callback);
     };
     /**
-     * Save the currently selected categories
-     *
-     * @param {Function} callback function(Boolean), called when categories has been saved
-     */
+        * Save the currently selected categories
+        *
+        * @param {Function} callback function(Boolean), called when categories has been saved
+        */
 
 
     ArticleCommunicator.prototype.saveCategories = function (callback) {
@@ -992,11 +1154,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       });
     };
     /**
-     * Set selected categories
-     *
-     * @param {Array} categories List of category IDs that should be set
-     * @param {Function} callback function(Boolean), called when categories have been set
-     */
+        * Set selected categories
+        *
+        * @param {Array} categories List of category IDs that should be set
+        * @param {Function} callback function(Boolean), called when categories have been set
+        */
 
 
     ArticleCommunicator.prototype.setCategories = function (categories, callback) {
@@ -1005,11 +1167,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Add the given categories to the list of categories
-     *
-     * @param {Array} categories List of category IDs to add
-     * @param {Function} callback function(Boolean), called when the categories have been set
-     */
+        * Add the given categories to the list of categories
+        *
+        * @param {Array} categories List of category IDs to add
+        * @param {Function} callback function(Boolean), called when the categories have been set
+        */
 
 
     ArticleCommunicator.prototype.addCategories = function (categories, callback) {
@@ -1018,11 +1180,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Remove the given categories from the list of categories
-     *
-     * @param {Array} categories List of category IDs to remove
-     * @param {Function} callback function(Boolean), called when the categories have been removed
-     */
+        * Remove the given categories from the list of categories
+        *
+        * @param {Array} categories List of category IDs to remove
+        * @param {Function} callback function(Boolean), called when the categories have been removed
+        */
 
 
     ArticleCommunicator.prototype.removeCategories = function (categories, callback) {
@@ -1031,11 +1193,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Set the main category of the current article
-     *
-     * @param {Number} category The ID of the category to set as the main category
-     * @param {Function} callback function(Boolean), called when the main category has been set
-     */
+        * Set the main category of the current article
+        *
+        * @param {Number} category The ID of the category to set as the main category
+        * @param {Function} callback function(Boolean), called when the main category has been set
+        */
 
 
     ArticleCommunicator.prototype.setMainCategory = function (category, callback) {
@@ -1044,21 +1206,21 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Get the source set for the article
-     *
-     * @param {Function} callback function(String), name of the source
-     */
+        * Get the source set for the article
+        *
+        * @param {Function} callback function(String), name of the source
+        */
 
 
     ArticleCommunicator.prototype.getSource = function (callback) {
       PluginAPI.request('article-source-get', null, callback);
     };
     /**
-     * Set the source for the article
-     *
-     * @param {String} value The new value to be set as source
-     * @param {Function} callback function(Boolean), called when the source has been set
-     */
+        * Set the source for the article
+        *
+        * @param {String} value The new value to be set as source
+        * @param {Function} callback function(Boolean), called when the source has been set
+        */
 
 
     ArticleCommunicator.prototype.setSource = function (value, callback) {
@@ -1067,21 +1229,21 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Get the status for the article
-     *
-     * @param {Function} callback function(String), current status
-     */
+        * Get the status for the article
+        *
+        * @param {Function} callback function(String), current status
+        */
 
 
     ArticleCommunicator.prototype.getStatus = function (callback) {
       PluginAPI.request('article-status-get', null, callback);
     };
     /**
-     * Set the status for the article
-     *
-     * @param {String} status The new status to be set (draft, waiting, published)
-     * @param {Function} callback function(Boolean), called when the source has been set
-     */
+        * Set the status for the article
+        *
+        * @param {String} status The new status to be set (draft, waiting, published)
+        * @param {Function} callback function(Boolean), called when the source has been set
+        */
 
 
     ArticleCommunicator.prototype.setStatus = function (status, callback) {
@@ -1090,21 +1252,21 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Get the published-date
-     *
-     * @param {Function} callback function(String), current published datetime
-     */
+        * Get the published-date
+        *
+        * @param {Function} callback function(String), current published datetime
+        */
 
 
     ArticleCommunicator.prototype.getPublishedDatetime = function (callback) {
       PluginAPI.request('article-published-get', null, callback);
     };
     /**
-     * Set the published-date
-     *
-     * @param {String} published Date to be set (YYYY-MM-DD HH:MM:SS)
-     * @param {Function} callback function(Boolean), called when done
-     */
+        * Set the published-date
+        *
+        * @param {String} published Date to be set (YYYY-MM-DD HH:MM:SS)
+        * @param {Function} callback function(Boolean), called when done
+        */
 
 
     ArticleCommunicator.prototype.setPublishedDatetime = function (published, callback) {
@@ -1113,21 +1275,21 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Get the authors set in the article
-     *
-     * @param {Function} callback function([String]), currently set authors
-     */
+        * Get the authors set in the article
+        *
+        * @param {Function} callback function([String]), currently set authors
+        */
 
 
     ArticleCommunicator.prototype.getAuthors = function (callback) {
       PluginAPI.request('article-authors-get', null, callback);
     };
     /**
-     * Set authors for the article
-     *
-     * @param {Array} authors List of authors that should be set
-     * @param {Function} callback function(Boolean), called when it has been set
-     */
+        * Set authors for the article
+        *
+        * @param {Array} authors List of authors that should be set
+        * @param {Function} callback function(Boolean), called when it has been set
+        */
 
 
     ArticleCommunicator.prototype.setAuthors = function (authors, callback) {
@@ -1136,11 +1298,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Add the given authors to the list of authors
-     *
-     * @param {Array} authors List of authors to add
-     * @param {Function} callback function(Boolean), called when it has been set
-     */
+        * Add the given authors to the list of authors
+        *
+        * @param {Array} authors List of authors to add
+        * @param {Function} callback function(Boolean), called when it has been set
+        */
 
 
     ArticleCommunicator.prototype.addAuthors = function (authors, callback) {
@@ -1149,11 +1311,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Remove the given authors from the list of authors
-     *
-     * @param {Array} authors List of authors to remove
-     * @param {Function} callback function([String]), author list as it is after the authors has been removed
-     */
+        * Remove the given authors from the list of authors
+        *
+        * @param {Array} authors List of authors to remove
+        * @param {Function} callback function([String]), author list as it is after the authors has been removed
+        */
 
 
     ArticleCommunicator.prototype.removeAuthors = function (authors, callback) {
@@ -1162,11 +1324,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Set the keyword-list on the article
-     *
-     * @param {Array} keywords List of keywords to add
-     * @param {Function} callback Function to call when keywords have been set
-     */
+        * Set the keyword-list on the article
+        *
+        * @param {Array} keywords List of keywords to add
+        * @param {Function} callback Function to call when keywords have been set
+        */
 
 
     ArticleCommunicator.prototype.setKeywords = function (keywords, callback) {
@@ -1175,31 +1337,31 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Get the current set of keywords on the article
-     *
-     * @param {Function} callback Function to call with the result
-     */
+        * Get the current set of keywords on the article
+        *
+        * @param {Function} callback Function to call with the result
+        */
 
 
     ArticleCommunicator.prototype.getKeywords = function (callback) {
       PluginAPI.request('article-keywords-get', null, callback);
     };
     /**
-     * Gets the current article content
-     *
-     * @param {Function} callback function(Object Content)
-     */
+        * Gets the current article content
+        *
+        * @param {Function} callback function(Object Content)
+        */
 
 
     ArticleCommunicator.prototype.getCurrentContent = function (callback) {
       PluginAPI.request('article-content-get', null, callback);
     };
     /**
-     * Updates current article content
-     *
-     * @param {String} content The new content for the article
-     * @param {Function} callback function(Boolean), called when it has been set
-     */
+        * Updates current article content
+        *
+        * @param {String} content The new content for the article
+        * @param {Function} callback function(Boolean), called when it has been set
+        */
 
 
     ArticleCommunicator.prototype.setCurrentContent = function (content, callback) {
@@ -1208,21 +1370,21 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Get the article type of the current article
-     *
-     * @param {Function} callback function(Int)
-     */
+        * Get the article type of the current article
+        *
+        * @param {Function} callback function(Int)
+        */
 
 
     ArticleCommunicator.prototype.getArticletypeId = function (callback) {
       PluginAPI.request('article-type-get', null, callback);
     };
     /**
-     * Set the article type of the current article
-     *
-     * @param {Number} articletypeId The new article type of the article
-     * @param {Function} callback function(Boolean), called when it has been set
-     */
+        * Set the article type of the current article
+        *
+        * @param {Number} articletypeId The new article type of the article
+        * @param {Function} callback function(Boolean), called when it has been set
+        */
 
 
     ArticleCommunicator.prototype.setArticletypeId = function (articletypeId, callback) {
@@ -1231,14 +1393,14 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Maximize the app view
-     *
-     * @param {String} title Title to give the maximized view
-     * @param {function} onClose Function to call when the window is closed/minimized
-     */
+        * Maximize the plugin view
+        *
+        * @param {String} title Title to give the maximized view
+        * @param {function} onClose Function to call when the window is closed/minimized
+        */
 
 
-    ArticleCommunicator.prototype.maximizeAppWindow = function (title, onClose) {
+    ArticleCommunicator.prototype.maximizePluginWindow = function (title, onClose) {
       var event = 'editor-pane-close-' + new Date().getTime();
       PluginAPI.request('editor-pane-maximize', {
         title: title,
@@ -1248,32 +1410,54 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       PluginAPI.eventListeners.add(event, onClose);
     };
     /**
-     * Restore the app pane to the default size
-     *
-     * @param {function} callback Callback to call after everything is done
-     */
+        * @deprecated use maximizePluginWindow instead
+        *  @param {String} title Window title
+        *  @param {function} onClose Callback to call after everything is done
+        *
+        */
 
 
-    ArticleCommunicator.prototype.restoreAppWindow = function (callback) {
+    ArticleCommunicator.prototype.maximizeAppWindow = function (title, onClose) {
+      this.maximizePluginWindow(title, onClose);
+    };
+    /**
+        * Restore the plugin pane to the default size
+        *
+        * @param {function} callback Callback to call after everything is done
+        */
+
+
+    ArticleCommunicator.prototype.restorePluginWindow = function (callback) {
       PluginAPI.request('restore-app-window', {}, callback);
     };
     /**
-     * Get the current byline
-     *
-     * @param {function} callback function(String), xml string with the current byline
-     */
+        * Restore the plugin pane to the default size
+        *
+        * @deprecated use restorPluginWindow instead
+        * @param {function} callback Callback to call after everything is done
+        */
+
+
+    ArticleCommunicator.prototype.restoreAppWindow = function (callback) {
+      this.restorePluginWindow(callback);
+    };
+    /**
+        * Get the current byline
+        *
+        * @param {function} callback function(String), xml string with the current byline
+        */
 
 
     ArticleCommunicator.prototype.getByline = function (callback) {
       PluginAPI.request('article-byline-get', null, callback);
     };
     /**
-     * Set the byline
-     *
-     * @param {String} byline XML version of byline to use
-     * @param {Boolean} save If true, force save after updating byline information
-     * @param {Function} callback function(Boolean), called when it has been set
-     */
+        * Set the byline
+        *
+        * @param {String} byline XML version of byline to use
+        * @param {Boolean} save If true, force save after updating byline information
+        * @param {Function} callback function(Boolean), called when it has been set
+        */
 
 
     ArticleCommunicator.prototype.setByline = function (byline, save, callback) {
@@ -1283,11 +1467,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Set geolocation
-     *
-     * @param {Object} geolocations The location to set
-     * @param {Function} callback function(Boolean), called when it has been set
-     */
+        * Set geolocation
+        *
+        * @param {Object} geolocations The location to set
+        * @param {Function} callback function(Boolean), called when it has been set
+        */
 
 
     ArticleCommunicator.prototype.setGeolocations = function (geolocations, callback) {
@@ -1296,40 +1480,40 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Get geolocation
-     *
-     * @param {Function} callback function(Object), retrieves the currently set geo location
-     */
+        * Get geolocation
+        *
+        * @param {Function} callback function(Object), retrieves the currently set geo location
+        */
 
 
     ArticleCommunicator.prototype.getGeolocations = function (callback) {
       PluginAPI.request('article-geolocations-get', null, callback);
     };
     /**
-     * Fetches a list of all properties available to an article.
-     *
-     * @param {Function} callback Callback called with an array of property objects.
-     */
+        * Fetches a list of all properties available to an article.
+        *
+        * @param {Function} callback Callback called with an array of property objects.
+        */
 
 
     ArticleCommunicator.prototype.getProperties = function (callback) {
       PluginAPI.request('article-properties-get', null, callback);
     };
     /**
-     * Updates and saves one or more property values. The input is a simple object with property names and their
-     * new value. The supplied callback is called with an updated list of properties.
-     *
-     * @example
-     * PluginAPI.Article.setProperties({
-     *     fooProperty: "bar",
-     *     barProperty: "foo"
-     * }, function(properties) {
-     *     // Returns a complete and updated list of properties.
-     * })
-     *
-     * @param {Object} properties An object of property names and corresponding values.
-     * @param {Function} callback Callback called with an updated list of properties.
-     */
+        * Updates and saves one or more property values. The input is a simple object with property names and their
+        * new value. The supplied callback is called with an updated list of properties.
+        *
+        * @example
+        * PluginAPI.Article.setProperties({
+        *     fooProperty: "bar",
+        *     barProperty: "foo"
+        * }, function(properties) {
+        *     // Returns a complete and updated list of properties.
+        * })
+        *
+        * @param {Object} properties An object of property names and corresponding values.
+        * @param {Function} callback Callback called with an updated list of properties.
+        */
 
 
     ArticleCommunicator.prototype.setProperties = function (properties, callback) {
@@ -1338,12 +1522,12 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Updates and saves a single property.
-     *
-     * @param {String} name The property to update.
-     * @param {Object} value The updated value.
-     * @param {Function} callback Callback called with an updated list of properties.
-     */
+        * Updates and saves a single property.
+        *
+        * @param {String} name The property to update.
+        * @param {Object} value The updated value.
+        * @param {Function} callback Callback called with an updated list of properties.
+        */
 
 
     ArticleCommunicator.prototype.setProperty = function (name, value, callback) {
@@ -1569,7 +1753,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   var PluginAPI = function () {
     /**
      *
-     * Namespace for all public DrPublish methods available from apps.
+     * Namespace for all public DrPublish methods available from plugins.
      *
      * @class
      * @classdesc The basic API object
@@ -1577,13 +1761,17 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
      *
      */
     var Api = function Api() {
+      var queryParameters = {};
+      window.location.search.substr(1).split('&').forEach(function (queryPair) {
+        queryParameters[queryPair.split('=')[0]] = queryPair.split('=')[1];
+      });
       this.DEBUG = false;
       this.Version = '1.0';
       this.Editor = null;
       this.Article = null;
       this.errorListeners = new Listeners();
       this.eventListeners = new Listeners();
-      this.appName = '';
+      this.appName = queryParameters.appName || '';
       this.selectedPluginElement = null;
       var self = this;
       pm.bind('event', function (data) {
@@ -1638,7 +1826,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       var self = this;
 
       if (this.DEBUG) {
-        console.info(this.getAppName() + ': Requesting ' + callSpec + ' from parent with data', data);
+        console.info(this.getPluginName() + ': Requesting ' + callSpec + ' from parent with data', data);
       }
 
       if (!data) {
@@ -1655,7 +1843,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         };
       }
 
-      data['src_app'] = this.getAppName();
+      data['src_app'] = this.getPluginName();
 
       var createEventFunction = function createEventFunction(func, eventKey) {
         return function () {
@@ -1721,34 +1909,55 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Reloads the app's iframe
+     * Reloads the plugins's iframe
      */
 
 
     Api.prototype.reloadIframe = function () {
       this.request('app-reload', {
-        app: this.getAppName()
+        app: this.getPluginName()
       });
     };
     /**
-     * Get the name of the loaded app
+     * Get the name of the loaded plugin
      *
-     * @return {String} The name of the app, or false if it couldn't be detected
+     * @return {String} The name of the plugin, or false if it couldn't be detected
+     */
+
+
+    Api.prototype.getPluginName = function () {
+      return this.appName;
+    };
+    /**
+     * Get the name of the loaded plugin
+     * @deprecated: use getPluginName instead
+     * @return {String} The name of the plugin, or false if it couldn't be detected
      */
 
 
     Api.prototype.getAppName = function () {
-      return this.appName;
+      return this.getPluginName();
     };
     /**
-     * Set the name of the app
+     * Set the name of the plugin
      *
-     * @param {String} name The name of the app
+     * @param {String} name The name of the plugin
+     */
+
+
+    Api.prototype.setPluginName = function (name) {
+      this.appName = name;
+    };
+    /**
+     * Set the name of the plugin
+     * @deprecated: use setPluginName instead
+     *
+     * @param {String} name The name of the plugin
      */
 
 
     Api.prototype.setAppName = function (name) {
-      this.appName = name;
+      this.setPluginName(name);
     };
     /**
      * Show info-message to the user
@@ -1805,27 +2014,6 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
     Api.prototype.hideLoader = function () {
       this.request('hide-loader');
-    };
-    /**
-     * @deprecated Use PluginAPI.on(...) instead
-     * @param {Object} listeners
-     */
-
-
-    Api.prototype.addListeners = function (listeners) {
-      var createCallback = function createCallback(callback) {
-        return function (data) {
-          callback(data.data);
-        };
-      };
-
-      for (var eventName in listeners) {
-        if (listeners.hasOwnProperty(eventName)) {
-          var callback = listeners[eventName];
-          var callWrapper = createCallback(callback);
-          this.on(eventName, callWrapper);
-        }
-      }
     };
     /**
      * Loads an old revision of an article
@@ -1917,7 +2105,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
-     * Extends the PluginAPI with custom functionality that other apps can use
+     * Extends the PluginAPI with custom functionality that other plugins can use
      *
      * @param {String} group Group name for functionality to add
      * @param {String} name Name of the specific function to add
@@ -1968,7 +2156,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       this.request('get-current-user', null, callback);
     };
     /**
-     * Get configuration information about the app
+     * Get configuration information about the plugin
      *
      * @param {Function} callback function(Object)
      */
@@ -1978,7 +2166,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       this.request('get-configuration', null, callback);
     };
     /**
-     * Get DrPublish configuratin
+     * Get DrPublish configuration
      *
      * @param {Function} callback function(Object)
      */
@@ -1988,7 +2176,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       this.request('get-drpublish-configuration', null, callback);
     };
     /**
-     * Set configuration information about the app
+     * Set configuration information about the plugin
      *
      * @param {Object} config The configuration object to save
      * @param {Object} options Object, can have three keys.
@@ -2035,7 +2223,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
      * Listen for an event. If the callback returns false the event may cancel continued actions, e.g beforeSave can cancel article save. Look at documentation for Listeners to learn more.
      *
      * @param {String} name Name of the event
-     * @param {Function} callback function(Object) Function to call when the event is triggered. Recieves one data object parameter of the form {source: <source app name or DrPublish>, data: <data object>}
+     * @param {Function} callback function(Object) Function to call when the event is triggered. Recieves one data object parameter of the form {source: <source plugin name or DrPublish>, data: <data object>}
      */
 
 

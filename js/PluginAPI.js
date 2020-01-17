@@ -10,7 +10,7 @@ const PluginAPI = (function () {
 
 	/**
 	 *
-	 * Namespace for all public DrPublish methods available from apps.
+	 * Namespace for all public DrPublish methods available from plugins.
 	 *
 	 * @class
 	 * @classdesc The basic API object
@@ -18,6 +18,13 @@ const PluginAPI = (function () {
 	 *
 	 */
 	const Api = function () {
+
+		const queryParameters = {};
+		window.location.search.substr(1).split('&').forEach((queryPair) => {
+			queryParameters[queryPair.split('=')[0]] = queryPair.split('=')[1];
+		});
+
+
 		this.DEBUG = false;
 
 		this.Version = '1.0';
@@ -25,7 +32,7 @@ const PluginAPI = (function () {
 		this.Article = null;
 		this.errorListeners = new Listeners();
 		this.eventListeners = new Listeners();
-		this.appName = '';
+		this.appName = queryParameters.appName || '';
 		this.selectedPluginElement = null;
 
 		const self = this;
@@ -73,7 +80,7 @@ const PluginAPI = (function () {
 	Api.prototype.request = function (callSpec, data, callback) {
 		const self = this;
 		if (this.DEBUG) {
-			console.info(this.getAppName() + ': Requesting ' + callSpec + ' from parent with data', data);
+			console.info(this.getPluginName() + ': Requesting ' + callSpec + ' from parent with data', data);
 		}
 
 		if (!data) {
@@ -88,7 +95,7 @@ const PluginAPI = (function () {
 			data = {data: data};
 		}
 
-		data['src_app'] = this.getAppName();
+		data['src_app'] = this.getPluginName();
 
 		const createEventFunction = function (func, eventKey) {
 			return function () {
@@ -153,31 +160,50 @@ const PluginAPI = (function () {
 	};
 
 	/**
-	 * Reloads the app's iframe
+	 * Reloads the plugins's iframe
 	 */
 	Api.prototype.reloadIframe = function () {
 
 		this.request('app-reload', {
-			app: this.getAppName()
+			app: this.getPluginName()
 		});
 	};
 
 	/**
-	 * Get the name of the loaded app
+	 * Get the name of the loaded plugin
 	 *
-	 * @return {String} The name of the app, or false if it couldn't be detected
+	 * @return {String} The name of the plugin, or false if it couldn't be detected
 	 */
-	Api.prototype.getAppName = function () {
+	Api.prototype.getPluginName = function () {
 		return this.appName;
 	};
 
 	/**
-	 * Set the name of the app
+	 * Get the name of the loaded plugin
+	 * @deprecated: use getPluginName instead
+	 * @return {String} The name of the plugin, or false if it couldn't be detected
+	 */
+	Api.prototype.getAppName = function () {
+		return this.getPluginName();
+	};
+
+	/**
+	 * Set the name of the plugin
 	 *
-	 * @param {String} name The name of the app
+	 * @param {String} name The name of the plugin
+	 */
+	Api.prototype.setPluginName = function (name) {
+		this.appName = name;
+	};
+
+	/**
+	 * Set the name of the plugin
+	 * @deprecated: use setPluginName instead
+	 *
+	 * @param {String} name The name of the plugin
 	 */
 	Api.prototype.setAppName = function (name) {
-		this.appName = name;
+		this.setPluginName(name);
 	};
 
 	/**
@@ -234,24 +260,6 @@ const PluginAPI = (function () {
 		this.request('hide-loader');
 	};
 
-	/**
-	 * @deprecated Use PluginAPI.on(...) instead
-	 * @param {Object} listeners
-	 */
-	Api.prototype.addListeners = function (listeners) {
-		const createCallback = function (callback) {
-			return function (data) {
-				callback(data.data);
-			};
-		};
-		for (const eventName in listeners) {
-			if (listeners.hasOwnProperty(eventName)) {
-				const callback = listeners[eventName];
-				const callWrapper = createCallback(callback);
-				this.on(eventName, callWrapper);
-			}
-		}
-	};
 
 	/**
 	 * Loads an old revision of an article
@@ -338,7 +346,7 @@ const PluginAPI = (function () {
 	};
 
 	/**
-	 * Extends the PluginAPI with custom functionality that other apps can use
+	 * Extends the PluginAPI with custom functionality that other plugins can use
 	 *
 	 * @param {String} group Group name for functionality to add
 	 * @param {String} name Name of the specific function to add
@@ -383,7 +391,7 @@ const PluginAPI = (function () {
 	};
 
 	/**
-	 * Get configuration information about the app
+	 * Get configuration information about the plugin
 	 *
 	 * @param {Function} callback function(Object)
 	 */
@@ -392,7 +400,7 @@ const PluginAPI = (function () {
 	};
 
 	/**
-	 * Get DrPublish configuratin
+	 * Get DrPublish configuration
 	 *
 	 * @param {Function} callback function(Object)
 	 */
@@ -401,7 +409,7 @@ const PluginAPI = (function () {
 	};
 
 	/**
-	 * Set configuration information about the app
+	 * Set configuration information about the plugin
 	 *
 	 * @param {Object} config The configuration object to save
 	 * @param {Object} options Object, can have three keys.
@@ -445,7 +453,7 @@ const PluginAPI = (function () {
 	 * Listen for an event. If the callback returns false the event may cancel continued actions, e.g beforeSave can cancel article save. Look at documentation for Listeners to learn more.
 	 *
 	 * @param {String} name Name of the event
-	 * @param {Function} callback function(Object) Function to call when the event is triggered. Recieves one data object parameter of the form {source: <source app name or DrPublish>, data: <data object>}
+	 * @param {Function} callback function(Object) Function to call when the event is triggered. Recieves one data object parameter of the form {source: <source plugin name or DrPublish>, data: <data object>}
 	 */
 	Api.prototype.on = function (name, callback) {
 		const self = this;

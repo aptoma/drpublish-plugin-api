@@ -11,8 +11,8 @@
  *
  * @description
  *
- * <p>DrPublish provides a large set of default events that an app can listen for. All events that start their name with &#39;before&#39; can be stopped by an app. This is done by returning &#39;false&#39; from the callback function, as in the &#39;beforSave&#39; example given bellow. </p>
- * <p>Other apps can also supply their own events using the PluginAPI.emit(...) function. Documention on these events are up to each app to create.</p>
+ * <p>DrPublish provides a large set of default events that an plugin can listen for. All events that start their name with &#39;before&#39; can be stopped by an plugin. This is done by returning &#39;false&#39; from the callback function, as in the &#39;beforSave&#39; example given bellow. </p>
+ * <p>Other plugins can also supply their own events using the PluginAPI.emit(...) function. Documention on these events are up to each plugin to create.</p>
  * <h3 id="available-events">Available Events</h3>
  * <p><code>addCategory</code></p>
  * <blockquote>
@@ -22,17 +22,13 @@
  * <blockquote>
  * <p><em>triggered after a tag had been added to the article</em></p>
  * </blockquote>
- * <p><code>appPaneMaximized</code></p>
+ * <p><code>pluginWindowMaximized</code></p>
  * <blockquote>
- * <p><em>triggered when the app pane is maximized</em></p>
+ * <p><em>triggered when the plugin pane is maximized</em></p>
  * </blockquote>
- * <p><code>appPaneRestored</code></p>
+ * <p><code>pluginWindowRestored</code></p>
  * <blockquote>
- * <p><em>triggered when the app pane is restored to its&#39; original size</em></p>
- * </blockquote>
- * <p><code>appAuthenticated</code></p>
- * <blockquote>
- * <p><em>triggered when an app has been authenticated</em></p>
+ * <p><em>triggered when the plugin pane is restored to its&#39; original size</em></p>
  * </blockquote>
  * <p><code>changedCustomMeta</code></p>
  * <blockquote>
