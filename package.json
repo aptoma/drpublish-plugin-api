@@ -1,6 +1,6 @@
 {
   "name": "@aptoma/drpublish-plugin-api",
-  "version": "3.12.4",
+  "version": "3.12.6",
   "repository": {
     "type": "git",
     "url": "https://github.com/aptoma/drpublish-plugin-api.git"
@@ -34,7 +34,7 @@
     "eslint-friendly-formatter": "^4.0.1",
     "eslint-loader": "^2.1.1",
     "eslint-plugin-compat": "^2.5.1",
-    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-import": "^2.20.0",
     "eslint-plugin-jasmine": "^2.10.1",
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^4.0.1",
@@ -54,7 +54,7 @@
     "release-it": "^2.9.0",
     "rimraf": "^2.6.2",
     "terser-webpack-plugin": "1.1.0",
-    "webpack": "^4.41.4",
+    "webpack": "^4.41.5",
     "webpack-cli": "3.1.1",
     "webpack-merge": "^4.1.4"
   },
