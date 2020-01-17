@@ -1,0 +1,9 @@
+{
+  "name": "hello-world-plugin",
+  "version": "0.0.1",
+  "description": "DrPublish example plugin",
+  "dependencies": {
+    "@aptoma/drpublish-plugin-api": "3.12.8",
+    "jquery": "^3.2.1"
+  }
+}

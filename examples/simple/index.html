@@ -3,17 +3,10 @@
 <head>
     <meta charset="utf-8">
     <title>Example Plugin</title>
-    <script src="../dist/jquery.postmessage.js"></script>
-    <script src="../dist/bundle.js"></script>
+    <script src="../../dist/jquery.postmessage.js"></script>
+    <script src="../../dist/bundle.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var queryParameters = {};
-        window.location.search.substr(1).split('&').forEach(function (queryPair) {
-            queryParameters[queryPair.split('=')[0]] = queryPair.split('=')[1];
-        });
-        // Register name of the app, sent as a parameter in the iframe url
-        // This is needed so that DrPublish knows which plugin to communicate with
-        PluginAPI.setAppName(queryParameters.appName);
 
         document.querySelector('#textButton').addEventListener('click', function() {
             var value = getValue();
