@@ -33,6 +33,7 @@ const PluginAPI = (function () {
 		this.errorListeners = new Listeners();
 		this.eventListeners = new Listeners();
 		this.appName = queryParameters.appName || '';
+		this.jwt = queryParameters.jwt || '';
 		this.selectedPluginElement = null;
 
 		const self = this;
@@ -661,6 +662,14 @@ const PluginAPI = (function () {
 		this.request('confirm-authenticated', {
 			pluginName: this.appName
 		});
+	};
+
+	/**
+     * Get the JWT as defined on DrPublish publication config. This token can be used to authenticate the request
+     * @return {*|string}
+     */
+	Api.prototype.getJWT = function () {
+		return this.jwt;
 	};
 
 	return new Api();

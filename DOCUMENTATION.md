@@ -5,36 +5,23 @@
 ### js/PluginAPI.js
 
 
-#### Api() 
 
-Namespace for all public DrPublish methods available from plugins.
+#### PluginAPI.getJWT(tag, callback) 
 
-
-
-
-
+Get the JWT as defined on DrPublish publication config. This token can be used to authenticate the request. 
 
 ##### Returns
 
 
-- `Void`
-
-
-
-#### Api.request(callSpec, data, callback) 
-
-Dispatches a request to DrPublish, and returns the reply to callback On error, notifies all error listeners based on the index .type of the thrown object
-
-
+- `String`
 
 
 ##### Parameters
 
 | Name | Type | Description |  |
 | ---- | ---- | ----------- | -------- |
-| callSpec | `String`  | What do you want to call? | &nbsp; |
-| data | `Object`  | The data attached to the request | &nbsp; |
-| callback | `Function`  | The function to call upon return | &nbsp; |
+| tag | `String`  | The tag to create | &nbsp; |
+| callback | `Function`  | function(Boolean) | &nbsp; |
 
 
 
@@ -46,7 +33,7 @@ Dispatches a request to DrPublish, and returns the reply to callback On error, n
 
 
 
-#### Api.openTagCreationDialog(tag, callback) 
+#### PluginAPI.openTagCreationDialog(tag, callback) 
 
 Creates a new tag
 
@@ -70,7 +57,7 @@ Creates a new tag
 
 
 
-#### Api.reloadIframe() 
+#### PluginAPI.reloadIframe() 
 
 Reloads the plugins's iframe
 
@@ -86,7 +73,7 @@ Reloads the plugins's iframe
 
 
 
-#### Api.getPluginName() 
+#### PluginAPI.getPluginName() 
 
 Get the name of the loaded plugin
 
@@ -102,7 +89,7 @@ Get the name of the loaded plugin
 
 
 
-#### Api.getAppName() 
+#### PluginAPI.getAppName() 
 
 Get the name of the loaded plugin
 
@@ -118,7 +105,7 @@ Get the name of the loaded plugin
 
 
 
-#### Api.setPluginName(name) 
+#### PluginAPI.setPluginName(name) 
 
 Set the name of the plugin
 
@@ -141,7 +128,7 @@ Set the name of the plugin
 
 
 
-#### Api.setAppName(name) 
+#### PluginAPI.setAppName(name) 
 
 Set the name of the plugin
 
@@ -164,7 +151,7 @@ Set the name of the plugin
 
 
 
-#### Api.showInfoMsg(msg) 
+#### PluginAPI.showInfoMsg(msg) 
 
 Show info-message to the user
 
@@ -187,7 +174,7 @@ Show info-message to the user
 
 
 
-#### Api.showWarningMsg(msg) 
+#### PluginAPI.showWarningMsg(msg) 
 
 Show warning-message to the user
 
@@ -210,7 +197,7 @@ Show warning-message to the user
 
 
 
-#### Api.showErrorMsg(msg) 
+#### PluginAPI.showErrorMsg(msg) 
 
 Show error-message to the user
 
@@ -233,7 +220,7 @@ Show error-message to the user
 
 
 
-#### Api.showLoader(msg) 
+#### PluginAPI.showLoader(msg) 
 
 Show the loader
 
@@ -256,7 +243,7 @@ Show the loader
 
 
 
-#### Api.hideLoader() 
+#### PluginAPI.hideLoader() 
 
 Hide the loader
 
@@ -272,7 +259,7 @@ Hide the loader
 
 
 
-#### Api.__loadArticleRevision(id, callback)  *private method*
+#### PluginAPI.__loadArticleRevision(id, callback)  *private method*
 
 Loads an old revision of an article
 
@@ -296,7 +283,7 @@ Loads an old revision of an article
 
 
 
-#### Api.createTag(tag, callback) 
+#### PluginAPI.createTag(tag, callback) 
 
 Creates a new tag
 
@@ -320,7 +307,7 @@ Creates a new tag
 
 
 
-#### Api.searchDrLib(data, callback) 
+#### PluginAPI.searchDrLib(data, callback) 
 
 Sends a query to DrLib
 
@@ -360,7 +347,7 @@ PluginAPI.searchDrLib({
 
 
 
-#### Api.generateArticleUrl(id, callback) 
+#### PluginAPI.generateArticleUrl(id, callback) 
 
 Generates an url to a published article
 
@@ -384,7 +371,7 @@ Generates an url to a published article
 
 
 
-#### Api.extendApi(group, name, action) 
+#### PluginAPI.extendApi(group, name, action) 
 
 Extends the PluginAPI with custom functionality that other plugins can use
 
@@ -409,7 +396,7 @@ Extends the PluginAPI with custom functionality that other plugins can use
 
 
 
-#### Api.callExtendedApi(group, name, data, callback) 
+#### PluginAPI.callExtendedApi(group, name, data, callback) 
 
 Call the extended PluginAPI
 
@@ -435,7 +422,7 @@ Call the extended PluginAPI
 
 
 
-#### Api.getCurrentUser(callback) 
+#### PluginAPI.getCurrentUser(callback) 
 
 Gets logged in user
 
@@ -458,7 +445,7 @@ Gets logged in user
 
 
 
-#### Api.getConfiguration(callback) 
+#### PluginAPI.getConfiguration(callback) 
 
 Get configuration information about the plugin
 
@@ -481,7 +468,7 @@ Get configuration information about the plugin
 
 
 
-#### Api.getDrPublishConfiguration(callback) 
+#### PluginAPI.getDrPublishConfiguration(callback) 
 
 Get DrPublish configuration
 
@@ -504,7 +491,7 @@ Get DrPublish configuration
 
 
 
-#### Api.setConfiguration(config, options, callback) 
+#### PluginAPI.setConfiguration(config, options, callback) 
 
 Set configuration information about the plugin
 
@@ -529,7 +516,7 @@ Set configuration information about the plugin
 
 
 
-#### Api.emit(name, data) 
+#### PluginAPI.emit(name, data) 
 
 Emits an event to DrPublish, and possibly other apps
 
@@ -553,7 +540,7 @@ Emits an event to DrPublish, and possibly other apps
 
 
 
-#### Api.on(name, callback) 
+#### PluginAPI.on(name, callback) 
 
 Listen for an event. If the callback returns false the event may cancel continued actions, e.g beforeSave can cancel article save. Look at documentation for Listeners to learn more.
 
@@ -577,7 +564,7 @@ Listen for an event. If the callback returns false the event may cancel continue
 
 
 
-#### Api.increaseRequiredActionCounter(callback) 
+#### PluginAPI.increaseRequiredActionCounter(callback) 
 
 Increase the counter of actions required by the user, used to tell the user that the plugin requires input of some kind
 
@@ -600,7 +587,7 @@ Increase the counter of actions required by the user, used to tell the user that
 
 
 
-#### Api.decreaseRequiredActionCounter(callback) 
+#### PluginAPI.decreaseRequiredActionCounter(callback) 
 
 Decrease the counter of actions required by the user, used to tell the user that the plugin requires input of some kind
 
@@ -623,7 +610,7 @@ Decrease the counter of actions required by the user, used to tell the user that
 
 
 
-#### Api.clearRequiredActionCounter(callback) 
+#### PluginAPI.clearRequiredActionCounter(callback) 
 
 Clear the counter of actions required by the user, used to tell the user that the plugin requires input of some kind
 
@@ -646,7 +633,7 @@ Clear the counter of actions required by the user, used to tell the user that th
 
 
 
-#### Api.setRequiredActionCounter(count, callback) 
+#### PluginAPI.setRequiredActionCounter(count, callback) 
 
 Set the counter of actions required by the user, used to tell the user that the plugin requires input of some kind
 
@@ -670,7 +657,7 @@ Set the counter of actions required by the user, used to tell the user that the 
 
 
 
-#### Api.create()  *private method*
+#### PluginAPI.create()  *private method*
 
 Create a new instance of the Api class
 
@@ -686,7 +673,7 @@ Create a new instance of the Api class
 
 
 
-#### Api.createEmbeddedObject(typeId, callback) 
+#### PluginAPI.createEmbeddedObject(typeId, callback) 
 
 Create an embedded object of the given type
 
@@ -710,7 +697,7 @@ Create an embedded object of the given type
 
 
 
-#### Api.getEmbeddedObjectTypes(callback) 
+#### PluginAPI.getEmbeddedObjectTypes(callback) 
 
 Get information about the available embedded object types
 
@@ -733,7 +720,7 @@ Get information about the available embedded object types
 
 
 
-#### Api.giveFocus(pluginName, argument, start) 
+#### PluginAPI.giveFocus(pluginName, argument, start) 
 
 Gives focus to another plugin
 
@@ -758,7 +745,7 @@ Gives focus to another plugin
 
 
 
-#### Api.hide() 
+#### PluginAPI.hide() 
 
 Hide the plugin, so it is no longer visible on the list of open plugins
 
@@ -774,7 +761,7 @@ Hide the plugin, so it is no longer visible on the list of open plugins
 
 
 
-#### Api.createModal(content, options) 
+#### PluginAPI.createModal(content, options) 
 
 <p>Creates a jQuery UI modal in the main editor window, detached from the plugin itself. Modals are unique on a
 per-plugin basis, meaning that a plugin can only have a single modal at a time. Creating a new modal will
@@ -835,7 +822,7 @@ PluginAPI.createModal('<h1>This is a brand new modal</h1>', {
 
 
 
-#### Api.updateModal(content) 
+#### PluginAPI.updateModal(content) 
 
 Updates the HTML content of a live modal. Has no effect if the modal does not exist.
 
@@ -858,7 +845,7 @@ Updates the HTML content of a live modal. Has no effect if the modal does not ex
 
 
 
-#### Api.closeModal(destroy) 
+#### PluginAPI.closeModal(destroy) 
 
 Closes and optionally deletes the modal. Has no effect if the modal does not exists.
 
@@ -881,7 +868,7 @@ Closes and optionally deletes the modal. Has no effect if the modal does not exi
 
 
 
-#### Api.getModalInputs(callback) 
+#### PluginAPI.getModalInputs(callback) 
 
 Returns the values of all input or select elements within a modal.
 

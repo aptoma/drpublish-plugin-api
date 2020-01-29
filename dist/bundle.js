@@ -1772,6 +1772,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       this.errorListeners = new Listeners();
       this.eventListeners = new Listeners();
       this.appName = queryParameters.appName || '';
+      this.jwt = queryParameters.jwt || '';
       this.selectedPluginElement = null;
       var self = this;
       pm.bind('event', function (data) {
@@ -2463,6 +2464,15 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       this.request('confirm-authenticated', {
         pluginName: this.appName
       });
+    };
+    /**
+        * Get the JWT as defined on DrPublish publication config. This token can be used to authenticate the request
+        * @return {*|string}
+        */
+
+
+    Api.prototype.getJWT = function () {
+      return this.jwt;
     };
 
     return new Api();

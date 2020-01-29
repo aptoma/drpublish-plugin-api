@@ -5,17 +5,36 @@
     <meta charset="UTF-8">
     <title>Hello World DrPublish Plugin</title>
     <link type="text/css" rel="stylesheet" href="styles.css"/>
-    <script type="application/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="application/javascript" src="jquery.min.js"></script>
     <script type="application/javascript"
-            src="node_modules/@aptoma/drpublish-plugin-api/dist/jquery.postmessage.js"></script>
-    <script type="application/javascript" src="node_modules/@aptoma/drpublish-plugin-api/dist/bundle.js"></script>
-    <script type="application/javascript" src="https://localhost/plugin-api/dist/bundle.js"></script>
+            src="../../dist/jquery.postmessage.js"></script>
+    <script type="application/javascript" src="../../dist/bundle.js"></script>
     <script type="application/javascript" src="helloworld.js"></script>
+
+    <!--<script type="application/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>-->
+    <!--<script type="application/javascript" src="node_modules/@aptoma/drpublish-plugin-api/dist/jquery.postmessage.js"></script>-->
+    <!--<script type="application/javascript" src="node_modules/@aptoma/drpublish-plugin-api/dist/bundle.js"></script>-->
 </head>
 <body>
 
 
 <h1>Demo plugin</h1>
+
+<h3>JWT emitted by DrPublish</h3>
+<textarea id="jwt-result"></textarea>
+<code>function fetchJWT() {
+    var jwt = PluginAPI.getJWT();
+    if (jwt !== '') {
+    var jwtParsed = parseJwt(jwt);
+    jwtParsed.jwt = jwt;
+    $('#jwt-result').val(JSON.stringify(jwtParsed));
+    } else {
+        $('#jwt-result').val('no JWT given');
+    }
+}
+</code>
+
+
 <h3>Fetch article id dynamically, each time a new article is loaded in the editor</h3>
 <input id="fetchArticleId-result" />
 <code>
@@ -30,7 +49,6 @@
     $('#fetchArticleId-result').val(id);
     });
     }
-
 </code>
 <hr/>
 
@@ -44,16 +62,16 @@
 <textarea id="readContent-result"></textarea>
 <code>PluginAPI.Editor.getHTMLBySelector('*', function (data) {
     $('#result-preview-txt').val(data);
-});</code>
+    });</code>
 <hr/>
 
 <h3>Get article id</h3>
 <button onclick="getId()">do it</button>
 <input id="getId-result" />
 <code>
-PluginAPI.Article.getId(function (id) {
+    PluginAPI.Article.getId(function (id) {
     $('#getId-result').val(id);
-});</code>
+    });</code>
 <hr/>
 
 
@@ -61,9 +79,9 @@ PluginAPI.Article.getId(function (id) {
 <button onclick="getTags()">do it</button>
 <textarea id="getTags-result" ></textarea>
 <code>
-PluginAPI.Article.getTags(function (tags) {
+    PluginAPI.Article.getTags(function (tags) {
     $('#getTags-result').val(tags.length > 0 ? JSON.stringify(tags) : 'article has no tags');
-});</code>
+    });</code>
 <hr/>
 
 <h3>Get custom metadata (aka. "article property")</h3>
@@ -71,9 +89,9 @@ PluginAPI.Article.getTags(function (tags) {
 <textarea id="getCustomMeta-result" ></textarea>
 <div class="hint">* If no value is provided, all available custom metadata are fetched</div>
 <code>
-PluginAPI.Article.getTags(function (tags) {
+    PluginAPI.Article.getTags(function (tags) {
     $('#getTags-result').val(tags.length > 0 ? JSON.stringify(tags) : 'article has no tags');
-});</code>
+    });</code>
 <hr/>
 
 <h3>Set custom metadata (aka. "article property")</h3>
@@ -83,9 +101,9 @@ PluginAPI.Article.getTags(function (tags) {
 <textarea id="setCustomMeta-result" ></textarea>
 
 <code>
-PluginAPI.Article.getTags(function (tags) {
+    PluginAPI.Article.getTags(function (tags) {
     $('#getTags-result').val(tags.length > 0 ? JSON.stringify(tags) : 'article has no tags');
-});</code>
+    });</code>
 <hr/>
 
 
