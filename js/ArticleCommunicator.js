@@ -469,13 +469,13 @@ module.exports = function (PluginAPI) {
      * @param {String} title Title to give the maximized view
      * @param {function} onClose Function to call when the window is closed/minimized
      */
-	ArticleCommunicator.prototype.maximizePluginWindow = function (title, onClose) {
+	ArticleCommunicator.prototype.maximizePluginWindow = function (title, onClose, callback) {
 		const event = 'editor-pane-close-' + new Date().getTime();
 
 		PluginAPI.request('editor-pane-maximize', {
 			title: title,
 			event: event
-		});
+		}, callback);
 		PluginAPI.eventListeners.removeAll(event);
 		PluginAPI.eventListeners.add(event, onClose);
 	};
@@ -486,8 +486,8 @@ module.exports = function (PluginAPI) {
      *  @param {function} onClose Callback to call after everything is done
      *
      */
-	ArticleCommunicator.prototype.maximizeAppWindow = function (title, onClose) {
-		this.maximizePluginWindow(title, onClose);
+	ArticleCommunicator.prototype.maximizeAppWindow = function (title, onClose, callback) {
+		this.maximizePluginWindow(title, onClose, callback);
 	};
 
 	/**
