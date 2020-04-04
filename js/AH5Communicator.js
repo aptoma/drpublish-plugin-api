@@ -362,6 +362,36 @@ module.exports = function (PluginAPI) {
 	};
 
 	/**
+	 * Get data-attribute of the element
+	 *
+	 * @param {String} id Id of the element
+	 * @param {String} attribute attribute name
+	 * @param {function} callback function(Boolean)
+	 */
+	AH5Communicator.prototype.getDataAttribute = function (id, attribute, callback) {
+		PluginAPI.request('editor-attribute-get', {
+			id: id,
+			attribute: 'data-' + attribute
+		}, callback);
+	};
+
+	/**
+	 * Update data-attribute of the element
+	 *
+	 * @param {String} id Id of the element
+	 * @param {String} attribute attribute name
+	 * @param {String} value attribute value
+	 * @param {function} callback function(Boolean)
+	 */
+	AH5Communicator.prototype.updateDataAttribute = function (id, attribute, value, callback) {
+		PluginAPI.request('editor-attribute-update', {
+			id: id,
+			attribute: 'data-' + attribute,
+			value: value
+		}, callback);
+	};
+
+	/**
 	 * Mark an element as currently selected (green border with default styling)
 	 *
 	 * @param {String} id Id of the element
