@@ -344,7 +344,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
     AH5Communicator.prototype.deleteElementById = function (id, callback) {
-      PluginAPI.request('editor-element-replace-byid', {
+      PluginAPI.request('editor-element-delete-byid', {
         id: id
       }, callback);
     };
@@ -761,6 +761,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           $element.attr('data-external-id', data.externalId);
         }
 
+        if (data.dpDigitalAssetId) {
+          $element.attr('data-dp-digital-asset-id', data.dpDigitalAssetId);
+        }
+
         if (data.assetClass) {
           $element.addClass(data.assetClass);
         }
@@ -869,6 +873,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
         if (data.externalId) {
           element.dataset.externalId = data.externalId;
+        }
+
+        if (data.dpDigitalAssetId) {
+          element.dataset.dpDigitalAssetId = data.dpDigitalAssetId;
         }
 
         if (data.assetClass) {

@@ -204,7 +204,7 @@ module.exports = function (PluginAPI) {
 	 * @param {function} callback function(Boolean), called after deletion is done
 	 */
 	AH5Communicator.prototype.deleteElementById = function (id, callback) {
-		PluginAPI.request('editor-element-replace-byid', {
+		PluginAPI.request('editor-element-delete-byid', {
 			id: id
 		}, callback);
 	};
@@ -590,6 +590,9 @@ module.exports = function (PluginAPI) {
 			if (data.externalId) {
 				$element.attr('data-external-id', data.externalId);
 			}
+			if (data.dpDigitalAssetId) {
+				$element.attr('data-dp-digital-asset-id', data.dpDigitalAssetId);
+			}
 			if (data.assetClass) {
 				$element.addClass(data.assetClass);
 			}
@@ -693,6 +696,9 @@ module.exports = function (PluginAPI) {
 			element.dataset.internalId = dpArticleId;
 			if (data.externalId) {
 				element.dataset.externalId = data.externalId;
+			}
+			if (data.dpDigitalAssetId) {
+				element.dataset.dpDigitalAssetId = data.dpDigitalAssetId;
 			}
 			if (data.assetClass) {
 				element.classList.add(data.assetClass);
