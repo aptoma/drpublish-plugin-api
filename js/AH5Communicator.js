@@ -98,6 +98,15 @@ module.exports = function (PluginAPI) {
 	};
 
 	/**
+     * Deselect all plugin elements in editor
+     *
+     * @param {function} callback function(String)
+     */
+	AH5Communicator.prototype.deSelectPluginElements = function (callback) {
+		PluginAPI.request('de-select-plugin-elements', {}, callback);
+	};
+
+	/**
 	 * Swap positions between the provided element and the adjacent one
 	 * in the specified direction
 	 * PluginAPI.Editor.directionalCastle({

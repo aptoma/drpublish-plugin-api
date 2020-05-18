@@ -230,6 +230,16 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       PluginAPI.request('get-selected-plugin-element', {}, callback);
     };
     /**
+        * Deselect all plugin elements in editor
+        *
+        * @param {function} callback function(String)
+        */
+
+
+    AH5Communicator.prototype.deSelectPluginElements = function (callback) {
+      PluginAPI.request('de-select-plugin-elements', {}, callback);
+    };
+    /**
      * Swap positions between the provided element and the adjacent one
      * in the specified direction
      * PluginAPI.Editor.directionalCastle({
