@@ -34,6 +34,7 @@ const PluginAPI = (function () {
 		this.eventListeners = new Listeners();
 		this.appName = queryParameters.appName || '';
 		this.jwt = queryParameters.jwt || '';
+		this.standAlone = queryParameters.standAlone && queryParameters.standAlone === 'true' || false;
 		this.selectedPluginElement = null;
 
 		const self = this;
@@ -662,6 +663,11 @@ const PluginAPI = (function () {
 		this.request('confirm-authenticated', {
 			pluginName: this.appName
 		});
+	};
+
+	Api.prototype.isStandAlone = function () {
+		return this.standAlone;
+
 	};
 
 	/**

@@ -1397,7 +1397,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       PluginAPI.request('article-keywords-get', null, callback);
     };
     /**
-        * Gets the current article content
+        * Gets the main article content
         *
         * @param {Function} callback function(Object Content)
         */
@@ -1407,7 +1407,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       PluginAPI.request('article-content-get', null, callback);
     };
     /**
-        * Updates current article content
+        * Updates main article content
         *
         * @param {String} content The new content for the article
         * @param {Function} callback function(Boolean), called when it has been set
@@ -1416,6 +1416,21 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
     ArticleCommunicator.prototype.setCurrentContent = function (content, callback) {
       PluginAPI.request('article-content-set', {
+        content: content
+      }, callback);
+    };
+    /**
+        * Updates sub article content
+        *
+        * @param {Integer} articleId Sub article id
+        * @param {String} content The new content for the sub article
+        * @param {Function} callback function(Boolean), called when it has been set
+        */
+
+
+    ArticleCommunicator.prototype.setSubArticleContent = function (articleId, content, callback) {
+      PluginAPI.request('sub-article-content-set', {
+        articleId: articleId,
         content: content
       }, callback);
     };
@@ -1598,6 +1613,16 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       PluginAPI.request('article-topic-set', {
         topic: name
       }, callback);
+    };
+    /**
+     * Get article package data, including content of sub articles
+     *
+     * @param {Function} callback function(Object)
+     */
+
+
+    ArticleCommunicator.prototype.getPackage = function (callback) {
+      PluginAPI.request('package-get', null, callback);
     };
 
     return new ArticleCommunicator();
@@ -1825,6 +1850,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       this.eventListeners = new Listeners();
       this.appName = queryParameters.appName || '';
       this.jwt = queryParameters.jwt || '';
+      this.standAlone = queryParameters.standAlone && queryParameters.standAlone === 'true' || false;
       this.selectedPluginElement = null;
       var self = this;
       pm.bind('event', function (data) {
@@ -2516,6 +2542,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       this.request('confirm-authenticated', {
         pluginName: this.appName
       });
+    };
+
+    Api.prototype.isStandAlone = function () {
+      return this.standAlone;
     };
     /**
         * Get the JWT as defined on DrPublish publication config. This token can be used to authenticate the request

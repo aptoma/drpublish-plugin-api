@@ -422,7 +422,7 @@ module.exports = function (PluginAPI) {
 	};
 
 	/**
-     * Gets the current article content
+     * Gets the main article content
      *
      * @param {Function} callback function(Object Content)
      */
@@ -431,13 +431,26 @@ module.exports = function (PluginAPI) {
 	};
 
 	/**
-     * Updates current article content
+     * Updates main article content
      *
      * @param {String} content The new content for the article
      * @param {Function} callback function(Boolean), called when it has been set
      */
 	ArticleCommunicator.prototype.setCurrentContent = function (content, callback) {
 		PluginAPI.request('article-content-set', {
+			content: content
+		}, callback);
+	};
+	/**
+     * Updates sub article content
+     *
+     * @param {Integer} articleId Sub article id
+     * @param {String} content The new content for the sub article
+     * @param {Function} callback function(Boolean), called when it has been set
+     */
+	ArticleCommunicator.prototype.setSubArticleContent = function (articleId, content, callback) {
+		PluginAPI.request('sub-article-content-set', {
+			articleId: articleId,
 			content: content
 		}, callback);
 	};
@@ -608,6 +621,15 @@ module.exports = function (PluginAPI) {
 		PluginAPI.request('article-topic-set', {
 			topic: name
 		}, callback);
+	};
+
+	/**
+	 * Get article package data, including content of sub articles
+	 *
+	 * @param {Function} callback function(Object)
+	 */
+	ArticleCommunicator.prototype.getPackage = function (callback) {
+		PluginAPI.request('package-get', null, callback);
 	};
 
 	return new ArticleCommunicator();
