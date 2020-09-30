@@ -614,7 +614,11 @@ module.exports = function (PluginAPI) {
 				self.replacePluginElementById(parentElementId, d.innerHTML, () => {
 					d = document.createElement('div');
 					d.innerHTML = html;
-					const assetContainer = d.querySelector('.dp-fact-box-image, .dp-nested-asset-container');
+					let assetContainer = d.querySelector('.dp-fact-box-image, .dp-nested-asset-container');
+					if (data.assetType === 'script') {
+						assetContainer = d.querySelector('.dp-nested-asset-container, .dp-fact-box-image');
+						data.isMultiple = true;
+					}
 					if (data.isMultiple) {
 						$(assetContainer).append($element.get(0).outerHTML);
 					} else {
