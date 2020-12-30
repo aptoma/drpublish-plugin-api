@@ -403,6 +403,7 @@ module.exports = function (PluginAPI) {
 	/**
      * Set the keyword-list on the article
      *
+     * @deprecated Use tags instead
      * @param {Array} keywords List of keywords to add
      * @param {Function} callback Function to call when keywords have been set
      */
@@ -415,6 +416,7 @@ module.exports = function (PluginAPI) {
 	/**
      * Get the current set of keywords on the article
      *
+     * @deprecated Use tags instead
      * @param {Function} callback Function to call with the result
      */
 	ArticleCommunicator.prototype.getKeywords = function (callback) {
