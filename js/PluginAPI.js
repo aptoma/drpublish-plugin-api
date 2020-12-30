@@ -540,7 +540,7 @@ const PluginAPI = (function () {
 	 * @return {Boolean}
 	 */
 	Api.prototype.giveFocus = function (pluginName, argument, start) {
-		if (typeof pluginName !== 'string' || pluginName === '') {
+		if (typeof pluginName !== 'string') {
 			return false;
 		}
 		if (typeof start !== 'boolean') {
@@ -676,6 +676,26 @@ const PluginAPI = (function () {
      */
 	Api.prototype.getJWT = function () {
 		return this.jwt;
+	};
+
+	Api.prototype.replaceEditorComponentsExtension = function (data) {
+		this.request('replace-editor-components-extension', data);
+	};
+
+	Api.prototype.clearEditorComponentsExtension = function (data) {
+		this.request('clear-editor-components-extension', data);
+	};
+
+	Api.prototype.highlightAnnotation = function (data) {
+		this.request('highlight-annotation', data);
+	};
+
+	Api.prototype.underemphasizeAnnotations = function (data) {
+		this.request('underemphasize-annotations', data);
+	};
+
+	Api.prototype.registerExternallyDefinedProperties = function (data) {
+		this.request('register-externally-defined-properties', data);
 	};
 
 	return new Api();
