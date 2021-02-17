@@ -774,5 +774,15 @@ module.exports = function (PluginAPI) {
 		PluginAPI.request('trigger-event', {selector: selector, event: event}, callback);
 	};
 
+	/**
+	 * Get ordered list of element IDs, for selector
+	 *
+	 * @param {String} selector the selector for finding the elements
+	 * @param {Function} callback Receives an ordered array of element IDs
+	 */
+	AH5Communicator.prototype.getOrderedIDs = function (selector, callback) {
+		PluginAPI.request('get-ordered-ids', {selector: selector}, callback);
+	};
+
 	return new AH5Communicator();
 };
