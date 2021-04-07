@@ -634,6 +634,15 @@ module.exports = function (PluginAPI) {
 		PluginAPI.request('package-get', null, callback);
 	};
 
+	/**
+	 * Get information on the multi channel setup of the loaded article
+	 *
+	 * @param {Function} callback function(Object)
+	 */
+	ArticleCommunicator.prototype.channelInfo = function (callback) {
+		PluginAPI.request('channel-info', null, callback);
+	};
+
 	return new ArticleCommunicator();
 
 };

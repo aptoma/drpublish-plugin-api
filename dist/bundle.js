@@ -114,8 +114,6 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   "use strict";
 
   function _typeof(obj) {
-    "@babel/helpers - typeof";
-
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
       _typeof = function _typeof(obj) {
         return typeof obj;
@@ -970,6 +968,19 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         event: event
       }, callback);
     };
+    /**
+     * Get ordered list of element IDs, for selector
+     *
+     * @param {String} selector the selector for finding the elements
+     * @param {Function} callback Receives an ordered array of element IDs
+     */
+
+
+    AH5Communicator.prototype.getOrderedIDs = function (selector, callback) {
+      PluginAPI.request('get-ordered-ids', {
+        selector: selector
+      }, callback);
+    };
 
     return new AH5Communicator();
   };
@@ -1431,6 +1442,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     /**
         * Set the keyword-list on the article
         *
+        * @deprecated Use tags instead
         * @param {Array} keywords List of keywords to add
         * @param {Function} callback Function to call when keywords have been set
         */
@@ -1444,6 +1456,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     /**
         * Get the current set of keywords on the article
         *
+        * @deprecated Use tags instead
         * @param {Function} callback Function to call with the result
         */
 
@@ -1679,6 +1692,16 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     ArticleCommunicator.prototype.getPackage = function (callback) {
       PluginAPI.request('package-get', null, callback);
     };
+    /**
+     * Get information on the multi channel setup of the loaded article
+     *
+     * @param {Function} callback function(Object)
+     */
+
+
+    ArticleCommunicator.prototype.channelInfo = function (callback) {
+      PluginAPI.request('channel-info', null, callback);
+    };
 
     return new ArticleCommunicator();
   };
@@ -1704,8 +1727,6 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   "use strict";
 
   function _typeof(obj) {
-    "@babel/helpers - typeof";
-
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
       _typeof = function _typeof(obj) {
         return typeof obj;
@@ -1871,8 +1892,6 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   "use strict";
 
   function _typeof(obj) {
-    "@babel/helpers - typeof";
-
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
       _typeof = function _typeof(obj) {
         return typeof obj;
