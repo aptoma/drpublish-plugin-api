@@ -584,7 +584,7 @@ module.exports = function (PluginAPI) {
 			data.embeddedTypeId,
 			(dpArticleId) => {
 				insert(dpArticleId, parentElementId, (data) => {
-					return updateEmbeddedAssetRequest(callback);
+					return addEmbeddedAssetRequest(callback);
 				});
 			}
 		);
@@ -625,8 +625,8 @@ module.exports = function (PluginAPI) {
 			});
 		}
 
-		function updateEmbeddedAssetRequest(callback) {
-			PluginAPI.request('update-embedded-asset', data, callback);
+		function addEmbeddedAssetRequest(callback) {
+			PluginAPI.request('add-embedded-asset', data, callback);
 		}
 	};
 
