@@ -15,7 +15,6 @@ addons:
   chrome: stable
 
 before_install:
-  - sudo ln -s /var/lib/dbus/machine-id /etc/machine-id
   - sudo chown root:$USER /opt/google/chrome/chrome-sandbox
   - sudo chmod 4755 /opt/google/chrome/chrome-sandbox
 
