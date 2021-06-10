@@ -970,6 +970,19 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         event: event
       }, callback);
     };
+    /**
+     * Get ordered list of element IDs, for selector
+     *
+     * @param {String} selector the selector for finding the elements
+     * @param {Function} callback Receives an ordered array of element IDs
+     */
+
+
+    AH5Communicator.prototype.getOrderedIDs = function (selector, callback) {
+      PluginAPI.request('get-ordered-ids', {
+        selector: selector
+      }, callback);
+    };
 
     return new AH5Communicator();
   };
@@ -1431,6 +1444,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     /**
         * Set the keyword-list on the article
         *
+        * @deprecated Use tags instead
         * @param {Array} keywords List of keywords to add
         * @param {Function} callback Function to call when keywords have been set
         */
@@ -1444,6 +1458,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     /**
         * Get the current set of keywords on the article
         *
+        * @deprecated Use tags instead
         * @param {Function} callback Function to call with the result
         */
 
