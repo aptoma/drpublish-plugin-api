@@ -120,6 +120,18 @@ module.exports = function (PluginAPI) {
 	};
 
 	/**
+	 * Get specific meta data of the article
+	 *
+	 * @param {String} name Name of the meta data
+	 * @param {Function} callback function(value)
+	 */
+	ArticleCommunicator.prototype.getMeta = function (name, callback) {
+		PluginAPI.request('article-meta-get', {
+			name: name
+		}, callback);
+	};
+
+	/**
      * Retrieve custom meta value for the article
      *
      * @param {String} name Name of the custom meta value
