@@ -1150,6 +1150,21 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }, callback);
     };
     /**
+     * Get specific meta data of the article
+     *
+     * @param {String} name Name of the meta data
+     * @param {Object} value Value of the meta data
+     * @param {Function} callback function(value)
+     */
+
+
+    ArticleCommunicator.prototype.setMeta = function (name, value, callback) {
+      PluginAPI.request('article-meta-set', {
+        name: name,
+        value: value
+      }, callback);
+    };
+    /**
         * Retrieve custom meta value for the article
         *
         * @param {String} name Name of the custom meta value
@@ -1714,6 +1729,18 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
     ArticleCommunicator.prototype.channelInfo = function (callback) {
       PluginAPI.request('channel-info', null, callback);
+    };
+    /**
+     * Save the article
+     *
+     * @param {Function} callback function(Boolean), called when the source has been set
+     */
+
+
+    ArticleCommunicator.prototype.save = function (callback) {
+      PluginAPI.request('article-save', {
+        status: status
+      }, callback);
     };
 
     return new ArticleCommunicator();
